@@ -154,7 +154,7 @@ tr.selected td{background:#1e3a5f}
           <thead><tr>
             <th>ID</th><th>Fecha</th><th>Usuario</th><th>Paga</th><th>Pagó</th>
             <th>Proveedor</th><th>Cancelado</th><th>Tipo</th><th>Cant.</th>
-            <th>Valor</th><th>Ganancia</th><th>Obs</th><th>✏️ Editar</th><th>🗑️</th>
+            <th>Valor</th><th>Ganancia</th><th>Obs</th><th>Acciones</th>
           </tr></thead>
           <tbody id="tbody-registros"></tbody>
         </table>
@@ -505,8 +505,7 @@ function renderTablaRegistros(data){
       <td>$${fmt(r.valor)}</td>
       <td class="${gc}">$${fmt(r.ganancia)}</td>
       <td>${r.observacion||""}</td>
-      <td><button class="btn btn-orange" style="padding:5px 12px;font-size:12px" onclick="event.stopPropagation();solicitarEdicion(${r.id})">✏️ Editar</button></td>
-      <td><button class="btn btn-red" style="padding:5px 12px;font-size:12px" onclick="event.stopPropagation();eliminarUno(${r.id})">🗑️</button></td>
+      <td style="white-space:nowrap"><button class="btn btn-orange" style="padding:5px 10px;font-size:12px;margin-right:4px" onclick="event.stopPropagation();solicitarEdicion(${r.id})">✏️</button><button class="btn btn-red" style="padding:5px 10px;font-size:12px" onclick="event.stopPropagation();eliminarUno(${r.id})">🗑️</button></td>
     `;
     tbody.appendChild(tr);
   });
