@@ -8,123 +8,53 @@
 <meta name="apple-mobile-web-app-title" content="IKS PRO">
 <meta name="theme-color" content="#0a0f1e">
 <title>IKS PRO</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:        #0a0f1e;
-  --card:      #0f1629;
-  --field:     #141c35;
-  --dis:       #080d1a;
-  --b1:        #1e40af;
-  --b2:        #3b82f6;
-  --green:     #22c55e;
-  --red:       #ef4444;
-  --txt:       #e2e8f0;
-  --muted:     #64748b;
-  --label:     #94a3b8;
-  --gold:      #f59e0b;
-  --radius:    12px;
-  --shadow:    0 4px 24px rgba(0,0,0,.4);
-}
+:root{--bg:#0a0f1e;--card:#0f1629;--field:#141c35;--dis:#080d1a;--b1:#1e40af;--b2:#3b82f6;--green:#22c55e;--red:#ef4444;--txt:#e2e8f0;--muted:#64748b;--label:#94a3b8;--gold:#f59e0b;--radius:12px;--shadow:0 4px 24px rgba(0,0,0,.4)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
-
-/* LOGIN */
-#login-screen{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100vh;padding:24px;
-  background:radial-gradient(ellipse at 30% 20%, #1e3a8a22 0%, transparent 60%),
-             radial-gradient(ellipse at 70% 80%, #1e40af18 0%, transparent 60%),
-             var(--bg);
-}
-.login-box{
-  background:var(--card);border:1px solid var(--b1);border-radius:20px;
-  padding:40px 32px;width:100%;max-width:400px;
-  box-shadow:0 0 60px #1e40af22;text-align:center;
-}
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:radial-gradient(ellipse at 30% 20%,#1e3a8a22 0%,transparent 60%),radial-gradient(ellipse at 70% 80%,#1e40af18 0%,transparent 60%),var(--bg)}
+.login-box{background:var(--card);border:1px solid var(--b1);border-radius:20px;padding:40px 32px;width:100%;max-width:400px;box-shadow:0 0 60px #1e40af22;text-align:center}
 .login-logo{font-family:'Rajdhani',sans-serif;font-size:42px;font-weight:700;color:var(--b2);letter-spacing:2px;margin-bottom:6px}
 .login-sub{color:var(--muted);font-size:14px;margin-bottom:28px}
-.login-box input{
-  width:100%;background:var(--field);border:1.5px solid var(--b1);border-radius:10px;
-  color:var(--txt);font-size:16px;padding:14px 16px;outline:none;
-  transition:border-color .2s;margin-bottom:14px;font-family:inherit;
-}
+.login-box input{width:100%;background:var(--field);border:1.5px solid var(--b1);border-radius:10px;color:var(--txt);font-size:16px;padding:14px 16px;outline:none;transition:border-color .2s;margin-bottom:14px;font-family:inherit}
 .login-box input:focus{border-color:var(--b2)}
-.btn-primary{
-  width:100%;background:var(--b2);color:#fff;border:none;border-radius:10px;
-  padding:14px;font-size:16px;font-weight:600;cursor:pointer;
-  transition:background .2s,transform .1s;font-family:inherit;
-}
+.btn-primary{width:100%;background:var(--b2);color:#fff;border:none;border-radius:10px;padding:14px;font-size:16px;font-weight:600;cursor:pointer;transition:background .2s,transform .1s;font-family:inherit}
 .btn-primary:active{transform:scale(.97);background:#1d4ed8}
 .login-error{color:var(--red);font-size:13px;margin-top:8px;min-height:18px}
 .login-hint{color:var(--muted);font-size:12px;margin-top:12px}
-
-/* APP */
 #app{display:none;flex-direction:column;min-height:100vh}
-
-/* HEADER */
-header{
-  background:var(--card);border-bottom:1px solid var(--b1);
-  padding:12px 16px;position:sticky;top:0;z-index:100;
-  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
-}
+header{background:var(--card);border-bottom:1px solid var(--b1);padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .logo{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;color:var(--b2);letter-spacing:1px;white-space:nowrap}
 .header-btns{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
-.btn-sm{
-  background:var(--field);border:1px solid var(--b1);color:var(--txt);
-  border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;
-  cursor:pointer;white-space:nowrap;transition:background .2s;font-family:inherit;
-}
+.btn-sm{background:var(--field);border:1px solid var(--b1);color:var(--txt);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .2s;font-family:inherit}
 .btn-sm:hover{background:var(--b1)}
 .btn-sm.green{background:#16a34a;border-color:#16a34a;color:#fff}
 .btn-sm.blue{background:var(--b2);border-color:var(--b2);color:#fff}
-
-/* MAIN */
 main{flex:1;padding:16px;display:flex;flex-direction:column;gap:14px;max-width:1400px;width:100%;margin:0 auto}
-
-/* CARDS */
 .card{background:var(--card);border:1px solid var(--b1);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
 .card-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--b2);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .card-title::after{content:'';flex:1;height:1px;background:var(--b1)}
-
-/* FORMS */
 .form-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
 .form-group{display:flex;flex-direction:column;gap:4px}
 .form-group label{font-size:12px;font-weight:600;color:var(--label);text-transform:uppercase;letter-spacing:.5px}
-.form-group input,
-.form-group select{
-  background:var(--field);border:1.5px solid var(--b1);border-radius:8px;
-  color:var(--txt);font-size:14px;font-weight:500;padding:10px 12px;
-  outline:none;transition:border-color .2s;font-family:inherit;width:100%;
-}
-.form-group input:focus,
-.form-group select:focus{border-color:var(--b2);box-shadow:0 0 0 3px #3b82f622}
+.form-group input,.form-group select{background:var(--field);border:1.5px solid var(--b1);border-radius:8px;color:var(--txt);font-size:14px;font-weight:500;padding:10px 12px;outline:none;transition:border-color .2s;font-family:inherit;width:100%}
+.form-group input:focus,.form-group select:focus{border-color:var(--b2);box-shadow:0 0 0 3px #3b82f622}
 .form-group input:disabled{background:var(--dis);border-color:#0f1a30;color:var(--muted);cursor:not-allowed}
 .form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
 select option{background:var(--card)}
 .obs-group{grid-column:1/-1}
-
-/* BUTTONS */
 .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
-.btn{
-  padding:11px 20px;border-radius:9px;font-size:14px;font-weight:700;
-  cursor:pointer;border:none;transition:all .2s;font-family:inherit;
-  display:flex;align-items:center;gap:6px;
-}
+.btn{padding:11px 20px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .2s;font-family:inherit;display:flex;align-items:center;gap:6px}
 .btn:active{transform:scale(.96)}
 .btn-blue{background:var(--b2);color:#fff} .btn-blue:hover{background:#1d4ed8}
 .btn-red{background:var(--red);color:#fff} .btn-red:hover{background:#b91c1c}
 .btn-green{background:#16a34a;color:#fff} .btn-green:hover{background:#15803d}
 .btn-purple{background:#7c3aed;color:#fff} .btn-purple:hover{background:#5b21b6}
+.btn-orange{background:#d97706;color:#fff} .btn-orange:hover{background:#b45309}
 .btn-gray{background:var(--field);color:var(--txt);border:1px solid var(--b1)} .btn-gray:hover{background:var(--b1)}
 .btn-full{width:100%}
-
-/* BUSCAR */
 .search-grid{display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:end}
-@media(max-width:600px){.search-grid{grid-template-columns:1fr 1fr;}.search-grid .btn{grid-column:span 1}}
-
-/* TABLA */
 .table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--b1)}
 table{width:100%;border-collapse:collapse;font-size:13px;min-width:700px}
 th{background:var(--field);color:var(--b2);font-weight:700;padding:10px 12px;text-align:center;white-space:nowrap;position:sticky;top:0}
@@ -135,68 +65,31 @@ tr.selected td{background:#1e3a5f}
 .neg{color:var(--red);font-weight:700}
 .tag-gasto{color:var(--red);font-weight:700}
 .tag-ingreso{color:var(--green);font-weight:700}
-
-/* FOOTER RESUMEN */
-.resumen{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:12px;
-}
-.resumen-card{
-  background:var(--card);border:1px solid var(--b1);border-radius:12px;
-  padding:16px 20px;text-align:center;
-}
+.resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.resumen-card{background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:16px 20px;text-align:center}
 .resumen-card .val{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;margin-top:4px}
 .resumen-card .lbl{font-size:12px;color:var(--label);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-
-/* MODAL */
-.modal-overlay{
-  display:none;position:fixed;inset:0;background:#00000088;z-index:999;
-  align-items:center;justify-content:center;padding:20px;
-}
+.modal-overlay{display:none;position:fixed;inset:0;background:#00000088;z-index:999;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
-.modal{background:var(--card);border:1px solid var(--b1);border-radius:16px;padding:28px;width:100%;max-width:420px;box-shadow:0 0 60px #00000066}
+.modal{background:var(--card);border:1px solid var(--b1);border-radius:16px;padding:28px;width:100%;max-width:440px;box-shadow:0 0 60px #00000066;max-height:90vh;overflow-y:auto}
 .modal h3{font-family:'Rajdhani',sans-serif;font-size:22px;color:var(--b2);margin-bottom:18px}
-.modal input{width:100%;background:var(--field);border:1.5px solid var(--b1);border-radius:8px;color:var(--txt);font-size:15px;padding:12px;outline:none;margin-bottom:10px;font-family:inherit}
+.modal input,.modal select{width:100%;background:var(--field);border:1.5px solid var(--b1);border-radius:8px;color:var(--txt);font-size:15px;padding:12px;outline:none;margin-bottom:10px;font-family:inherit}
 .modal input:focus{border-color:var(--b2)}
+.modal-label{font-size:12px;font-weight:600;color:var(--label);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;display:block}
 .modal-btns{display:flex;gap:10px;margin-top:6px}
 .modal-error{color:var(--red);font-size:13px;margin-bottom:8px;min-height:16px}
-
-/* GRAFICA */
 #chart-container{width:100%;height:300px;position:relative}
-canvas#myChart{width:100%!important}
-
-/* TOAST */
-.toast{
-  position:fixed;bottom:24px;right:24px;z-index:9999;
-  background:#22c55e;color:#fff;padding:14px 22px;border-radius:10px;
-  font-weight:700;font-size:15px;box-shadow:0 4px 20px #0006;
-  transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;
-}
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:#22c55e;color:#fff;padding:14px 22px;border-radius:10px;font-weight:700;font-size:15px;box-shadow:0 4px 20px #0006;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.error{background:var(--red)}
-
-/* MOBILE */
-@media(max-width:768px){
-  header{padding:10px 12px}
-  .logo{font-size:22px}
-  .btn-sm{padding:7px 10px;font-size:12px}
-  main{padding:10px;gap:10px}
-  .card{padding:14px}
-  .form-grid{grid-template-columns:1fr 1fr}
-  table{font-size:12px}
-  th,td{padding:7px 8px}
-  .resumen-card .val{font-size:20px}
-}
-@media(max-width:420px){
-  .form-grid{grid-template-columns:1fr}
-  .header-btns{gap:5px}
-  .btn-sm{padding:6px 8px;font-size:11px}
-}
+.edit-form-grid{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+@media(max-width:768px){header{padding:10px 12px}.logo{font-size:22px}.btn-sm{padding:7px 10px;font-size:12px}main{padding:10px;gap:10px}.card{padding:14px}.form-grid{grid-template-columns:1fr 1fr}table{font-size:12px}th,td{padding:7px 8px}.resumen-card .val{font-size:20px}.search-grid{grid-template-columns:1fr 1fr}.edit-form-grid{grid-template-columns:1fr}}
+@media(max-width:420px){.form-grid{grid-template-columns:1fr}.header-btns{gap:5px}.btn-sm{padding:6px 8px;font-size:11px}}
 </style>
 </head>
 <body>
 
-<!-- ===== LOGIN ===== -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">⚡ IKS PRO</div>
@@ -208,10 +101,8 @@ canvas#myChart{width:100%!important}
   </div>
 </div>
 
-<!-- ===== APP ===== -->
+<!-- APP -->
 <div id="app">
-
-  <!-- HEADER -->
   <header>
     <div class="logo">⚡ IKS PRO</div>
     <div class="header-btns">
@@ -224,7 +115,6 @@ canvas#myChart{width:100%!important}
   </header>
 
   <main>
-
     <!-- NUEVO REGISTRO -->
     <div class="card">
       <div class="card-title">📋 Nuevo Registro</div>
@@ -232,16 +122,10 @@ canvas#myChart{width:100%!important}
         <div class="form-group"><label>Fecha</label><input type="text" id="f-fecha"></div>
         <div class="form-group"><label>Usuario</label><input type="text" id="f-usuario" placeholder="Nombre del cliente"></div>
         <div class="form-group"><label>Paga ($)</label><input type="number" id="f-paga" placeholder="0"></div>
-        <div class="form-group"><label>¿Pagó?</label>
-          <select id="f-pago"><option>SI</option><option>NO</option></select>
-        </div>
+        <div class="form-group"><label>¿Pagó?</label><select id="f-pago"><option>SI</option><option>NO</option></select></div>
         <div class="form-group"><label>Proveedor</label><input type="text" id="f-proveedor" placeholder="Proveedor"></div>
         <div class="form-group"><label>Cancelado</label><input type="text" id="f-cancelado" placeholder="Estado"></div>
-        <div class="form-group"><label>Tipo</label>
-          <select id="f-tipo" onchange="toggleCantidad()">
-            <option>SAT FULL</option><option>IKS</option>
-          </select>
-        </div>
+        <div class="form-group"><label>Tipo</label><select id="f-tipo" onchange="toggleCantidad()"><option>SAT FULL</option><option>IKS</option></select></div>
         <div class="form-group"><label>Cantidad</label><input type="number" id="f-cantidad" placeholder="Solo IKS" disabled></div>
         <div class="form-group"><label>Valor ($)</label><input type="number" id="f-valor" placeholder="0"></div>
         <div class="form-group obs-group"><label>Observaciones</label><input type="text" id="f-obs" placeholder="Notas adicionales..."></div>
@@ -270,7 +154,7 @@ canvas#myChart{width:100%!important}
           <thead><tr>
             <th>ID</th><th>Fecha</th><th>Usuario</th><th>Paga</th><th>Pagó</th>
             <th>Proveedor</th><th>Cancelado</th><th>Tipo</th><th>Cant.</th>
-            <th>Valor</th><th>Ganancia</th><th>Obs</th><th>⚙️</th>
+            <th>Valor</th><th>Ganancia</th><th>Obs</th><th>✏️ Editar</th><th>🗑️</th>
           </tr></thead>
           <tbody id="tbody-registros"></tbody>
         </table>
@@ -293,10 +177,8 @@ canvas#myChart{width:100%!important}
         <button class="btn btn-green" onclick="agregarIngreso()">🔺 Agregar Ingreso</button>
       </div>
       <div class="table-wrap" style="margin-top:14px;max-height:200px;overflow-y:auto">
-        <table id="tabla-movimientos">
-          <thead><tr><th>ID</th><th>Tipo</th><th>Valor</th><th>Descripción</th><th>⚙️</th></tr></thead>
-          <tbody id="tbody-movimientos"></tbody>
-        </table>
+        <table><thead><tr><th>ID</th><th>Tipo</th><th>Valor</th><th>Descripción</th><th>🗑️</th></tr></thead>
+        <tbody id="tbody-movimientos"></tbody></table>
       </div>
       <div class="btn-row" style="margin-top:10px">
         <button class="btn btn-purple" onclick="eliminarMovSeleccionados()">🗑️ Eliminar Movimiento</button>
@@ -304,14 +186,51 @@ canvas#myChart{width:100%!important}
     </div>
 
     <!-- RESUMEN -->
-    <div class="resumen" id="resumen-footer">
+    <div class="resumen">
       <div class="resumen-card"><div class="lbl">💰 Ganancia Total</div><div class="val pos" id="r-ganancia">$0</div></div>
       <div class="resumen-card"><div class="lbl">🔻 Gastos</div><div class="val neg" id="r-gastos">$0</div></div>
       <div class="resumen-card"><div class="lbl">🔺 Ingresos Extra</div><div class="val pos" id="r-ingresos">$0</div></div>
       <div class="resumen-card"><div class="lbl">📊 Balance Final</div><div class="val" id="r-balance">$0</div></div>
     </div>
-
   </main>
+</div>
+
+<!-- MODAL CONTRASEÑA PARA EDITAR -->
+<div class="modal-overlay" id="modal-auth-edit">
+  <div class="modal" style="max-width:360px;text-align:center">
+    <h3>🔐 Confirmar Identidad</h3>
+    <p style="color:var(--label);font-size:14px;margin-bottom:16px">Ingresa tu contraseña para editar este registro</p>
+    <input type="password" id="auth-edit-input" placeholder="Contraseña">
+    <div class="modal-error" id="auth-edit-error"></div>
+    <div class="modal-btns">
+      <button class="btn btn-blue btn-full" onclick="confirmarAuthEdit()">✔ Confirmar</button>
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-auth-edit')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR REGISTRO -->
+<div class="modal-overlay" id="modal-editar">
+  <div class="modal" style="max-width:600px">
+    <h3>✏️ Editar Registro</h3>
+    <div class="edit-form-grid">
+      <div class="form-group"><label class="modal-label">Fecha</label><input type="text" id="e-fecha"></div>
+      <div class="form-group"><label class="modal-label">Usuario</label><input type="text" id="e-usuario" placeholder="Nombre del cliente"></div>
+      <div class="form-group"><label class="modal-label">Paga ($)</label><input type="number" id="e-paga" placeholder="0"></div>
+      <div class="form-group"><label class="modal-label">¿Pagó?</label><select id="e-pago"><option>SI</option><option>NO</option></select></div>
+      <div class="form-group"><label class="modal-label">Proveedor</label><input type="text" id="e-proveedor"></div>
+      <div class="form-group"><label class="modal-label">Cancelado</label><input type="text" id="e-cancelado"></div>
+      <div class="form-group"><label class="modal-label">Tipo</label><select id="e-tipo" onchange="toggleCantidadEdit()"><option>SAT FULL</option><option>IKS</option></select></div>
+      <div class="form-group"><label class="modal-label">Cantidad</label><input type="number" id="e-cantidad" placeholder="Solo IKS" disabled></div>
+      <div class="form-group"><label class="modal-label">Valor ($)</label><input type="number" id="e-valor" placeholder="0"></div>
+      <div class="form-group" style="grid-column:1/-1"><label class="modal-label">Observaciones</label><input type="text" id="e-obs" placeholder="Notas..."></div>
+    </div>
+    <div class="modal-error" id="edit-error"></div>
+    <div class="modal-btns" style="margin-top:14px">
+      <button class="btn btn-orange btn-full" onclick="guardarEdicion()">💾 Guardar Cambios</button>
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-editar')">Cancelar</button>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL CONTRASEÑA -->
@@ -339,15 +258,13 @@ canvas#myChart{width:100%!important}
   </div>
 </div>
 
-<!-- MODAL RESUMEN MENSUAL -->
+<!-- MODAL RESUMEN -->
 <div class="modal-overlay" id="modal-resumen">
   <div class="modal" style="max-width:700px">
     <h3>📅 Resumen Mensual</h3>
     <div class="table-wrap" style="max-height:360px;overflow-y:auto">
-      <table>
-        <thead><tr><th>Mes</th><th>Registros</th><th>Total Cobrado</th><th>Total Costo</th><th>Ganancia</th></tr></thead>
-        <tbody id="tbody-resumen"></tbody>
-      </table>
+      <table><thead><tr><th>Mes</th><th>Registros</th><th>Total Cobrado</th><th>Total Costo</th><th>Ganancia</th></tr></thead>
+      <tbody id="tbody-resumen"></tbody></table>
     </div>
     <div class="modal-btns" style="margin-top:16px">
       <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-resumen')">Cerrar</button>
@@ -355,510 +272,413 @@ canvas#myChart{width:100%!important}
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-// =====================================================================
-// DATOS — IndexedDB (base de datos local del navegador)
-// =====================================================================
-let db;
-let registros = [];
-let movimientos = [];
-let seleccionados = new Set();
-let selMov = new Set();
-let chartInstance = null;
-
 const MAESTRAS = ["carmen*","hanna*","danna*","miguel*","wilder*","gilberto*","fenanda*"];
+let db, registros=[], movimientos=[], seleccionados=new Set(), selMov=new Set(), chartInstance=null;
+let editandoId = null; // ID del registro que se va a editar
 
-// Abrir / crear DB
-function initDB() {
-  return new Promise((res, rej) => {
-    const req = indexedDB.open("ikspro", 2);
-    req.onupgradeneeded = e => {
-      const d = e.target.result;
-      if (!d.objectStoreNames.contains("registros"))
-        d.createObjectStore("registros", {keyPath:"id", autoIncrement:true});
-      if (!d.objectStoreNames.contains("movimientos"))
-        d.createObjectStore("movimientos", {keyPath:"id", autoIncrement:true});
-      if (!d.objectStoreNames.contains("config"))
-        d.createObjectStore("config", {keyPath:"clave"});
+// ── DB ────────────────────────────────────────────────────────────────
+function initDB(){
+  return new Promise((res,rej)=>{
+    const req=indexedDB.open("ikspro",2);
+    req.onupgradeneeded=e=>{
+      const d=e.target.result;
+      if(!d.objectStoreNames.contains("registros")) d.createObjectStore("registros",{keyPath:"id",autoIncrement:true});
+      if(!d.objectStoreNames.contains("movimientos")) d.createObjectStore("movimientos",{keyPath:"id",autoIncrement:true});
+      if(!d.objectStoreNames.contains("config")) d.createObjectStore("config",{keyPath:"clave"});
     };
-    req.onsuccess = e => { db = e.target.result; res(); };
-    req.onerror   = e => rej(e);
+    req.onsuccess=e=>{db=e.target.result;res()};
+    req.onerror=e=>rej(e);
   });
 }
+const dbGet=(s,k)=>new Promise(r=>{db.transaction(s,"readonly").objectStore(s).get(k).onsuccess=e=>r(e.target.result)});
+const dbPut=(s,v)=>new Promise(r=>{db.transaction(s,"readwrite").objectStore(s).put(v).onsuccess=e=>r(e.target.result)});
+const dbAdd=(s,v)=>new Promise(r=>{db.transaction(s,"readwrite").objectStore(s).add(v).onsuccess=e=>r(e.target.result)});
+const dbDelete=(s,k)=>new Promise(r=>{db.transaction(s,"readwrite").objectStore(s).delete(k).onsuccess=()=>r()});
+const dbGetAll=(s)=>new Promise(r=>{db.transaction(s,"readonly").objectStore(s).getAll().onsuccess=e=>r(e.target.result)});
 
-function dbGet(store, key) {
-  return new Promise(res => {
-    const tx = db.transaction(store,"readonly");
-    tx.objectStore(store).get(key).onsuccess = e => res(e.target.result);
-  });
-}
-function dbPut(store, val) {
-  return new Promise(res => {
-    const tx = db.transaction(store,"readwrite");
-    tx.objectStore(store).put(val).onsuccess = e => res(e.target.result);
-  });
-}
-function dbAdd(store, val) {
-  return new Promise(res => {
-    const tx = db.transaction(store,"readwrite");
-    tx.objectStore(store).add(val).onsuccess = e => res(e.target.result);
-  });
-}
-function dbDelete(store, key) {
-  return new Promise(res => {
-    const tx = db.transaction(store,"readwrite");
-    tx.objectStore(store).delete(key).onsuccess = () => res();
-  });
-}
-function dbGetAll(store) {
-  return new Promise(res => {
-    const tx = db.transaction(store,"readonly");
-    tx.objectStore(store).getAll().onsuccess = e => res(e.target.result);
-  });
-}
+// ── CONFIG ────────────────────────────────────────────────────────────
+async function getConfig(c){const r=await dbGet("config",c);return r?r.valor:null}
+async function setConfig(c,v){await dbPut("config",{clave:c,valor:v})}
 
-// =====================================================================
-// LOGIN
-// =====================================================================
-async function getConfig(clave) {
-  const r = await dbGet("config", clave);
-  return r ? r.valor : null;
+// ── LOGIN ─────────────────────────────────────────────────────────────
+async function iniciarLogin(){
+  const p=await getConfig("password");
+  if(!p) document.getElementById("login-hint").textContent="Primera vez: escribe una contraseña nueva (mín. 4 caracteres)";
+  document.getElementById("login-input").addEventListener("keydown",e=>{if(e.key==="Enter")verificarLogin()});
 }
-async function setConfig(clave, valor) {
-  await dbPut("config", {clave, valor});
-}
-
-async function iniciarLogin() {
-  const pass = await getConfig("password");
-  if (!pass) {
-    document.getElementById("login-hint").textContent = "Primera vez: escribe una contraseña nueva (mín. 4 caracteres)";
+async function verificarLogin(){
+  const ing=document.getElementById("login-input").value;
+  const err=document.getElementById("login-error");
+  if(MAESTRAS.includes(ing)){abrirApp();return}
+  const g=await getConfig("password");
+  if(!g){
+    if(ing.length<4){err.textContent="Mínimo 4 caracteres";return}
+    await setConfig("password",ing);abrirApp();return;
   }
-  document.getElementById("login-input").addEventListener("keydown", e => {
-    if (e.key === "Enter") verificarLogin();
-  });
+  if(ing===g){abrirApp()}
+  else{err.textContent="Contraseña incorrecta ✗";document.getElementById("login-input").value=""}
 }
-
-async function verificarLogin() {
-  const ingresada = document.getElementById("login-input").value;
-  const errEl = document.getElementById("login-error");
-  if (MAESTRAS.includes(ingresada)) {
-    abrirApp(); return;
-  }
-  const guardada = await getConfig("password");
-  if (!guardada) {
-    if (ingresada.length < 4) { errEl.textContent = "Mínimo 4 caracteres"; return; }
-    await setConfig("password", ingresada);
-    abrirApp(); return;
-  }
-  if (ingresada === guardada) {
-    abrirApp();
-  } else {
-    errEl.textContent = "Contraseña incorrecta ✗";
-    document.getElementById("login-input").value = "";
-  }
-}
-
-function abrirApp() {
-  document.getElementById("login-screen").style.display = "none";
-  document.getElementById("app").style.display = "flex";
+function abrirApp(){
+  document.getElementById("login-screen").style.display="none";
+  document.getElementById("app").style.display="flex";
+  const hoy=new Date();
+  const dd=String(hoy.getDate()).padStart(2,"0");
+  const mm=String(hoy.getMonth()+1).padStart(2,"0");
+  document.getElementById("f-fecha").value=`${dd}/${mm}/${hoy.getFullYear()}`;
+  const modo=localStorage.getItem("modo")||"dark";
+  if(modo==="light") aplicarModo("light");
   cargar();
-  // Fecha actual
-  const hoy = new Date();
-  const dd   = String(hoy.getDate()).padStart(2,"0");
-  const mm   = String(hoy.getMonth()+1).padStart(2,"0");
-  const yyyy = hoy.getFullYear();
-  document.getElementById("f-fecha").value = `${dd}/${mm}/${yyyy}`;
-  // Modo guardado
-  const modo = localStorage.getItem("modo") || "dark";
-  if (modo === "light") aplicarModo("light");
 }
 
-// =====================================================================
-// MODO CLARO/OSCURO
-// =====================================================================
-function toggleModo() {
-  const actual = localStorage.getItem("modo") || "dark";
-  const nuevo  = actual === "dark" ? "light" : "dark";
-  aplicarModo(nuevo);
-}
-function aplicarModo(modo) {
-  localStorage.setItem("modo", modo);
-  const btn = document.getElementById("btn-modo");
-  if (modo === "light") {
-    document.documentElement.style.setProperty("--bg",    "#f0f4ff");
-    document.documentElement.style.setProperty("--card",  "#ffffff");
-    document.documentElement.style.setProperty("--field", "#e8eef8");
-    document.documentElement.style.setProperty("--txt",   "#0f172a");
-    document.documentElement.style.setProperty("--label", "#334155");
-    document.documentElement.style.setProperty("--muted", "#94a3b8");
-    btn.textContent = "🌙 Modo Oscuro";
+// ── MODO ──────────────────────────────────────────────────────────────
+function toggleModo(){aplicarModo(localStorage.getItem("modo")==="dark"?"light":"dark")}
+function aplicarModo(modo){
+  localStorage.setItem("modo",modo);
+  const btn=document.getElementById("btn-modo");
+  if(modo==="light"){
+    document.documentElement.style.setProperty("--bg","#f0f4ff");
+    document.documentElement.style.setProperty("--card","#ffffff");
+    document.documentElement.style.setProperty("--field","#e8eef8");
+    document.documentElement.style.setProperty("--txt","#0f172a");
+    document.documentElement.style.setProperty("--label","#334155");
+    document.documentElement.style.setProperty("--muted","#94a3b8");
+    btn.textContent="🌙 Modo Oscuro";
   } else {
-    document.documentElement.style.setProperty("--bg",    "#0a0f1e");
-    document.documentElement.style.setProperty("--card",  "#0f1629");
-    document.documentElement.style.setProperty("--field", "#141c35");
-    document.documentElement.style.setProperty("--txt",   "#e2e8f0");
-    document.documentElement.style.setProperty("--label", "#94a3b8");
-    document.documentElement.style.setProperty("--muted", "#64748b");
-    btn.textContent = "☀️ Modo Claro";
+    document.documentElement.style.setProperty("--bg","#0a0f1e");
+    document.documentElement.style.setProperty("--card","#0f1629");
+    document.documentElement.style.setProperty("--field","#141c35");
+    document.documentElement.style.setProperty("--txt","#e2e8f0");
+    document.documentElement.style.setProperty("--label","#94a3b8");
+    document.documentElement.style.setProperty("--muted","#64748b");
+    btn.textContent="☀️ Modo Claro";
   }
 }
 
-// =====================================================================
-// CANTIDAD — habilitar solo si IKS
-// =====================================================================
-function toggleCantidad() {
-  const tipo = document.getElementById("f-tipo").value;
-  const cant = document.getElementById("f-cantidad");
-  cant.disabled = tipo !== "IKS";
-  if (cant.disabled) cant.value = "";
+// ── CANTIDAD ──────────────────────────────────────────────────────────
+function toggleCantidad(){
+  const c=document.getElementById("f-cantidad");
+  c.disabled=document.getElementById("f-tipo").value!=="IKS";
+  if(c.disabled) c.value="";
+}
+function toggleCantidadEdit(){
+  const c=document.getElementById("e-cantidad");
+  c.disabled=document.getElementById("e-tipo").value!=="IKS";
+  if(c.disabled) c.value="";
 }
 
-// =====================================================================
-// GUARDAR REGISTRO
-// =====================================================================
-async function guardar() {
-  const usuario = document.getElementById("f-usuario").value.trim();
-  if (!usuario) { showToast("El usuario es obligatorio", true); return; }
-  const paga = parseFloat(document.getElementById("f-paga").value) || 0;
-  if (paga <= 0) { showToast("El valor que paga debe ser mayor a 0", true); return; }
-  const valor    = parseFloat(document.getElementById("f-valor").value) || 0;
-  const ganancia = paga - valor;
-  const tipo     = document.getElementById("f-tipo").value;
-  const cantidad = tipo === "IKS" ? (parseFloat(document.getElementById("f-cantidad").value)||0) : 0;
-
-  await dbAdd("registros", {
-    fecha:      document.getElementById("f-fecha").value,
-    usuario,
-    paga,
-    pago:       document.getElementById("f-pago").value,
-    proveedor:  document.getElementById("f-proveedor").value,
-    cancelado:  document.getElementById("f-cancelado").value,
-    tipo,
-    cantidad,
-    valor,
-    ganancia,
-    observacion: document.getElementById("f-obs").value
+// ── GUARDAR ───────────────────────────────────────────────────────────
+async function guardar(){
+  const usuario=document.getElementById("f-usuario").value.trim();
+  if(!usuario){showToast("El usuario es obligatorio",true);return}
+  const paga=parseFloat(document.getElementById("f-paga").value)||0;
+  if(paga<=0){showToast("El valor que paga debe ser mayor a 0",true);return}
+  const valor=parseFloat(document.getElementById("f-valor").value)||0;
+  const tipo=document.getElementById("f-tipo").value;
+  const cantidad=tipo==="IKS"?(parseFloat(document.getElementById("f-cantidad").value)||0):0;
+  await dbAdd("registros",{
+    fecha:document.getElementById("f-fecha").value,usuario,paga,
+    pago:document.getElementById("f-pago").value,
+    proveedor:document.getElementById("f-proveedor").value,
+    cancelado:document.getElementById("f-cancelado").value,
+    tipo,cantidad,valor,ganancia:paga-valor,
+    observacion:document.getElementById("f-obs").value
   });
-
-  ["f-usuario","f-paga","f-proveedor","f-cancelado","f-valor","f-obs","f-cantidad"].forEach(id => {
-    document.getElementById(id).value = "";
-  });
-  document.getElementById("f-tipo").value = "SAT FULL";
+  ["f-usuario","f-paga","f-proveedor","f-cancelado","f-valor","f-obs","f-cantidad"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("f-tipo").value="SAT FULL";
   toggleCantidad();
   await cargar();
   showToast("Registro guardado correctamente ✔");
 }
 
-// =====================================================================
-// GASTOS / INGRESOS
-// =====================================================================
-async function agregarGasto() {
-  const v = parseFloat(document.getElementById("m-gasto").value) || 0;
-  const d = document.getElementById("m-desc").value.trim();
-  if (v <= 0) { showToast("Ingresa un monto mayor a 0", true); return; }
-  await dbAdd("movimientos", {tipo:"GASTO", valor:v, descripcion:d});
-  document.getElementById("m-gasto").value = "";
-  document.getElementById("m-desc").value  = "";
-  await cargar();
-  showToast("Gasto agregado");
-}
-async function agregarIngreso() {
-  const v = parseFloat(document.getElementById("m-ingreso").value) || 0;
-  const d = document.getElementById("m-desc").value.trim();
-  if (v <= 0) { showToast("Ingresa un monto mayor a 0", true); return; }
-  await dbAdd("movimientos", {tipo:"INGRESO", valor:v, descripcion:d});
-  document.getElementById("m-ingreso").value = "";
-  document.getElementById("m-desc").value    = "";
-  await cargar();
-  showToast("Ingreso agregado");
+// ── EDITAR — PASO 1: pedir contraseña ────────────────────────────────
+function solicitarEdicion(id){
+  editandoId = id;
+  document.getElementById("auth-edit-input").value="";
+  document.getElementById("auth-edit-error").textContent="";
+  document.getElementById("modal-auth-edit").classList.add("open");
+  setTimeout(()=>document.getElementById("auth-edit-input").focus(),100);
 }
 
-// =====================================================================
-// CARGAR TABLAS
-// =====================================================================
-async function cargar() {
-  registros    = (await dbGetAll("registros")).reverse();
-  movimientos  = (await dbGetAll("movimientos")).reverse();
+async function confirmarAuthEdit(){
+  const ing=document.getElementById("auth-edit-input").value;
+  const err=document.getElementById("auth-edit-error");
+  const guardada=await getConfig("password");
+  if(ing===guardada||MAESTRAS.includes(ing)){
+    cerrarModal("modal-auth-edit");
+    abrirFormEditar(editandoId);
+  } else {
+    err.textContent="Contraseña incorrecta ✗";
+    document.getElementById("auth-edit-input").value="";
+  }
+}
+
+// ── EDITAR — PASO 2: abrir formulario ────────────────────────────────
+async function abrirFormEditar(id){
+  const reg=registros.find(r=>r.id===id);
+  if(!reg) return;
+  document.getElementById("e-fecha").value     = reg.fecha||"";
+  document.getElementById("e-usuario").value   = reg.usuario||"";
+  document.getElementById("e-paga").value      = reg.paga||0;
+  document.getElementById("e-pago").value      = reg.pago||"SI";
+  document.getElementById("e-proveedor").value = reg.proveedor||"";
+  document.getElementById("e-cancelado").value = reg.cancelado||"";
+  document.getElementById("e-tipo").value      = reg.tipo||"SAT FULL";
+  document.getElementById("e-cantidad").value  = reg.cantidad||0;
+  document.getElementById("e-valor").value     = reg.valor||0;
+  document.getElementById("e-obs").value       = reg.observacion||"";
+  document.getElementById("edit-error").textContent="";
+  toggleCantidadEdit();
+  document.getElementById("modal-editar").classList.add("open");
+}
+
+// ── EDITAR — PASO 3: guardar cambios ─────────────────────────────────
+async function guardarEdicion(){
+  const usuario=document.getElementById("e-usuario").value.trim();
+  if(!usuario){document.getElementById("edit-error").textContent="El usuario es obligatorio";return}
+  const paga=parseFloat(document.getElementById("e-paga").value)||0;
+  if(paga<=0){document.getElementById("edit-error").textContent="El valor que paga debe ser mayor a 0";return}
+  const valor=parseFloat(document.getElementById("e-valor").value)||0;
+  const tipo=document.getElementById("e-tipo").value;
+  const cantidad=tipo==="IKS"?(parseFloat(document.getElementById("e-cantidad").value)||0):0;
+  await dbPut("registros",{
+    id:editandoId,
+    fecha:document.getElementById("e-fecha").value,
+    usuario,paga,
+    pago:document.getElementById("e-pago").value,
+    proveedor:document.getElementById("e-proveedor").value,
+    cancelado:document.getElementById("e-cancelado").value,
+    tipo,cantidad,valor,ganancia:paga-valor,
+    observacion:document.getElementById("e-obs").value
+  });
+  cerrarModal("modal-editar");
+  await cargar();
+  showToast("Registro actualizado ✔");
+}
+
+// ── MOVIMIENTOS ───────────────────────────────────────────────────────
+async function agregarGasto(){
+  const v=parseFloat(document.getElementById("m-gasto").value)||0;
+  const d=document.getElementById("m-desc").value.trim();
+  if(v<=0){showToast("Ingresa un monto mayor a 0",true);return}
+  await dbAdd("movimientos",{tipo:"GASTO",valor:v,descripcion:d});
+  document.getElementById("m-gasto").value="";
+  document.getElementById("m-desc").value="";
+  await cargar();showToast("Gasto agregado");
+}
+async function agregarIngreso(){
+  const v=parseFloat(document.getElementById("m-ingreso").value)||0;
+  const d=document.getElementById("m-desc").value.trim();
+  if(v<=0){showToast("Ingresa un monto mayor a 0",true);return}
+  await dbAdd("movimientos",{tipo:"INGRESO",valor:v,descripcion:d});
+  document.getElementById("m-ingreso").value="";
+  document.getElementById("m-desc").value="";
+  await cargar();showToast("Ingreso agregado");
+}
+
+// ── CARGAR ────────────────────────────────────────────────────────────
+async function cargar(){
+  registros=(await dbGetAll("registros")).reverse();
+  movimientos=(await dbGetAll("movimientos")).reverse();
   renderTablaRegistros(registros);
   renderTablaMovimientos(movimientos);
-  actualizarResumen(registros, movimientos);
+  actualizarResumen(registros,movimientos);
 }
 
-function renderTablaRegistros(data) {
-  const tbody = document.getElementById("tbody-registros");
-  tbody.innerHTML = "";
-  data.forEach(r => {
-    const tr = document.createElement("tr");
-    if (seleccionados.has(r.id)) tr.classList.add("selected");
-    tr.onclick = () => toggleSel(r.id, tr);
-    const gClass = r.ganancia >= 0 ? "pos" : "neg";
-    tr.innerHTML = `
+function renderTablaRegistros(data){
+  const tbody=document.getElementById("tbody-registros");
+  tbody.innerHTML="";
+  data.forEach(r=>{
+    const tr=document.createElement("tr");
+    if(seleccionados.has(r.id)) tr.classList.add("selected");
+    tr.onclick=()=>toggleSel(r.id,tr);
+    const gc=r.ganancia>=0?"pos":"neg";
+    tr.innerHTML=`
       <td>${r.id}</td><td>${r.fecha||""}</td><td>${r.usuario||""}</td>
       <td>$${fmt(r.paga)}</td><td>${r.pago||""}</td>
       <td>${r.proveedor||""}</td><td>${r.cancelado||""}</td>
       <td>${r.tipo||""}</td><td>${r.cantidad||0}</td>
       <td>$${fmt(r.valor)}</td>
-      <td class="${gClass}">$${fmt(r.ganancia)}</td>
+      <td class="${gc}">$${fmt(r.ganancia)}</td>
       <td>${r.observacion||""}</td>
-      <td><button class="btn btn-red" style="padding:4px 10px;font-size:12px" onclick="eliminarUno(event,${r.id})">🗑️</button></td>
+      <td><button class="btn btn-orange" style="padding:5px 12px;font-size:12px" onclick="event.stopPropagation();solicitarEdicion(${r.id})">✏️ Editar</button></td>
+      <td><button class="btn btn-red" style="padding:5px 12px;font-size:12px" onclick="event.stopPropagation();eliminarUno(${r.id})">🗑️</button></td>
     `;
     tbody.appendChild(tr);
   });
 }
 
-function renderTablaMovimientos(data) {
-  const tbody = document.getElementById("tbody-movimientos");
-  tbody.innerHTML = "";
-  data.forEach(m => {
-    const tr = document.createElement("tr");
-    if (selMov.has(m.id)) tr.classList.add("selected");
-    tr.onclick = () => toggleSelMov(m.id, tr);
-    const cls = m.tipo === "GASTO" ? "tag-gasto" : "tag-ingreso";
-    tr.innerHTML = `
-      <td>${m.id}</td>
-      <td class="${cls}">${m.tipo}</td>
-      <td>$${fmt(m.valor)}</td>
-      <td>${m.descripcion||""}</td>
-      <td><button class="btn btn-red" style="padding:4px 10px;font-size:12px" onclick="eliminarMov(event,${m.id})">🗑️</button></td>
-    `;
+function renderTablaMovimientos(data){
+  const tbody=document.getElementById("tbody-movimientos");
+  tbody.innerHTML="";
+  data.forEach(m=>{
+    const tr=document.createElement("tr");
+    if(selMov.has(m.id)) tr.classList.add("selected");
+    tr.onclick=()=>toggleSelMov(m.id,tr);
+    const cls=m.tipo==="GASTO"?"tag-gasto":"tag-ingreso";
+    tr.innerHTML=`<td>${m.id}</td><td class="${cls}">${m.tipo}</td><td>$${fmt(m.valor)}</td><td>${m.descripcion||""}</td>
+    <td><button class="btn btn-red" style="padding:4px 10px;font-size:12px" onclick="event.stopPropagation();eliminarMov(${m.id})">🗑️</button></td>`;
     tbody.appendChild(tr);
   });
 }
 
-function actualizarResumen(regs, movs) {
-  const totalGan  = regs.reduce((a,r)  => a + (r.ganancia||0), 0);
-  const gastos    = movs.filter(m => m.tipo==="GASTO").reduce((a,m)   => a + (m.valor||0), 0);
-  const ingresos  = movs.filter(m => m.tipo==="INGRESO").reduce((a,m) => a + (m.valor||0), 0);
-  const balance   = totalGan + ingresos - gastos;
-
-  const rg = document.getElementById("r-ganancia");
-  const rb = document.getElementById("r-balance");
-  rg.textContent = `$${fmt(totalGan)}`;
-  rg.className   = `val ${totalGan >= 0 ? "pos":"neg"}`;
-  document.getElementById("r-gastos").textContent   = `$${fmt(gastos)}`;
-  document.getElementById("r-ingresos").textContent = `$${fmt(ingresos)}`;
-  rb.textContent = `$${fmt(balance)}`;
-  rb.className   = `val ${balance >= 0 ? "pos":"neg"}`;
+function actualizarResumen(regs,movs){
+  const tg=regs.reduce((a,r)=>a+(r.ganancia||0),0);
+  const ga=movs.filter(m=>m.tipo==="GASTO").reduce((a,m)=>a+(m.valor||0),0);
+  const in2=movs.filter(m=>m.tipo==="INGRESO").reduce((a,m)=>a+(m.valor||0),0);
+  const bal=tg+in2-ga;
+  const rg=document.getElementById("r-ganancia");
+  const rb=document.getElementById("r-balance");
+  rg.textContent=`$${fmt(tg)}`;rg.className=`val ${tg>=0?"pos":"neg"}`;
+  document.getElementById("r-gastos").textContent=`$${fmt(ga)}`;
+  document.getElementById("r-ingresos").textContent=`$${fmt(in2)}`;
+  rb.textContent=`$${fmt(bal)}`;rb.className=`val ${bal>=0?"pos":"neg"}`;
 }
 
-// =====================================================================
-// SELECCIÓN / ELIMINACIÓN
-// =====================================================================
-function toggleSel(id, tr) {
-  if (seleccionados.has(id)) { seleccionados.delete(id); tr.classList.remove("selected"); }
-  else { seleccionados.add(id); tr.classList.add("selected"); }
+// ── SELECCIÓN / ELIMINAR ──────────────────────────────────────────────
+function toggleSel(id,tr){seleccionados.has(id)?(seleccionados.delete(id),tr.classList.remove("selected")):(seleccionados.add(id),tr.classList.add("selected"))}
+function toggleSelMov(id,tr){selMov.has(id)?(selMov.delete(id),tr.classList.remove("selected")):(selMov.add(id),tr.classList.add("selected"))}
+async function eliminarUno(id){
+  if(!confirm("¿Eliminar este registro?")) return;
+  await dbDelete("registros",id);seleccionados.delete(id);await cargar();showToast("Registro eliminado");
 }
-function toggleSelMov(id, tr) {
-  if (selMov.has(id)) { selMov.delete(id); tr.classList.remove("selected"); }
-  else { selMov.add(id); tr.classList.add("selected"); }
+async function eliminarSeleccionados(){
+  if(!seleccionados.size){showToast("Selecciona registros primero",true);return}
+  if(!confirm(`¿Eliminar ${seleccionados.size} registro(s)?`)) return;
+  for(const id of seleccionados) await dbDelete("registros",id);
+  seleccionados.clear();await cargar();showToast("Registros eliminados");
 }
-
-async function eliminarUno(e, id) {
-  e.stopPropagation();
-  if (!confirm("¿Eliminar este registro?")) return;
-  await dbDelete("registros", id);
-  seleccionados.delete(id);
-  await cargar();
-  showToast("Registro eliminado");
+async function eliminarMov(id){
+  if(!confirm("¿Eliminar este movimiento?")) return;
+  await dbDelete("movimientos",id);selMov.delete(id);await cargar();showToast("Movimiento eliminado");
 }
-async function eliminarSeleccionados() {
-  if (!seleccionados.size) { showToast("Selecciona registros primero", true); return; }
-  if (!confirm(`¿Eliminar ${seleccionados.size} registro(s)?`)) return;
-  for (const id of seleccionados) await dbDelete("registros", id);
-  seleccionados.clear();
-  await cargar();
-  showToast("Registros eliminados");
-}
-async function eliminarMov(e, id) {
-  e.stopPropagation();
-  if (!confirm("¿Eliminar este movimiento?")) return;
-  await dbDelete("movimientos", id);
-  selMov.delete(id);
-  await cargar();
-  showToast("Movimiento eliminado");
-}
-async function eliminarMovSeleccionados() {
-  if (!selMov.size) { showToast("Selecciona movimientos primero", true); return; }
-  if (!confirm(`¿Eliminar ${selMov.size} movimiento(s)?`)) return;
-  for (const id of selMov) await dbDelete("movimientos", id);
-  selMov.clear();
-  await cargar();
-  showToast("Movimientos eliminados");
+async function eliminarMovSeleccionados(){
+  if(!selMov.size){showToast("Selecciona movimientos primero",true);return}
+  if(!confirm(`¿Eliminar ${selMov.size} movimiento(s)?`)) return;
+  for(const id of selMov) await dbDelete("movimientos",id);
+  selMov.clear();await cargar();showToast("Movimientos eliminados");
 }
 
-// =====================================================================
-// BUSCAR / FILTRAR
-// =====================================================================
-function buscar() {
-  const txt   = document.getElementById("s-usuario").value.toLowerCase();
-  const fecha = document.getElementById("s-fecha").value.trim();
-  const filtrados = registros.filter(r => {
-    const uOk = txt   ? (r.usuario||"").toLowerCase().includes(txt) : true;
-    const fOk = fecha ? (r.fecha||"").includes(fecha) : true;
-    return uOk && fOk;
+// ── BUSCAR ────────────────────────────────────────────────────────────
+function buscar(){
+  const txt=document.getElementById("s-usuario").value.toLowerCase();
+  const fecha=document.getElementById("s-fecha").value.trim();
+  const f=registros.filter(r=>{
+    const uOk=txt?(r.usuario||"").toLowerCase().includes(txt):true;
+    const fOk=fecha?(r.fecha||"").includes(fecha):true;
+    return uOk&&fOk;
   });
-  renderTablaRegistros(filtrados);
-  const totalGan = filtrados.reduce((a,r) => a + (r.ganancia||0), 0);
-  const rg = document.getElementById("r-ganancia");
-  rg.textContent = `$${fmt(totalGan)}`;
-  rg.className   = `val ${totalGan >= 0 ? "pos":"neg"}`;
+  renderTablaRegistros(f);
+  const tg=f.reduce((a,r)=>a+(r.ganancia||0),0);
+  const rg=document.getElementById("r-ganancia");
+  rg.textContent=`$${fmt(tg)}`;rg.className=`val ${tg>=0?"pos":"neg"}`;
 }
-function limpiarFiltro() {
-  document.getElementById("s-usuario").value = "";
-  document.getElementById("s-fecha").value   = "";
+function limpiarFiltro(){
+  document.getElementById("s-usuario").value="";
+  document.getElementById("s-fecha").value="";
   renderTablaRegistros(registros);
-  actualizarResumen(registros, movimientos);
+  actualizarResumen(registros,movimientos);
 }
 
-// =====================================================================
-// GRÁFICA
-// =====================================================================
-function mostrarGrafica() {
-  // Agrupar por mes
-  const meses = {};
-  registros.forEach(r => {
-    if (!r.fecha) return;
-    const parts = r.fecha.split("/");
-    const key   = parts.length >= 3 ? `${parts[1]}/${parts[2]}` : r.fecha;
-    meses[key]  = (meses[key] || 0) + (r.ganancia || 0);
+// ── GRÁFICA ───────────────────────────────────────────────────────────
+function mostrarGrafica(){
+  const meses={};
+  registros.forEach(r=>{
+    if(!r.fecha) return;
+    const p=r.fecha.split("/");
+    const k=p.length>=3?`${p[1]}/${p[2]}`:r.fecha;
+    meses[k]=(meses[k]||0)+(r.ganancia||0);
   });
-  const labels = Object.keys(meses).sort();
-  const vals   = labels.map(k => meses[k]);
-
+  const labels=Object.keys(meses).sort();
+  const vals=labels.map(k=>meses[k]);
   document.getElementById("modal-grafica").classList.add("open");
-
-  setTimeout(() => {
-    const ctx = document.getElementById("myChart").getContext("2d");
-    if (chartInstance) chartInstance.destroy();
-    chartInstance = new Chart(ctx, {
+  setTimeout(()=>{
+    const ctx=document.getElementById("myChart").getContext("2d");
+    if(chartInstance) chartInstance.destroy();
+    chartInstance=new Chart(ctx,{
       type:"bar",
-      data:{
-        labels,
-        datasets:[{
-          label:"Ganancia ($)",
-          data: vals,
-          backgroundColor: vals.map(v => v >= 0 ? "#22c55e88" : "#ef444488"),
-          borderColor:      vals.map(v => v >= 0 ? "#22c55e"   : "#ef4444"),
-          borderWidth:2, borderRadius:6
-        }]
-      },
-      options:{
-        responsive:true,
-        plugins:{
-          legend:{labels:{color:"#94a3b8"}},
-          tooltip:{callbacks:{label: ctx => `$${fmt(ctx.raw)}`}}
-        },
-        scales:{
-          x:{ticks:{color:"#94a3b8"},grid:{color:"#1e40af33"}},
-          y:{ticks:{color:"#94a3b8",callback: v => `$${fmt(v)}`},grid:{color:"#1e40af33"}}
-        }
-      }
+      data:{labels,datasets:[{label:"Ganancia ($)",data:vals,
+        backgroundColor:vals.map(v=>v>=0?"#22c55e88":"#ef444488"),
+        borderColor:vals.map(v=>v>=0?"#22c55e":"#ef4444"),
+        borderWidth:2,borderRadius:6}]},
+      options:{responsive:true,plugins:{legend:{labels:{color:"#94a3b8"}},
+        tooltip:{callbacks:{label:c=>`$${fmt(c.raw)}`}}},
+        scales:{x:{ticks:{color:"#94a3b8"},grid:{color:"#1e40af33"}},
+                y:{ticks:{color:"#94a3b8",callback:v=>`$${fmt(v)}`},grid:{color:"#1e40af33"}}}}
     });
-  }, 100);
+  },100);
 }
 
-// =====================================================================
-// RESUMEN MENSUAL
-// =====================================================================
-function mostrarResumen() {
-  const meses = {};
-  registros.forEach(r => {
-    if (!r.fecha) return;
-    const parts = r.fecha.split("/");
-    const key   = parts.length >= 3 ? `${parts[1]}/${parts[2]}` : r.fecha;
-    if (!meses[key]) meses[key] = {n:0, cobrado:0, costo:0, gan:0};
-    meses[key].n++;
-    meses[key].cobrado += r.paga    || 0;
-    meses[key].costo   += r.valor   || 0;
-    meses[key].gan     += r.ganancia|| 0;
+// ── RESUMEN MENSUAL ───────────────────────────────────────────────────
+function mostrarResumen(){
+  const meses={};
+  registros.forEach(r=>{
+    if(!r.fecha) return;
+    const p=r.fecha.split("/");
+    const k=p.length>=3?`${p[1]}/${p[2]}`:r.fecha;
+    if(!meses[k]) meses[k]={n:0,cobrado:0,costo:0,gan:0};
+    meses[k].n++;meses[k].cobrado+=r.paga||0;meses[k].costo+=r.valor||0;meses[k].gan+=r.ganancia||0;
   });
-  const tbody = document.getElementById("tbody-resumen");
-  tbody.innerHTML = "";
-  Object.keys(meses).sort().reverse().forEach(k => {
-    const m  = meses[k];
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${k}</td><td>${m.n}</td>
-      <td>$${fmt(m.cobrado)}</td>
-      <td>$${fmt(m.costo)}</td>
-      <td class="${m.gan>=0?"pos":"neg"}">$${fmt(m.gan)}</td>
-    `;
+  const tbody=document.getElementById("tbody-resumen");
+  tbody.innerHTML="";
+  Object.keys(meses).sort().reverse().forEach(k=>{
+    const m=meses[k];
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${k}</td><td>${m.n}</td><td>$${fmt(m.cobrado)}</td><td>$${fmt(m.costo)}</td><td class="${m.gan>=0?"pos":"neg"}">$${fmt(m.gan)}</td>`;
     tbody.appendChild(tr);
   });
   document.getElementById("modal-resumen").classList.add("open");
 }
 
-// =====================================================================
-// EXPORTAR EXCEL
-// =====================================================================
-function exportarExcel() {
-  const wb = XLSX.utils.book_new();
-  // Registros
-  const dataR = [["ID","Fecha","Usuario","Paga","Pago","Proveedor","Cancelado","Tipo","Cantidad","Valor","Ganancia","Observación"]];
-  registros.forEach(r => dataR.push([r.id,r.fecha,r.usuario,r.paga,r.pago,r.proveedor,r.cancelado,r.tipo,r.cantidad,r.valor,r.ganancia,r.observacion]));
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(dataR), "Registros");
-  // Movimientos
-  const dataM = [["ID","Tipo","Valor","Descripción"]];
-  movimientos.forEach(m => dataM.push([m.id,m.tipo,m.valor,m.descripcion]));
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(dataM), "Movimientos");
-  const ts = new Date().toISOString().slice(0,10);
-  XLSX.writeFile(wb, `IKS_Reporte_${ts}.xlsx`);
+// ── EXCEL ─────────────────────────────────────────────────────────────
+function exportarExcel(){
+  const wb=XLSX.utils.book_new();
+  const dR=[["ID","Fecha","Usuario","Paga","Pago","Proveedor","Cancelado","Tipo","Cantidad","Valor","Ganancia","Observación"]];
+  registros.forEach(r=>dR.push([r.id,r.fecha,r.usuario,r.paga,r.pago,r.proveedor,r.cancelado,r.tipo,r.cantidad,r.valor,r.ganancia,r.observacion]));
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(dR),"Registros");
+  const dM=[["ID","Tipo","Valor","Descripción"]];
+  movimientos.forEach(m=>dM.push([m.id,m.tipo,m.valor,m.descripcion]));
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(dM),"Movimientos");
+  XLSX.writeFile(wb,`IKS_Reporte_${new Date().toISOString().slice(0,10)}.xlsx`);
   showToast("Excel descargado ✔");
 }
 
-// =====================================================================
-// CONTRASEÑA
-// =====================================================================
-function abrirModalPassword() {
-  document.getElementById("mp-actual").value = "";
-  document.getElementById("mp-nueva").value  = "";
-  document.getElementById("mp-error").textContent = "";
+// ── CONTRASEÑA ────────────────────────────────────────────────────────
+function abrirModalPassword(){
+  document.getElementById("mp-actual").value="";
+  document.getElementById("mp-nueva").value="";
+  document.getElementById("mp-error").textContent="";
   document.getElementById("modal-pass").classList.add("open");
 }
-async function cambiarPassword() {
-  const actual = document.getElementById("mp-actual").value;
-  const nueva  = document.getElementById("mp-nueva").value;
-  const errEl  = document.getElementById("mp-error");
-  const guardada = await getConfig("password");
-  if (actual !== guardada && !MAESTRAS.includes(actual)) {
-    errEl.textContent = "Contraseña actual incorrecta"; return;
-  }
-  if (nueva.length < 4) { errEl.textContent = "Mínimo 4 caracteres"; return; }
-  await setConfig("password", nueva);
-  cerrarModal("modal-pass");
-  showToast("Contraseña actualizada ✔");
+async function cambiarPassword(){
+  const actual=document.getElementById("mp-actual").value;
+  const nueva=document.getElementById("mp-nueva").value;
+  const err=document.getElementById("mp-error");
+  const g=await getConfig("password");
+  if(actual!==g&&!MAESTRAS.includes(actual)){err.textContent="Contraseña actual incorrecta";return}
+  if(nueva.length<4){err.textContent="Mínimo 4 caracteres";return}
+  await setConfig("password",nueva);
+  cerrarModal("modal-pass");showToast("Contraseña actualizada ✔");
 }
 
-// =====================================================================
-// HELPERS
-// =====================================================================
-function cerrarModal(id) {
-  document.getElementById(id).classList.remove("open");
-}
-// Cerrar modal al click fuera
-document.querySelectorAll(".modal-overlay").forEach(el => {
-  el.addEventListener("click", e => { if (e.target === el) el.classList.remove("open"); });
+// ── HELPERS ───────────────────────────────────────────────────────────
+function cerrarModal(id){document.getElementById(id).classList.remove("open")}
+document.querySelectorAll(".modal-overlay").forEach(el=>{
+  el.addEventListener("click",e=>{if(e.target===el) el.classList.remove("open")});
 });
-
-function fmt(n) {
-  return Number(n||0).toLocaleString("es-CO");
+document.getElementById("auth-edit-input").addEventListener("keydown",e=>{if(e.key==="Enter")confirmarAuthEdit()});
+function fmt(n){return Number(n||0).toLocaleString("es-CO")}
+function showToast(msg,error=false){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.className=`toast${error?" error":""} show`;
+  setTimeout(()=>t.classList.remove("show"),3000);
 }
 
-function showToast(msg, error=false) {
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.className   = `toast${error?" error":""} show`;
-  setTimeout(() => t.classList.remove("show"), 3000);
-}
-
-// =====================================================================
-// ARRANQUE
-// =====================================================================
+// ── ARRANQUE ──────────────────────────────────────────────────────────
 initDB().then(iniciarLogin);
 </script>
 </body>
