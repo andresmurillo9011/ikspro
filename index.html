@@ -186,7 +186,10 @@ tr.por-vencer td{background:#f59e0b22}
 
     <!-- HISTORIAL REGISTROS -->
     <div class="card">
-      <div class="card-title">📊 Registros del Mes Actual</div>
+      <div class="card-title" style="justify-content:space-between">
+        <span>📊 Registros del Mes Actual</span>
+        <button class="btn btn-gray" style="padding:5px 12px;font-size:12px;margin-left:auto" onclick="forzarRecarga()">🔄 Recargar</button>
+      </div>
       <div class="table-wrap" style="max-height:360px;overflow-y:auto">
         <table>
           <thead><tr>
@@ -385,6 +388,22 @@ function mesActual(){
 function colRegistros(){ return `registros_${mesActual()}` }
 function colMovimientos(){ return `movimientos_${mesActual()}` }
 
+// Migrar registros viejos (colección "registros") al mes actual si existen
+async function migrarRegistrosViejos(){
+  try{
+    const snap=await getDocs(collection(db,"registros"));
+    if(snap.empty) return;
+    const batch=writeBatch(db);
+    snap.docs.forEach(d=>{
+      const newRef=doc(collection(db,colRegistros()),d.id);
+      batch.set(newRef,d.data());
+      batch.delete(d.ref);
+    });
+    await batch.commit();
+    console.log("Migrados",snap.size,"registros al mes actual");
+  }catch(e){console.log("Migración:",e)}
+}
+
 // ── CONFIG ────────────────────────────────────────────
 async function getConfig(c){try{const d=await getDoc(doc(db,"config",c));return d.exists()?d.data().valor:null}catch{return null}}
 async function setConfig(c,v){await setDoc(doc(db,"config",c),{valor:v})}
@@ -404,13 +423,14 @@ window.verificarLogin=async function(){
   if(ing===g){abrirApp()}else{err.textContent="Contraseña incorrecta ✗";document.getElementById("login-input").value=""}
 }
 
-function abrirApp(){
+async function abrirApp(){
   document.getElementById("login-screen").style.display="none";
   document.getElementById("app").style.display="flex";
   const hoy=new Date();
   document.getElementById("f-fecha").value=`${String(hoy.getDate()).padStart(2,"0")}/${String(hoy.getMonth()+1).padStart(2,"0")}/${hoy.getFullYear()}`;
   const modo=localStorage.getItem("modo")||"dark";
   if(modo==="light") aplicarModo("light");
+  await migrarRegistrosViejos();
   escucharCambios();
   verificarCierreMensual();
 }
@@ -881,6 +901,11 @@ function showToast(msg,error=false,tipo=""){
   t.textContent=msg;
   t.className=`toast${error?" error":tipo==="warning"?" warning":""} show`;
   setTimeout(()=>t.classList.remove("show"),3500);
+}
+
+// ── FORZAR RECARGA ───────────────────────────────────
+window.forzarRecarga=function(){
+  location.reload();
 }
 
 iniciarLogin();
