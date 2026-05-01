@@ -177,7 +177,7 @@ tr.selected td{background:#1e3a5f}
         <button class="btn btn-green" onclick="agregarIngreso()">🔺 Agregar Ingreso</button>
       </div>
       <div class="table-wrap" style="margin-top:14px;max-height:200px;overflow-y:auto">
-        <table><thead><tr><th>ID</th><th>Tipo</th><th>Valor</th><th>Descripción</th><th>🗑️</th></tr></thead>
+        <table><thead><tr><th>ID</th><th>Tipo</th><th>Valor</th><th>Descripción</th><th>Acciones</th></tr></thead>
         <tbody id="tbody-movimientos"></tbody></table>
       </div>
       <div class="btn-row" style="margin-top:10px">
@@ -268,6 +268,41 @@ tr.selected td{background:#1e3a5f}
     </div>
     <div class="modal-btns" style="margin-top:16px">
       <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-resumen')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL AUTH EDITAR MOVIMIENTO -->
+<div class="modal-overlay" id="modal-auth-edit-mov">
+  <div class="modal" style="max-width:360px;text-align:center">
+    <h3>🔐 Confirmar Identidad</h3>
+    <p style="color:var(--label);font-size:14px;margin-bottom:16px">Ingresa tu contraseña para editar este movimiento</p>
+    <input type="password" id="auth-edit-mov-input" placeholder="Contraseña">
+    <div class="modal-error" id="auth-edit-mov-error"></div>
+    <div class="modal-btns">
+      <button class="btn btn-blue btn-full" onclick="confirmarAuthEditMov()">✔ Confirmar</button>
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-auth-edit-mov')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR MOVIMIENTO -->
+<div class="modal-overlay" id="modal-editar-mov">
+  <div class="modal" style="max-width:400px">
+    <h3>✏️ Editar Movimiento</h3>
+    <div class="form-group" style="margin-bottom:10px"><label class="modal-label">Tipo</label>
+      <select id="em-tipo"><option>GASTO</option><option>INGRESO</option></select>
+    </div>
+    <div class="form-group" style="margin-bottom:10px"><label class="modal-label">Valor ($)</label>
+      <input type="number" id="em-valor" placeholder="0">
+    </div>
+    <div class="form-group" style="margin-bottom:10px"><label class="modal-label">Descripción</label>
+      <input type="text" id="em-desc" placeholder="Descripción...">
+    </div>
+    <div class="modal-error" id="edit-mov-error"></div>
+    <div class="modal-btns" style="margin-top:14px">
+      <button class="btn btn-orange btn-full" onclick="guardarEdicionMov()">💾 Guardar Cambios</button>
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-editar-mov')">Cancelar</button>
     </div>
   </div>
 </div>
@@ -520,7 +555,7 @@ function renderTablaMovimientos(data){
     tr.onclick=()=>toggleSelMov(m.id,tr);
     const cls=m.tipo==="GASTO"?"tag-gasto":"tag-ingreso";
     tr.innerHTML=`<td>${m.id}</td><td class="${cls}">${m.tipo}</td><td>$${fmt(m.valor)}</td><td>${m.descripcion||""}</td>
-    <td><button class="btn btn-red" style="padding:4px 10px;font-size:12px" onclick="event.stopPropagation();eliminarMov(${m.id})">🗑️</button></td>`;
+    <td style="white-space:nowrap"><button class="btn btn-orange" style="padding:4px 10px;font-size:12px;margin-right:4px" onclick="event.stopPropagation();solicitarEdicionMov(${m.id})">✏️</button><button class="btn btn-red" style="padding:4px 10px;font-size:12px" onclick="event.stopPropagation();eliminarMov(${m.id})">🗑️</button></td>`;
     tbody.appendChild(tr);
   });
 }
@@ -670,6 +705,7 @@ document.querySelectorAll(".modal-overlay").forEach(el=>{
   el.addEventListener("click",e=>{if(e.target===el) el.classList.remove("open")});
 });
 document.getElementById("auth-edit-input").addEventListener("keydown",e=>{if(e.key==="Enter")confirmarAuthEdit()});
+document.getElementById("auth-edit-mov-input").addEventListener("keydown",e=>{if(e.key==="Enter")confirmarAuthEditMov()});
 function fmt(n){return Number(n||0).toLocaleString("es-CO")}
 function showToast(msg,error=false){
   const t=document.getElementById("toast");
