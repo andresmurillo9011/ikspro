@@ -85,6 +85,15 @@ tr.selected td{background:#1e3a5f}
 .toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:#22c55e;color:#fff;padding:14px 22px;border-radius:10px;font-weight:700;font-size:15px;box-shadow:0 4px 20px #0006;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.error{background:var(--red)}
+.alerta-banner{background:#0f1629;border:1px solid #ef4444;border-radius:12px;padding:16px 20px;display:none}
+.alerta-banner-title{font-family:"Rajdhani",sans-serif;font-size:18px;font-weight:700;color:#ef4444;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.alerta-item{display:flex;align-items:center;justify-content:space-between;background:#141c35;border-radius:10px;padding:10px 14px;margin-bottom:8px;flex-wrap:wrap;gap:8px}
+.alerta-info{display:flex;flex-direction:column;gap:2px}
+.alerta-nombre{font-weight:700;font-size:14px;color:#e2e8f0}
+.alerta-detalle{font-size:12px;color:#64748b}
+.badge-rojo{background:#ef444422;color:#ef4444;border:1px solid #ef4444;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge-naranja{background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.btn-wsp{background:#25d366;color:#fff;padding:8px 14px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
 @media(max-width:768px){.logo{font-size:22px}.btn-sm{padding:7px 10px;font-size:12px}main{padding:10px;gap:10px}.card{padding:14px}.form-grid{grid-template-columns:1fr 1fr}table{font-size:12px}th,td{padding:7px 8px}.search-grid{grid-template-columns:1fr 1fr}.edit-form-grid{grid-template-columns:1fr}}
 @media(max-width:420px){.form-grid{grid-template-columns:1fr}.btn-sm{padding:6px 8px;font-size:11px}}
 </style>
@@ -115,6 +124,12 @@ tr.selected td{background:#1e3a5f}
   </header>
 
   <main>
+    <!-- BANNER ALERTAS VENCIMIENTO -->
+    <div class="alerta-banner" id="alerta-banner">
+      <div class="alerta-banner-title">⚠️ Clientes por vencer hoy y en los próximos 5 días</div>
+      <div id="alerta-lista"></div>
+    </div>
+
     <div class="card">
       <div class="card-title">📋 Nuevo Registro</div>
       <div class="form-grid">
@@ -346,6 +361,7 @@ function escucharCambios(){
     registros=snap.docs.map(d=>({...d.data(),fireId:d.id}));
     renderTablaRegistros(registros);
     actualizarResumen(registros,movimientos);
+    mostrarAlertas(registros);
     document.getElementById("sync-dot").style.background="var(--green)";
   });
   onSnapshot(query(collection(db,"movimientos"),orderBy("timestamp","desc")),snap=>{
@@ -518,6 +534,48 @@ function estadoVence(d){
   if(diff===0) return {txt:"Vence HOY",cls:"#ef4444"};
   if(diff<=5) return {txt:`${diff}d ⚠️`,cls:"#f59e0b"};
   return {txt:`${diff}d`,cls:"#22c55e"};
+}
+
+function mostrarAlertas(regs){
+  const banner=document.getElementById("alerta-banner");
+  const lista=document.getElementById("alerta-lista");
+  const hoy=new Date();hoy.setHours(0,0,0,0);
+
+  const alertas=regs.filter(r=>{
+    if(!r.dias||!r.fecha) return false;
+    const fv=calcularVencimiento(r.fecha,r.dias);
+    if(!fv) return false;
+    const diff=Math.floor((fv-hoy)/(1000*60*60*24));
+    return diff<=5;
+  }).sort((a,b)=>{
+    const fa=calcularVencimiento(a.fecha,a.dias);
+    const fb=calcularVencimiento(b.fecha,b.dias);
+    return fa-fb;
+  });
+
+  if(!alertas.length){banner.style.display="none";return}
+  banner.style.display="block";
+  lista.innerHTML="";
+
+  alertas.forEach(r=>{
+    const fv=calcularVencimiento(r.fecha,r.dias);
+    const hoy2=new Date();hoy2.setHours(0,0,0,0);
+    const diff=Math.floor((fv-hoy2)/(1000*60*60*24));
+    const fvStr=fmtFecha(fv);
+    const tel=(r.telefono||"").replace(/\D/g,"");
+    const msg=encodeURIComponent(`Hola ${r.usuario||""}, te recordamos que tu servicio IKS vence el ${fvStr}. Por favor renueva a tiempo. Gracias!`);
+    const badge=diff<=0?`<span class="badge-rojo">VENCIDO</span>`:diff===0?`<span class="badge-rojo">Vence HOY</span>`:`<span class="badge-naranja">Vence en ${diff} día${diff===1?"":"s"}</span>`;
+    const div=document.createElement("div");
+    div.className="alerta-item";
+    div.innerHTML=`
+      <div class="alerta-info">
+        <div class="alerta-nombre">${r.usuario||""} ${badge}</div>
+        <div class="alerta-detalle">📅 Vence: ${fvStr} &nbsp;|&nbsp; 📞 ${r.telefono||"Sin teléfono"}</div>
+      </div>
+      ${tel?`<a href="https://wa.me/${tel}?text=${msg}" target="_blank" class="btn-wsp">📲 Enviar WhatsApp</a>`:`<span style="color:#64748b;font-size:12px">Sin teléfono</span>`}
+    `;
+    lista.appendChild(div);
+  });
 }
 
 function renderTablaRegistros(data){
