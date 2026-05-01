@@ -378,7 +378,7 @@ const db  = getFirestore(app);
 
 const MAESTRAS = ["carmen*","hanna*","danna*","miguel*","wilder*","gilberto*","fenanda*"];
 let registros=[], movimientos=[], seleccionados=new Set(), chartInstance=null;
-let editandoId=null, editandoMovId=null;
+let editandoId=null, editandoMovId=null, editandoCol=null;
 
 // ── MES ACTUAL ────────────────────────────────────────
 function mesActual(){
@@ -451,14 +451,30 @@ async function verificarCierreMensual(){
 }
 
 // ── TIEMPO REAL ───────────────────────────────────────
+let regsNuevos=[], regsViejos=[];
+
+function combinarYRenderizar(){
+  // Combinar registros viejos y nuevos, ordenar por timestamp desc
+  registros=[...regsNuevos,...regsViejos].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+  renderTablaRegistros(registros);
+  actualizarResumen(registros,movimientos);
+  verificarVencimientos(registros);
+  document.getElementById("sync-dot").style.background="var(--green)";
+}
+
 function escucharCambios(){
+  // Escuchar colección nueva del mes actual
   onSnapshot(query(collection(db,colRegistros()),orderBy("timestamp","desc")),snap=>{
-    registros=snap.docs.map(d=>({...d.data(),fireId:d.id}));
-    renderTablaRegistros(registros);
-    actualizarResumen(registros,movimientos);
-    verificarVencimientos(registros);
-    document.getElementById("sync-dot").style.background="var(--green)";
+    regsNuevos=snap.docs.map(d=>({...d.data(),fireId:d.id,_col:colRegistros()}));
+    combinarYRenderizar();
   });
+
+  // Escuchar colección vieja "registros" también
+  onSnapshot(query(collection(db,"registros"),orderBy("timestamp","desc")),snap=>{
+    regsViejos=snap.docs.map(d=>({...d.data(),fireId:d.id,_col:"registros"}));
+    combinarYRenderizar();
+  });
+
   onSnapshot(query(collection(db,colMovimientos()),orderBy("timestamp","desc")),snap=>{
     movimientos=snap.docs.map(d=>({...d.data(),fireId:d.id}));
     renderTablaMovimientos(movimientos);
@@ -573,8 +589,9 @@ window.agregarIngreso=async function(){
 }
 
 // ── EDITAR REGISTRO ───────────────────────────────────
-window.solicitarEdicion=function(fireId){
+window.solicitarEdicion=function(fireId,col){
   editandoId=fireId;
+  editandoCol=col||colRegistros();
   document.getElementById("auth-edit-input").value="";
   document.getElementById("auth-edit-error").textContent="";
   document.getElementById("modal-auth-edit").classList.add("open");
@@ -618,7 +635,7 @@ window.guardarEdicion=async function(){
   const dias=parseInt(document.getElementById("e-dias").value)||0;
   const fecha=document.getElementById("e-fecha").value;
   const fv=calcularFechaVencimiento(fecha,dias);
-  await updateDoc(doc(db,colRegistros(),editandoId),{
+  await updateDoc(doc(db,editandoCol||colRegistros(),editandoId),{
     fecha,usuario,
     telefono:document.getElementById("e-telefono").value.trim(),
     dias,fechaVencimiento:fv?fv.toISOString():null,
@@ -665,9 +682,10 @@ window.guardarEdicionMov=async function(){
 }
 
 // ── ELIMINAR ──────────────────────────────────────────
-window.eliminarUno=async function(fireId){
+window.eliminarUno=async function(fireId,col){
   if(!confirm("¿Eliminar este registro?")) return;
-  await deleteDoc(doc(db,colRegistros(),fireId));showToast("Registro eliminado");
+  const colUsar=col||colRegistros();
+  await deleteDoc(doc(db,colUsar,fireId));showToast("Registro eliminado");
 }
 window.eliminarSeleccionados=async function(){
   if(!seleccionados.size){showToast("Selecciona registros primero",true);return}
@@ -708,9 +726,9 @@ function renderTablaRegistros(data){
       <td class="${gc}">$${fmt(r.ganancia)}</td>
       <td>${r.observacion||""}</td>
       <td style="white-space:nowrap">
-        <button class="btn btn-orange" style="padding:4px 8px;font-size:11px;margin-right:2px" onclick="event.stopPropagation();solicitarEdicion('${r.fireId}')">✏️</button>
+        <button class="btn btn-orange" style="padding:4px 8px;font-size:11px;margin-right:2px" onclick="event.stopPropagation();solicitarEdicion('${r.fireId}','${r._col||colRegistros()}')">✏️</button>
         ${tel?`<a href="https://wa.me/${tel}?text=${msg}" target="_blank" class="btn btn-wsp" style="padding:4px 8px;font-size:11px;margin-right:2px;text-decoration:none">📲</a>`:""}
-        <button class="btn btn-red" style="padding:4px 8px;font-size:11px" onclick="event.stopPropagation();eliminarUno('${r.fireId}')">🗑️</button>
+        <button class="btn btn-red" style="padding:4px 8px;font-size:11px" onclick="event.stopPropagation();eliminarUno('${r.fireId}','${r._col||colRegistros()}')">🗑️</button>
       </td>`;
     tbody.appendChild(tr);
   });
@@ -905,7 +923,10 @@ function showToast(msg,error=false,tipo=""){
 
 // ── FORZAR RECARGA ───────────────────────────────────
 window.forzarRecarga=function(){
-  location.reload();
+  regsNuevos=[];regsViejos=[];
+  document.getElementById("tbody-registros").innerHTML='<tr><td colspan="13" class="loading">🔄 Recargando...</td></tr>';
+  escucharCambios();
+  showToast("Actualizando...");
 }
 
 iniciarLogin();
