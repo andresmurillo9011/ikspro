@@ -127,6 +127,8 @@ tr.selected td{background:#1e3a5f}
         <div class="form-group"><label>Tipo</label><select id="f-tipo" onchange="toggleCantidad()"><option>SAT FULL</option><option>IKS</option></select></div>
         <div class="form-group"><label>Cantidad</label><input type="number" id="f-cantidad" placeholder="Solo IKS" disabled></div>
         <div class="form-group"><label>Valor ($)</label><input type="number" id="f-valor" placeholder="0"></div>
+        <div class="form-group"><label>WhatsApp cliente</label><input type="text" id="f-telefono" placeholder="573001234567"></div>
+        <div class="form-group"><label>Días de servicio</label><input type="number" id="f-dias" placeholder="30" min="1"></div>
         <div class="form-group obs-group"><label>Observaciones</label><input type="text" id="f-obs" placeholder="Notas adicionales..."></div>
       </div>
       <div class="btn-row" style="margin-top:14px">
@@ -149,7 +151,7 @@ tr.selected td{background:#1e3a5f}
       <div class="table-wrap" style="max-height:360px;overflow-y:auto">
         <table>
           <thead><tr>
-            <th>ID</th><th>Fecha</th><th>Usuario</th><th>Paga</th><th>Pagó</th>
+            <th>ID</th><th>Fecha</th><th>Usuario</th><th>Vence</th><th>Paga</th><th>Pagó</th>
             <th>Proveedor</th><th>Cancelado</th><th>Tipo</th><th>Cant.</th>
             <th>Valor</th><th>Ganancia</th><th>Obs</th><th>Acciones</th>
           </tr></thead>
@@ -216,6 +218,8 @@ tr.selected td{background:#1e3a5f}
       <div class="form-group"><label class="modal-label">Tipo</label><select id="e-tipo" onchange="toggleCantidadEdit()"><option>SAT FULL</option><option>IKS</option></select></div>
       <div class="form-group"><label class="modal-label">Cantidad</label><input type="number" id="e-cantidad" disabled></div>
       <div class="form-group"><label class="modal-label">Valor ($)</label><input type="number" id="e-valor"></div>
+      <div class="form-group"><label class="modal-label">WhatsApp cliente</label><input type="text" id="e-telefono" placeholder="573001234567"></div>
+      <div class="form-group"><label class="modal-label">Días de servicio</label><input type="number" id="e-dias" placeholder="30"></div>
       <div class="form-group" style="grid-column:1/-1"><label class="modal-label">Observaciones</label><input type="text" id="e-obs"></div>
     </div>
     <div class="modal-error" id="edit-error"></div>
@@ -366,9 +370,11 @@ window.guardar=async function(){
     cancelado:document.getElementById("f-cancelado").value,
     tipo,cantidad,valor,ganancia:paga-valor,
     observacion:document.getElementById("f-obs").value,
+    telefono:document.getElementById("f-telefono").value.trim(),
+    dias:parseInt(document.getElementById("f-dias").value)||0,
     timestamp:Date.now()
   });
-  ["f-usuario","f-paga","f-proveedor","f-cancelado","f-valor","f-obs","f-cantidad"].forEach(id=>document.getElementById(id).value="");
+  ["f-usuario","f-paga","f-proveedor","f-cancelado","f-valor","f-obs","f-cantidad","f-telefono","f-dias"].forEach(id=>document.getElementById(id).value="");
   document.getElementById("f-tipo").value="SAT FULL";
   toggleCantidad();
   showToast("Registro guardado ✔");
@@ -414,6 +420,8 @@ window.confirmarAuthEdit=async function(){
     document.getElementById("e-cantidad").value=r.cantidad||0;
     document.getElementById("e-valor").value=r.valor||0;
     document.getElementById("e-obs").value=r.observacion||"";
+    document.getElementById("e-telefono").value=r.telefono||"";
+    document.getElementById("e-dias").value=r.dias||"";
     document.getElementById("edit-error").textContent="";
     toggleCantidadEdit();
     document.getElementById("modal-editar").classList.add("open");
@@ -436,7 +444,9 @@ window.guardarEdicion=async function(){
     proveedor:document.getElementById("e-proveedor").value,
     cancelado:document.getElementById("e-cancelado").value,
     tipo,cantidad,valor,ganancia:paga-valor,
-    observacion:document.getElementById("e-obs").value
+    observacion:document.getElementById("e-obs").value,
+    telefono:document.getElementById("e-telefono").value.trim(),
+    dias:parseInt(document.getElementById("e-dias").value)||0
   });
   cerrarModal("modal-editar");showToast("Registro actualizado ✔");
 }
@@ -487,6 +497,29 @@ window.eliminarMov=async function(fireId){
   await deleteDoc(doc(db,"movimientos",fireId));showToast("Movimiento eliminado");
 }
 
+function calcularVencimiento(fecha, dias){
+  if(!fecha||!dias) return null;
+  const p=fecha.split("/");
+  if(p.length<3) return null;
+  const d=new Date(parseInt(p[2]),parseInt(p[1])-1,parseInt(p[0]));
+  d.setDate(d.getDate()+parseInt(dias));
+  return d;
+}
+function fmtFecha(d){
+  if(!d) return "—";
+  return `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`;
+}
+function estadoVence(d){
+  if(!d) return {txt:"Sin fecha",cls:"#64748b"};
+  const hoy=new Date();hoy.setHours(0,0,0,0);
+  const vence=new Date(d);vence.setHours(0,0,0,0);
+  const diff=Math.floor((vence-hoy)/(1000*60*60*24));
+  if(diff<0) return {txt:`Vencido ${Math.abs(diff)}d`,cls:"#ef4444"};
+  if(diff===0) return {txt:"Vence HOY",cls:"#ef4444"};
+  if(diff<=5) return {txt:`${diff}d ⚠️`,cls:"#f59e0b"};
+  return {txt:`${diff}d`,cls:"#22c55e"};
+}
+
 function renderTablaRegistros(data){
   const tbody=document.getElementById("tbody-registros");
   tbody.innerHTML="";
@@ -496,12 +529,19 @@ function renderTablaRegistros(data){
     if(seleccionados.has(r.fireId)) tr.classList.add("selected");
     tr.onclick=()=>{seleccionados.has(r.fireId)?(seleccionados.delete(r.fireId),tr.classList.remove("selected")):(seleccionados.add(r.fireId),tr.classList.add("selected"))};
     const gc=r.ganancia>=0?"pos":"neg";
+    const fv=calcularVencimiento(r.fecha,r.dias);
+    const ev=estadoVence(fv);
+    const fvStr=fmtFecha(fv);
+    const tel=(r.telefono||"").replace(/\D/g,"");
+    const msg=encodeURIComponent(`Hola ${r.usuario||""}, te recordamos que tu servicio IKS vence el ${fvStr}. Por favor renueva a tiempo. Gracias!`);
     tr.innerHTML=`<td>${r.fireId.slice(-4)}</td><td>${r.fecha||""}</td><td>${r.usuario||""}</td>
+      <td style="color:${ev.cls};font-weight:700">${fvStr}<br><small>${ev.txt}</small></td>
       <td>$${fmt(r.paga)}</td><td>${r.pago||""}</td><td>${r.proveedor||""}</td><td>${r.cancelado||""}</td>
       <td>${r.tipo||""}</td><td>${r.cantidad||0}</td><td>$${fmt(r.valor)}</td>
       <td class="${gc}">$${fmt(r.ganancia)}</td><td>${r.observacion||""}</td>
       <td style="white-space:nowrap">
         <button class="btn btn-orange" style="padding:5px 10px;font-size:12px;margin-right:4px" onclick="event.stopPropagation();solicitarEdicion('${r.fireId}')">✏️</button>
+        ${tel?`<a href="https://wa.me/${tel}?text=${msg}" target="_blank" onclick="event.stopPropagation()" style="padding:5px 10px;font-size:12px;margin-right:4px;background:#25d366;color:#fff;border-radius:9px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center">📲</a>`:""}
         <button class="btn btn-red" style="padding:5px 10px;font-size:12px" onclick="event.stopPropagation();eliminarUno('${r.fireId}')">🗑️</button>
       </td>`;
     tbody.appendChild(tr);
