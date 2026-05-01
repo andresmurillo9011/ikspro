@@ -94,6 +94,15 @@ tr.selected td{background:#1e3a5f}
 .badge-rojo{background:#ef444422;color:#ef4444;border:1px solid #ef4444;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700}
 .badge-naranja{background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700}
 .btn-wsp{background:#25d366;color:#fff;padding:8px 14px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.agenda-item{background:#141c35;border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-left:4px solid var(--b2)}
+.agenda-item.hoy{border-left-color:#f59e0b;background:#f59e0b11}
+.agenda-item.pasado{border-left-color:#ef4444;background:#ef444411;opacity:.8}
+.agenda-item.recordatorio{border-left-color:#22c55e;background:#22c55e11;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.6}}
+.agenda-info{display:flex;flex-direction:column;gap:3px}
+.agenda-titulo{font-weight:700;font-size:14px;color:#e2e8f0}
+.agenda-sub{font-size:12px;color:#64748b}
+.agenda-btns{display:flex;gap:6px;flex-wrap:wrap}
 @media(max-width:768px){.logo{font-size:22px}.btn-sm{padding:7px 10px;font-size:12px}main{padding:10px;gap:10px}.card{padding:14px}.form-grid{grid-template-columns:1fr 1fr}table{font-size:12px}th,td{padding:7px 8px}.search-grid{grid-template-columns:1fr 1fr}.edit-form-grid{grid-template-columns:1fr}}
 @media(max-width:420px){.form-grid{grid-template-columns:1fr}.btn-sm{padding:6px 8px;font-size:11px}}
 </style>
@@ -119,11 +128,18 @@ tr.selected td{background:#1e3a5f}
       <button class="btn-sm" onclick="abrirModalPassword()">🔑 Contraseña</button>
       <button class="btn-sm blue" onclick="mostrarGrafica()">📊 Gráfica</button>
       <button class="btn-sm blue" onclick="mostrarResumen()">📅 Resumen</button>
+      <button class="btn-sm" style="background:#7c3aed;border-color:#7c3aed;color:#fff" onclick="abrirAgenda()">📅 Agenda</button>
       <button class="btn-sm green" onclick="exportarExcel()">📥 Excel</button>
     </div>
   </header>
 
   <main>
+    <!-- AGENDA RECORDATORIOS HOY -->
+    <div class="alerta-banner" id="agenda-hoy-banner" style="border-color:#f59e0b">
+      <div class="alerta-banner-title" style="color:#f59e0b">📅 Soportes programados para hoy</div>
+      <div id="agenda-hoy-lista"></div>
+    </div>
+
     <!-- BANNER ALERTAS VENCIMIENTO -->
     <div class="alerta-banner" id="alerta-banner">
       <div class="alerta-banner-title">⚠️ Clientes por vencer hoy y en los próximos 5 días</div>
@@ -204,6 +220,36 @@ tr.selected td{background:#1e3a5f}
       <div class="resumen-card"><div class="lbl">📊 Balance Final</div><div class="val" id="r-balance">$0</div></div>
     </div>
   </main>
+</div>
+
+<!-- MODAL AGENDA -->
+<div class="modal-overlay" id="modal-agenda">
+  <div class="modal" style="max-width:700px">
+    <h3>📅 Agenda de Soportes</h3>
+
+    <!-- Formulario nuevo soporte -->
+    <div style="background:#141c35;border-radius:10px;padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:#3b82f6;margin-bottom:10px">➕ Nuevo Soporte</div>
+      <div class="edit-form-grid" style="gap:10px">
+        <div class="form-group"><label class="modal-label">Cliente</label><input type="text" id="ag-cliente" placeholder="Nombre del cliente"></div>
+        <div class="form-group"><label class="modal-label">Teléfono WhatsApp</label><input type="text" id="ag-telefono" placeholder="573001234567"></div>
+        <div class="form-group"><label class="modal-label">Fecha</label><input type="date" id="ag-fecha"></div>
+        <div class="form-group"><label class="modal-label">Hora</label><input type="time" id="ag-hora"></div>
+        <div class="form-group" style="grid-column:1/-1"><label class="modal-label">Descripción del soporte</label><input type="text" id="ag-desc" placeholder="Ej: Configurar router, instalar decoder..."></div>
+      </div>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn btn-blue" onclick="guardarSoporte()">💾 Agendar Soporte</button>
+      </div>
+    </div>
+
+    <!-- Lista de soportes -->
+    <div style="font-size:13px;font-weight:700;color:#94a3b8;margin-bottom:8px">📋 Soportes Agendados</div>
+    <div id="agenda-lista" style="max-height:300px;overflow-y:auto"></div>
+
+    <div class="modal-btns" style="margin-top:16px">
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-agenda')">Cerrar</button>
+    </div>
+  </div>
 </div>
 
 <!-- MODALES -->
@@ -310,7 +356,7 @@ tr.selected td{background:#1e3a5f}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, getDoc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey:            "AIzaSyAw4y25NtQ_WcrBWRll143cNB2xe824cgo",
@@ -354,6 +400,7 @@ function abrirApp(){
   const modo=localStorage.getItem("modo")||"dark";
   if(modo==="light") aplicarModo("light");
   escucharCambios();
+  cargarSoportes();
 }
 
 function escucharCambios(){
@@ -703,6 +750,144 @@ document.getElementById("auth-edit-input").addEventListener("keydown",e=>{if(e.k
 document.getElementById("auth-edit-mov-input").addEventListener("keydown",e=>{if(e.key==="Enter")confirmarAuthEditMov()});
 function fmt(n){return Number(n||0).toLocaleString("es-CO")}
 function showToast(msg,error=false){const t=document.getElementById("toast");t.textContent=msg;t.className=`toast${error?" error":""} show`;setTimeout(()=>t.classList.remove("show"),3000)}
+
+// ── AGENDA DE SOPORTES ───────────────────────────────
+let soportes = [];
+
+window.abrirAgenda = function(){
+  // Fecha de hoy por defecto
+  const hoy = new Date();
+  const yyyy = hoy.getFullYear();
+  const mm   = String(hoy.getMonth()+1).padStart(2,"0");
+  const dd   = String(hoy.getDate()).padStart(2,"0");
+  document.getElementById("ag-fecha").value = `${yyyy}-${mm}-${dd}`;
+  document.getElementById("ag-hora").value  = "09:00";
+  renderAgenda();
+  document.getElementById("modal-agenda").classList.add("open");
+}
+
+window.guardarSoporte = async function(){
+  const cliente  = document.getElementById("ag-cliente").value.trim();
+  const telefono = document.getElementById("ag-telefono").value.trim();
+  const fecha    = document.getElementById("ag-fecha").value;
+  const hora     = document.getElementById("ag-hora").value;
+  const desc     = document.getElementById("ag-desc").value.trim();
+  if(!cliente||!fecha||!hora){showToast("Cliente, fecha y hora son obligatorios",true);return}
+  await addDoc(collection(db,"soportes"),{
+    cliente,telefono,fecha,hora,desc,
+    timestamp:Date.now(),
+    estado:"pendiente"
+  });
+  document.getElementById("ag-cliente").value="";
+  document.getElementById("ag-telefono").value="";
+  document.getElementById("ag-desc").value="";
+  showToast("Soporte agendado ✔");
+  renderAgenda();
+}
+
+window.eliminarSoporte = async function(id){
+  if(!confirm("¿Eliminar este soporte?")) return;
+  await deleteDoc(doc(db,"soportes",id));
+  showToast("Soporte eliminado");
+  renderAgenda();
+}
+
+window.completarSoporte = async function(id){
+  await updateDoc(doc(db,"soportes",id),{estado:"completado"});
+  showToast("Soporte marcado como completado ✔");
+  renderAgenda();
+}
+
+async function cargarSoportes(){
+  const snap = await getDocs(query(collection(db,"soportes"),orderBy("timestamp","desc")));
+  soportes = snap.docs.map(d=>({...d.data(),fireId:d.id}));
+  verificarSoportesHoy();
+}
+
+function verificarSoportesHoy(){
+  const hoy    = new Date();
+  const hoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,"0")}-${String(hoy.getDate()).padStart(2,"0")}`;
+  const horaActual = hoy.getHours()*60 + hoy.getMinutes();
+
+  const soportesHoy = soportes.filter(s=>s.fecha===hoyStr && s.estado!=="completado");
+  const banner = document.getElementById("agenda-hoy-banner");
+  const lista  = document.getElementById("agenda-hoy-lista");
+
+  if(!soportesHoy.length){banner.style.display="none";return}
+  banner.style.display="block";
+  lista.innerHTML="";
+
+  soportesHoy.forEach(s=>{
+    const [hh,mm2] = s.hora.split(":").map(Number);
+    const minSoporte = hh*60+mm2;
+    const minAntes   = minSoporte - horaActual;
+    const esRecordatorio = minAntes>=0 && minAntes<=120;
+    const tel  = (s.telefono||"").replace(/\D/g,"");
+    const msgCliente = encodeURIComponent(`Hola ${s.cliente}, te recordamos que tienes un soporte técnico IKS hoy a las ${s.hora}. ¡Te esperamos!`);
+    const div = document.createElement("div");
+    div.className = `agenda-item${esRecordatorio?" recordatorio":" hoy"}`;
+    div.innerHTML = `
+      <div class="agenda-info">
+        <div class="agenda-titulo">${esRecordatorio?"🔔 RECORDATORIO: ":""}${s.cliente} — ${s.hora}</div>
+        <div class="agenda-sub">${s.desc||"Sin descripción"} ${esRecordatorio?`<strong style="color:#22c55e">· Faltan ${minAntes} minutos</strong>`:""}</div>
+      </div>
+      <div class="agenda-btns">
+        ${tel?`<a href="https://wa.me/${tel}?text=${msgCliente}" target="_blank" class="btn-wsp">📲 Avisar cliente</a>`:""}
+        <button class="btn btn-green" style="padding:6px 12px;font-size:12px" onclick="completarSoporte('${s.fireId}')">✔ Listo</button>
+      </div>`;
+    lista.appendChild(div);
+  });
+}
+
+async function renderAgenda(){
+  await cargarSoportes();
+  const lista = document.getElementById("agenda-lista");
+  if(!lista) return;
+  lista.innerHTML="";
+
+  const hoy    = new Date();
+  const hoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,"0")}-${String(hoy.getDate()).padStart(2,"0")}`;
+
+  if(!soportes.length){lista.innerHTML='<div class="loading">Sin soportes agendados</div>';return}
+
+  soportes.filter(s=>s.estado!=="completado").forEach(s=>{
+    const esPasado = s.fecha < hoyStr;
+    const tel = (s.telefono||"").replace(/\D/g,"");
+    const msgCliente = encodeURIComponent(`Hola ${s.cliente}, te recordamos que tienes un soporte técnico IKS el ${s.fecha} a las ${s.hora}. ¡Te esperamos!`);
+    const div = document.createElement("div");
+    div.className = `agenda-item${esPasado?" pasado":""}`;
+    div.innerHTML = `
+      <div class="agenda-info">
+        <div class="agenda-titulo">${s.cliente} <span style="color:#64748b;font-weight:400;font-size:12px">— ${s.fecha} ${s.hora}</span></div>
+        <div class="agenda-sub">${s.desc||"Sin descripción"} ${esPasado?'<span style="color:#ef4444">· Fecha pasada</span>':""}</div>
+      </div>
+      <div class="agenda-btns">
+        ${tel?`<a href="https://wa.me/${tel}?text=${msgCliente}" target="_blank" class="btn-wsp">📲 Avisar</a>`:""}
+        <button class="btn btn-green" style="padding:5px 10px;font-size:12px" onclick="completarSoporte('${s.fireId}')">✔ Listo</button>
+        <button class="btn btn-red" style="padding:5px 10px;font-size:12px" onclick="eliminarSoporte('${s.fireId}')">🗑️</button>
+      </div>`;
+    lista.appendChild(div);
+  });
+
+  // Completados al final
+  const completados = soportes.filter(s=>s.estado==="completado");
+  if(completados.length){
+    const sep=document.createElement("div");
+    sep.style="font-size:12px;color:#64748b;margin:12px 0 6px;font-weight:600";
+    sep.textContent="✔ Completados";
+    lista.appendChild(sep);
+    completados.slice(0,5).forEach(s=>{
+      const div=document.createElement("div");
+      div.className="agenda-item";
+      div.style="opacity:.5";
+      div.innerHTML=`<div class="agenda-info"><div class="agenda-titulo" style="text-decoration:line-through">${s.cliente} — ${s.fecha} ${s.hora}</div><div class="agenda-sub">${s.desc||""}</div></div>`;
+      lista.appendChild(div);
+    });
+  }
+}
+
+// Verificar cada 5 minutos si hay recordatorios
+setInterval(verificarSoportesHoy, 5*60*1000);
 
 iniciarLogin();
 </script>
