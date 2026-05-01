@@ -425,13 +425,16 @@ window.guardar=async function(){
   if(paga<=0){showToast("El valor que paga debe ser mayor a 0",true);return}
   const valor=parseFloat(document.getElementById("f-valor").value)||0;
   const tipo=document.getElementById("f-tipo").value;
+  const pago=document.getElementById("f-pago").value;
   const cantidad=tipo==="IKS"?(parseFloat(document.getElementById("f-cantidad").value)||0):0;
+  // Solo genera ganancia si el cliente ya pagó
+  const ganancia = pago==="SI" ? paga-valor : 0;
   await addDoc(collection(db,"registros"),{
     fecha:document.getElementById("f-fecha").value,usuario,paga,
-    pago:document.getElementById("f-pago").value,
+    pago,
     proveedor:document.getElementById("f-proveedor").value,
     cancelado:document.getElementById("f-cancelado").value,
-    tipo,cantidad,valor,ganancia:paga-valor,
+    tipo,cantidad,valor,ganancia,
     observacion:document.getElementById("f-obs").value,
     telefono:document.getElementById("f-telefono").value.trim(),
     dias:parseInt(document.getElementById("f-dias").value)||0,
@@ -500,13 +503,16 @@ window.guardarEdicion=async function(){
   if(paga<=0){document.getElementById("edit-error").textContent="Paga debe ser mayor a 0";return}
   const valor=parseFloat(document.getElementById("e-valor").value)||0;
   const tipo=document.getElementById("e-tipo").value;
+  const pagoE=document.getElementById("e-pago").value;
   const cantidad=tipo==="IKS"?(parseFloat(document.getElementById("e-cantidad").value)||0):0;
+  // Solo genera ganancia si el cliente ya pagó
+  const gananciaE = pagoE==="SI" ? paga-valor : 0;
   await updateDoc(doc(db,"registros",editandoId),{
     fecha:document.getElementById("e-fecha").value,usuario,paga,
-    pago:document.getElementById("e-pago").value,
+    pago:pagoE,
     proveedor:document.getElementById("e-proveedor").value,
     cancelado:document.getElementById("e-cancelado").value,
-    tipo,cantidad,valor,ganancia:paga-valor,
+    tipo,cantidad,valor,ganancia:gananciaE,
     observacion:document.getElementById("e-obs").value,
     telefono:document.getElementById("e-telefono").value.trim(),
     dias:parseInt(document.getElementById("e-dias").value)||0
