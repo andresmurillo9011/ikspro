@@ -99,6 +99,12 @@ tr.selected td{background:#1e3a5f}
 .agenda-item.pasado{border-left-color:#ef4444;background:#ef444411;opacity:.8}
 .agenda-item.recordatorio{border-left-color:#22c55e;background:#22c55e11;animation:blink 1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.6}}
+.pago-item{background:#141c35;border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-left:4px solid var(--b2)}
+.pago-item.vence-pronto{border-left-color:#f59e0b;background:#f59e0b11}
+.pago-item.vencido{border-left-color:#ef4444;background:#ef444411}
+.pago-info{display:flex;flex-direction:column;gap:3px}
+.pago-titulo{font-weight:700;font-size:14px;color:#e2e8f0}
+.pago-sub{font-size:12px;color:#64748b}
 .agenda-info{display:flex;flex-direction:column;gap:3px}
 .agenda-titulo{font-weight:700;font-size:14px;color:#e2e8f0}
 .agenda-sub{font-size:12px;color:#64748b}
@@ -129,6 +135,7 @@ tr.selected td{background:#1e3a5f}
       <button class="btn-sm blue" onclick="mostrarGrafica()">📊 Gráfica</button>
       <button class="btn-sm blue" onclick="mostrarResumen()">📅 Resumen</button>
       <button class="btn-sm" style="background:#7c3aed;border-color:#7c3aed;color:#fff" onclick="abrirAgenda()">📅 Agenda</button>
+      <button class="btn-sm" style="background:#0891b2;border-color:#0891b2;color:#fff" onclick="abrirPagosMensuales()">💳 Pagos</button>
       <button class="btn-sm green" onclick="exportarExcel()">📥 Excel</button>
     </div>
   </header>
@@ -138,6 +145,12 @@ tr.selected td{background:#1e3a5f}
     <div class="alerta-banner" id="agenda-hoy-banner" style="border-color:#f59e0b">
       <div class="alerta-banner-title" style="color:#f59e0b">📅 Soportes programados para hoy</div>
       <div id="agenda-hoy-lista"></div>
+    </div>
+
+    <!-- BANNER PAGOS MENSUALES -->
+    <div class="alerta-banner" id="pagos-banner" style="border-color:#0891b2">
+      <div class="alerta-banner-title" style="color:#0891b2">💳 Pagos mensuales próximos a vencer</div>
+      <div id="pagos-banner-lista"></div>
     </div>
 
     <!-- BANNER ALERTAS VENCIMIENTO -->
@@ -220,6 +233,31 @@ tr.selected td{background:#1e3a5f}
       <div class="resumen-card"><div class="lbl">📊 Balance Final</div><div class="val" id="r-balance">$0</div></div>
     </div>
   </main>
+</div>
+
+<!-- MODAL PAGOS MENSUALES -->
+<div class="modal-overlay" id="modal-pagos">
+  <div class="modal" style="max-width:600px">
+    <h3>💳 Pagos Mensuales Fijos</h3>
+    <div style="background:#141c35;border-radius:10px;padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:#0891b2;margin-bottom:10px">➕ Nuevo Pago Fijo</div>
+      <div class="edit-form-grid" style="gap:10px">
+        <div class="form-group"><label class="modal-label">Nombre</label><input type="text" id="pm-nombre" placeholder="Ej: Internet, IKS, Arriendo..."></div>
+        <div class="form-group"><label class="modal-label">Monto ($)</label><input type="number" id="pm-monto" placeholder="0"></div>
+        <div class="form-group"><label class="modal-label">Día de pago (del mes)</label><input type="number" id="pm-dia" placeholder="Ej: 5" min="1" max="31"></div>
+        <div class="form-group"><label class="modal-label">Recordar (días antes)</label><input type="number" id="pm-aviso" placeholder="3" min="1" max="15"></div>
+        <div class="form-group obs-group"><label class="modal-label">Descripción</label><input type="text" id="pm-desc" placeholder="Descripción opcional"></div>
+      </div>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn btn-blue" onclick="guardarPagoMensual()">💾 Guardar Pago Fijo</button>
+      </div>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:#94a3b8;margin-bottom:8px">📋 Pagos Registrados</div>
+    <div id="pagos-lista" style="max-height:300px;overflow-y:auto"></div>
+    <div class="modal-btns" style="margin-top:16px">
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-pagos')">Cerrar</button>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL AGENDA -->
@@ -895,7 +933,94 @@ async function renderAgenda(){
 // Verificar cada 5 minutos si hay recordatorios
 setInterval(verificarSoportesHoy, 5*60*1000);
 
+// ── PAGOS MENSUALES FIJOS ─────────────────────────────
+window.abrirPagosMensuales = async function(){
+  await renderPagosMensuales();
+  document.getElementById("modal-pagos").classList.add("open");
+}
+
+window.guardarPagoMensual = async function(){
+  const nombre = document.getElementById("pm-nombre").value.trim();
+  const monto  = parseFloat(document.getElementById("pm-monto").value)||0;
+  const dia    = parseInt(document.getElementById("pm-dia").value)||0;
+  const aviso  = parseInt(document.getElementById("pm-aviso").value)||3;
+  const desc   = document.getElementById("pm-desc").value.trim();
+  if(!nombre||!dia){showToast("Nombre y día son obligatorios",true);return}
+  await addDoc(collection(db,"pagos_mensuales"),{nombre,monto,dia,aviso,desc,timestamp:Date.now()});
+  ["pm-nombre","pm-monto","pm-dia","pm-aviso","pm-desc"].forEach(id=>document.getElementById(id).value="");
+  showToast("Pago fijo guardado ✔");
+  await renderPagosMensuales();
+  verificarPagosMensuales();
+}
+
+window.eliminarPagoMensual = async function(id){
+  if(!confirm("¿Eliminar este pago fijo?")) return;
+  await deleteDoc(doc(db,"pagos_mensuales",id));
+  showToast("Pago eliminado");
+  await renderPagosMensuales();
+  verificarPagosMensuales();
+}
+
+async function renderPagosMensuales(){
+  const snap = await getDocs(query(collection(db,"pagos_mensuales"),orderBy("dia","asc")));
+  const pagos = snap.docs.map(d=>({...d.data(),fireId:d.id}));
+  const lista = document.getElementById("pagos-lista");
+  if(!lista) return;
+  lista.innerHTML="";
+  if(!pagos.length){lista.innerHTML='<div class="loading">Sin pagos fijos registrados</div>';return}
+  const hoy = new Date().getDate();
+  pagos.forEach(p=>{
+    const diasFaltan = p.dia >= hoy ? p.dia - hoy : (31 - hoy + p.dia);
+    const vencePronto = diasFaltan <= p.aviso;
+    const vencido     = p.dia < hoy && diasFaltan > 20;
+    const div = document.createElement("div");
+    div.className = `pago-item${vencePronto&&!vencido?" vence-pronto":vencido?" vencido":""}`;
+    div.innerHTML = `
+      <div class="pago-info">
+        <div class="pago-titulo">${p.nombre} <span style="color:#64748b;font-weight:400;font-size:12px">— Día ${p.dia} de cada mes</span></div>
+        <div class="pago-sub">$${fmt(p.monto)} · ${p.desc||""} · Aviso ${p.aviso} días antes · ${vencePronto?`<strong style="color:#f59e0b">Vence en ${diasFaltan} día(s)</strong>`:`Faltan ${diasFaltan} días`}</div>
+      </div>
+      <button class="btn btn-red" style="padding:5px 10px;font-size:12px" onclick="eliminarPagoMensual('${p.fireId}')">🗑️</button>`;
+    lista.appendChild(div);
+  });
+}
+
+async function verificarPagosMensuales(){
+  const snap = await getDocs(query(collection(db,"pagos_mensuales"),orderBy("dia","asc")));
+  const pagos = snap.docs.map(d=>({...d.data(),fireId:d.id}));
+  const banner = document.getElementById("pagos-banner");
+  const lista  = document.getElementById("pagos-banner-lista");
+  const hoy = new Date().getDate();
+  const proximos = pagos.filter(p=>{
+    const diasFaltan = p.dia >= hoy ? p.dia - hoy : (31 - hoy + p.dia);
+    return diasFaltan <= p.aviso;
+  });
+  if(!proximos.length){banner.style.display="none";return}
+  banner.style.display="block";
+  lista.innerHTML="";
+  proximos.forEach(p=>{
+    const diasFaltan = p.dia >= hoy ? p.dia - hoy : (31 - hoy + p.dia);
+    const div = document.createElement("div");
+    div.className="alerta-item";
+    div.innerHTML=`
+      <div class="alerta-info">
+        <div class="alerta-nombre">${p.nombre} <span class="badge-naranja">Vence en ${diasFaltan} día(s)</span></div>
+        <div class="alerta-detalle">$${fmt(p.monto)} · Día ${p.dia} del mes · ${p.desc||""}</div>
+      </div>`;
+    lista.appendChild(div);
+  });
+}
+
+// ── MODO OFFLINE (Service Worker) ─────────────────────
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js").then(()=>{
+    console.log("Service Worker registrado - modo offline activo");
+  }).catch(e=>console.log("SW error:",e));
+}
+
 iniciarLogin();
+// Cargar pagos al iniciar
+setTimeout(verificarPagosMensuales, 2000);
 </script>
 </body>
 </html>
