@@ -155,6 +155,12 @@ tr.selected td{background:#1e3a5f}
       <div id="pagos-banner-lista"></div>
     </div>
 
+    <!-- BANNER RENOVACIONES AUTOMÁTICAS -->
+    <div class="alerta-banner" id="renovacion-banner" style="border-color:#a855f7">
+      <div class="alerta-banner-title" style="color:#a855f7">🔄 Clientes renovados automáticamente hoy</div>
+      <div id="renovacion-lista"></div>
+    </div>
+
     <!-- BANNER ALERTAS VENCIMIENTO -->
     <div class="alerta-banner" id="alerta-banner">
       <div class="alerta-banner-title">⚠️ Clientes por vencer hoy y en los próximos 5 días</div>
@@ -1183,6 +1189,104 @@ window.exportarMesArchivado = async function(clave){
   showToast("Excel del mes exportado ✔");
 }
 
+
+// ── RENOVACIÓN AUTOMÁTICA MENSUAL ────────────────────
+async function verificarRenovacionesAutomaticas(){
+  const hoy = new Date();
+  hoy.setHours(0,0,0,0);
+  const hoyStr = `${String(hoy.getDate()).padStart(2,"0")}/${String(hoy.getMonth()+1).padStart(2,"0")}/${hoy.getFullYear()}`;
+
+  // Clave para saber qué renovaciones ya se hicieron hoy
+  const claveHoy = `renovaciones_${hoy.getFullYear()}_${hoy.getMonth()+1}_${hoy.getDate()}`;
+  let yaRenovados = [];
+  try {
+    const docRen = await getDoc(doc(db,"config",claveHoy));
+    if(docRen.exists()) yaRenovados = docRen.data().ids || [];
+  } catch(e){}
+
+  const renovados = [];
+
+  for(const r of registros){
+    // Saltar si ya fue renovado hoy
+    if(yaRenovados.includes(r.fireId)) continue;
+    if(!r.fecha || !r.dias) continue;
+
+    const fv = calcularVencimiento(r.fecha, r.dias);
+    if(!fv) continue;
+
+    const fvNorm = new Date(fv);
+    fvNorm.setHours(0,0,0,0);
+
+    // Si vence HOY → renovar automáticamente
+    if(fvNorm.getTime() === hoy.getTime()){
+      // Calcular nueva fecha de inicio (hoy) en formato dd/mm/yyyy
+      const nuevaFecha = hoyStr;
+
+      // Crear nuevo registro renovado con Pagó = NO
+      const nuevoDoc = {
+        fecha: nuevaFecha,
+        usuario: r.usuario,
+        paga: r.paga,
+        pago: "NO",
+        proveedor: r.proveedor || "",
+        cancelado: r.cancelado || "",
+        tipo: r.tipo || "SAT FULL",
+        cantidad: r.cantidad || 0,
+        valor: r.valor || 0,
+        ganancia: 0,
+        observacion: `🔄 Renovación automática desde ${r.fecha}`,
+        telefono: r.telefono || "",
+        dias: r.dias,
+        timestamp: Date.now(),
+        renovacionAutomatica: true
+      };
+
+      await addDoc(collection(db,"registros"), nuevoDoc);
+      renovados.push(r);
+
+      // Marcar el registro original como renovado (actualizar observación)
+      await updateDoc(doc(db,"registros",r.fireId),{
+        cancelado: "RENOVADO",
+        observacion: (r.observacion||"") + " | ✅ Renovado automáticamente"
+      });
+
+      // Registrar que este ID ya fue renovado hoy
+      yaRenovados.push(r.fireId);
+    }
+  }
+
+  // Guardar registro de renovaciones del día
+  if(renovados.length > 0){
+    await setDoc(doc(db,"config",claveHoy),{ids: yaRenovados, fecha: hoyStr});
+  }
+
+  // Mostrar banner de renovados
+  const banner = document.getElementById("renovacion-banner");
+  const lista  = document.getElementById("renovacion-lista");
+  if(!renovados.length){banner.style.display="none";return}
+
+  banner.style.display="block";
+  lista.innerHTML="";
+  renovados.forEach(r=>{
+    const fv = calcularVencimiento(r.fecha,r.dias);
+    const tel = (r.telefono||"").replace(/\D/g,"");
+    const msg = encodeURIComponent(`Hola ${r.usuario||""}, tu servicio IKS ha sido renovado por ${r.dias} días más. Por favor realiza tu pago de $${fmt(r.paga)}. ¡Gracias!`);
+    const div = document.createElement("div");
+    div.className="alerta-item";
+    div.style="border-left:4px solid #a855f7";
+    div.innerHTML=`
+      <div class="alerta-info">
+        <div class="alerta-nombre" style="color:#a855f7">🔄 ${r.usuario||""} <span style="background:#a855f722;color:#a855f7;border:1px solid #a855f7;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700">RENOVADO HOY</span></div>
+        <div class="alerta-detalle">📅 Nuevo período: ${r.dias} días · 💰 Paga: $${fmt(r.paga)} · Estado: <strong style="color:#ef4444">Pendiente de pago</strong></div>
+      </div>
+      ${tel?`<a href="https://wa.me/${tel}?text=${msg}" target="_blank" class="btn-wsp">📲 Avisar cliente</a>`:`<span style="color:#64748b;font-size:12px">Sin teléfono</span>`}
+    `;
+    lista.appendChild(div);
+  });
+
+  showToast(`🔄 ${renovados.length} cliente(s) renovado(s) automáticamente`);
+}
+
 // ── MODO OFFLINE (Service Worker) ─────────────────────
 if("serviceWorker" in navigator){
   navigator.serviceWorker.register("sw.js").then(()=>{
@@ -1193,6 +1297,10 @@ if("serviceWorker" in navigator){
 iniciarLogin();
 // Cargar pagos al iniciar
 setTimeout(verificarPagosMensuales, 2000);
+// Verificar renovaciones automáticas al abrir (espera a que carguen los registros)
+setTimeout(verificarRenovacionesAutomaticas, 4000);
+// Verificar cada hora por si la app queda abierta
+setInterval(verificarRenovacionesAutomaticas, 60*60*1000);
 </script>
 </body>
 </html>
