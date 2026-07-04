@@ -137,6 +137,8 @@ tr.selected td{background:#1e3a5f}
       <button class="btn-sm" style="background:#7c3aed;border-color:#7c3aed;color:#fff" onclick="abrirAgenda()">📅 Agenda</button>
       <button class="btn-sm" style="background:#0891b2;border-color:#0891b2;color:#fff" onclick="abrirPagosMensuales()">💳 Pagos</button>
       <button class="btn-sm blue" onclick="mostrarGrafica()">📊 Gráfica</button>
+      <button class="btn-sm" style="background:#dc2626;border-color:#dc2626;color:#fff" onclick="cerrarMes()">📦 Cerrar Mes</button>
+      <button class="btn-sm" style="background:#f59e0b;border-color:#f59e0b;color:#fff" onclick="abrirHistorial()">🗂️ Historial</button>
       <button class="btn-sm green" onclick="exportarExcel()">📥 Excel</button>
     </div>
   </header>
@@ -240,6 +242,34 @@ tr.selected td{background:#1e3a5f}
       <div class="resumen-card"><div class="lbl">📊 Balance Final</div><div class="val" id="r-balance">$0</div></div>
     </div>
   </main>
+</div>
+
+<!-- MODAL HISTORIAL -->
+<div class="modal-overlay" id="modal-historial">
+  <div class="modal" style="max-width:800px">
+    <h3>🗂️ Historial de Meses</h3>
+    <div id="historial-meses" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"></div>
+    <div id="historial-detalle" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <button class="btn btn-gray" style="padding:5px 12px;font-size:12px" onclick="document.getElementById('historial-detalle').style.display='none';document.getElementById('historial-meses').style.display='flex'">← Volver</button>
+        <span id="historial-titulo" style="font-weight:700;color:#3b82f6;font-size:16px"></span>
+      </div>
+      <div class="table-wrap" style="max-height:400px;overflow-y:auto">
+        <table>
+          <thead><tr><th>Usuario</th><th>Fecha</th><th>Paga</th><th>Pagó</th><th>Proveedor</th><th>Tipo</th><th>Valor</th><th>Ganancia</th></tr></thead>
+          <tbody id="historial-tbody"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:10px;padding:10px;background:#141c35;border-radius:8px;display:flex;gap:20px;flex-wrap:wrap">
+        <span>📋 Registros: <strong id="h-total-regs">0</strong></span>
+        <span>💰 Ganancia: <strong id="h-total-gan" style="color:#22c55e">$0</strong></span>
+        <span>💸 Cobrado: <strong id="h-total-cob">$0</strong></span>
+      </div>
+    </div>
+    <div class="modal-btns" style="margin-top:16px">
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-historial')">Cerrar</button>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL ASTRA -->
@@ -438,7 +468,7 @@ tr.selected td{background:#1e3a5f}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, getDoc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, getDoc, setDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey:            "AIzaSyAw4y25NtQ_WcrBWRll143cNB2xe824cgo",
@@ -1053,6 +1083,99 @@ async function verificarPagosMensuales(){
       </div>`;
     lista.appendChild(div);
   });
+}
+
+// ── CIERRE MENSUAL ───────────────────────────────────
+window.cerrarMes = async function(){
+  const hoy  = new Date();
+  const mes  = `${String(hoy.getMonth()+1).padStart(2,"0")}-${hoy.getFullYear()}`;
+  const nombre = hoy.toLocaleDateString("es-CO",{month:"long",year:"numeric"});
+
+  if(!confirm(`¿Cerrar el mes de ${nombre}?
+
+Los registros se guardarán en el historial y el balance volverá a $0.
+Los clientes NO se borran.`)) return;
+
+  // Copiar registros al historial del mes
+  const snap = await getDocs(query(collection(db,"registros"),orderBy("timestamp","desc")));
+  if(snap.empty){showToast("No hay registros para cerrar",true);return}
+
+  const batch = writeBatch(db);
+  snap.docs.forEach(d=>{
+    const ref = doc(collection(db,`historial_${mes}`));
+    batch.set(ref, {...d.data(), mesArchivado: mes});
+  });
+  await batch.commit();
+
+  // Borrar registros del mes actual (los clientes quedan en historial)
+  const batch2 = writeBatch(db);
+  snap.docs.forEach(d=> batch2.delete(d.ref));
+  await batch2.commit();
+
+  // Borrar movimientos del mes
+  const snapMov = await getDocs(collection(db,"movimientos"));
+  if(!snapMov.empty){
+    const batch3 = writeBatch(db);
+    snapMov.docs.forEach(d=> batch3.delete(d.ref));
+    await batch3.commit();
+  }
+
+  showToast(`✔ Mes ${nombre} cerrado y archivado`);
+}
+
+window.abrirHistorial = async function(){
+  const mesesDiv = document.getElementById("historial-meses");
+  mesesDiv.innerHTML = '<div class="loading">🔄 Cargando historial...</div>';
+  mesesDiv.style.display = "flex";
+  document.getElementById("historial-detalle").style.display = "none";
+  document.getElementById("modal-historial").classList.add("open");
+
+  // Buscar últimos 12 meses
+  const hoy = new Date();
+  mesesDiv.innerHTML = "";
+  let hayMeses = false;
+
+  for(let i=0; i<24; i++){
+    const d = new Date(hoy.getFullYear(), hoy.getMonth()-i, 1);
+    const key = `${String(d.getMonth()+1).padStart(2,"0")}-${d.getFullYear()}`;
+    const nombre = d.toLocaleDateString("es-CO",{month:"long",year:"numeric"});
+    const snap = await getDocs(collection(db,`historial_${key}`));
+    if(snap.empty) continue;
+    hayMeses = true;
+    const regs = snap.docs.map(d=>d.data());
+    const gan  = regs.reduce((a,r)=>a+(r.ganancia||0),0);
+    const btn  = document.createElement("div");
+    btn.style = "background:#141c35;border:1px solid #1e40af;border-radius:10px;padding:14px 20px;cursor:pointer;text-align:center;min-width:140px";
+    btn.innerHTML = `<div style="font-weight:700;color:#3b82f6;font-size:15px">${nombre}</div>
+      <div style="color:${gan>=0?"#22c55e":"#ef4444"};font-weight:700;margin-top:4px">$${fmt(gan)}</div>
+      <div style="font-size:11px;color:#64748b;margin-top:2px">${regs.length} registros</div>`;
+    btn.onclick = ()=> verDetalleHistorial(key, nombre, regs);
+    mesesDiv.appendChild(btn);
+  }
+  if(!hayMeses) mesesDiv.innerHTML = '<div class="loading">No hay meses cerrados aún</div>';
+}
+
+function verDetalleHistorial(key, nombre, regs){
+  document.getElementById("historial-meses").style.display = "none";
+  document.getElementById("historial-detalle").style.display = "block";
+  document.getElementById("historial-titulo").textContent = `📅 ${nombre}`;
+  const tbody = document.getElementById("historial-tbody");
+  tbody.innerHTML = "";
+  let totalGan=0, totalCob=0;
+  regs.forEach(r=>{
+    const tr = document.createElement("tr");
+    const gc = r.ganancia>=0?"pos":"neg";
+    tr.innerHTML = `<td>${r.usuario||""}</td><td>${r.fecha||""}</td><td>$${fmt(r.paga)}</td>
+      <td>${r.pago||""}</td><td>${r.proveedor||""}</td><td>${r.tipo||""}</td>
+      <td>$${fmt(r.valor)}</td><td class="${gc}">$${fmt(r.ganancia)}</td>`;
+    tbody.appendChild(tr);
+    totalGan += r.ganancia||0;
+    totalCob += r.paga||0;
+  });
+  document.getElementById("h-total-regs").textContent = regs.length;
+  document.getElementById("h-total-gan").textContent  = `$${fmt(totalGan)}`;
+  document.getElementById("h-total-gan").style.color  = totalGan>=0?"#22c55e":"#ef4444";
+  document.getElementById("h-total-cob").textContent  = `$${fmt(totalCob)}`;
 }
 
 // ── ASTRA ─────────────────────────────────────────────
