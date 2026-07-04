@@ -1219,10 +1219,11 @@ async function verificarAstra(){
 }
 
 // ── MODO OFFLINE (Service Worker) ─────────────────────
+// Limpiar service workers viejos
 if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("sw.js").then(()=>{
-    console.log("Service Worker registrado - modo offline activo");
-  }).catch(e=>console.log("SW error:",e));
+  navigator.serviceWorker.getRegistrations().then(regs=>{
+    regs.forEach(r=>r.unregister());
+  });
 }
 
 iniciarLogin();
