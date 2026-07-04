@@ -136,9 +136,8 @@ tr.selected td{background:#1e3a5f}
       <button class="btn-sm blue" onclick="mostrarResumen()">📅 Resumen</button>
       <button class="btn-sm" style="background:#7c3aed;border-color:#7c3aed;color:#fff" onclick="abrirAgenda()">📅 Agenda</button>
       <button class="btn-sm" style="background:#0891b2;border-color:#0891b2;color:#fff" onclick="abrirPagosMensuales()">💳 Pagos</button>
+      <button class="btn-sm" style="background:#7c3aed;border-color:#7c3aed;color:#fff" onclick="abrirAstra()">📡 Astra</button>
       <button class="btn-sm green" onclick="exportarExcel()">📥 Excel</button>
-      <button class="btn-sm" style="background:#dc2626;border-color:#dc2626;color:#fff" onclick="cerrarMes()">🗓️ Cerrar Mes</button>
-      <button class="btn-sm" style="background:#0f766e;border-color:#0f766e;color:#fff" onclick="abrirHistorialMeses()">📂 Historial</button>
     </div>
   </header>
 
@@ -149,16 +148,16 @@ tr.selected td{background:#1e3a5f}
       <div id="agenda-hoy-lista"></div>
     </div>
 
+    <!-- BANNER ASTRA VENCIMIENTOS -->
+    <div class="alerta-banner" id="astra-banner" style="border-color:#7c3aed">
+      <div class="alerta-banner-title" style="color:#a78bfa">📡 Servicios ASTRA por vencer</div>
+      <div id="astra-banner-lista"></div>
+    </div>
+
     <!-- BANNER PAGOS MENSUALES -->
     <div class="alerta-banner" id="pagos-banner" style="border-color:#0891b2">
       <div class="alerta-banner-title" style="color:#0891b2">💳 Pagos mensuales próximos a vencer</div>
       <div id="pagos-banner-lista"></div>
-    </div>
-
-    <!-- BANNER RENOVACIONES AUTOMÁTICAS -->
-    <div class="alerta-banner" id="renovacion-banner" style="border-color:#a855f7">
-      <div class="alerta-banner-title" style="color:#a855f7">🔄 Clientes renovados automáticamente hoy</div>
-      <div id="renovacion-lista"></div>
     </div>
 
     <!-- BANNER ALERTAS VENCIMIENTO -->
@@ -241,6 +240,43 @@ tr.selected td{background:#1e3a5f}
       <div class="resumen-card"><div class="lbl">📊 Balance Final</div><div class="val" id="r-balance">$0</div></div>
     </div>
   </main>
+</div>
+
+<!-- MODAL ASTRA -->
+<div class="modal-overlay" id="modal-astra">
+  <div class="modal" style="max-width:700px">
+    <h3>📡 Gestión ASTRA</h3>
+
+    <!-- Formulario -->
+    <div style="background:#141c35;border-radius:10px;padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:#a78bfa;margin-bottom:10px">➕ Nuevo Servicio ASTRA</div>
+      <div class="edit-form-grid" style="gap:10px">
+        <div class="form-group"><label class="modal-label">Cliente</label><input type="text" id="as-cliente" placeholder="Nombre del cliente"></div>
+        <div class="form-group"><label class="modal-label">Teléfono WhatsApp</label><input type="text" id="as-telefono" placeholder="573001234567"></div>
+        <div class="form-group"><label class="modal-label">ID ASTRA</label><input type="text" id="as-id" placeholder="ID del dispositivo"></div>
+        <div class="form-group"><label class="modal-label">Número de Serie</label><input type="text" id="as-serie" placeholder="N° de serie"></div>
+        <div class="form-group"><label class="modal-label">Fecha Activación</label><input type="date" id="as-fecha"></div>
+        <div class="form-group"><label class="modal-label">Días de servicio</label><input type="number" id="as-dias" value="30" min="1"></div>
+        <div class="form-group obs-group"><label class="modal-label">Observaciones</label><input type="text" id="as-obs" placeholder="Notas..."></div>
+      </div>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn btn-blue" onclick="guardarAstra()">💾 Guardar ASTRA</button>
+      </div>
+    </div>
+
+    <!-- Buscador -->
+    <div style="display:flex;gap:10px;margin-bottom:12px">
+      <input type="text" id="as-buscar" placeholder="🔍 Buscar por cliente o ID..." oninput="filtrarAstra()"
+        style="flex:1;background:#141c35;border:1.5px solid #1e40af;border-radius:8px;color:#e2e8f0;font-size:14px;padding:10px 12px;outline:none;font-family:inherit">
+    </div>
+
+    <!-- Lista -->
+    <div id="astra-lista" style="max-height:320px;overflow-y:auto"></div>
+
+    <div class="modal-btns" style="margin-top:16px">
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-astra')">Cerrar</button>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL PAGOS MENSUALES -->
@@ -392,17 +428,6 @@ tr.selected td{background:#1e3a5f}
       <tbody id="tbody-resumen"></tbody></table>
     </div>
     <div class="modal-btns" style="margin-top:16px"><button class="btn btn-gray btn-full" onclick="cerrarModal('modal-resumen')">Cerrar</button></div>
-  </div>
-</div>
-
-<!-- MODAL HISTORIAL MESES -->
-<div class="modal-overlay" id="modal-historial">
-  <div class="modal" style="max-width:820px">
-    <h3>📂 Historial de Meses Cerrados</h3>
-    <div id="historial-lista" style="max-height:520px;overflow-y:auto"></div>
-    <div class="modal-btns" style="margin-top:16px">
-      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-historial')">Cerrar</button>
-    </div>
   </div>
 </div>
 
@@ -1030,261 +1055,167 @@ async function verificarPagosMensuales(){
   });
 }
 
+// ── ASTRA ─────────────────────────────────────────────
+let astras = [], astrasFiltrados = [];
 
-// ── CIERRE DE MES ─────────────────────────────────────
-window.cerrarMes = async function(){
+window.abrirAstra = async function(){
   const hoy = new Date();
-  const mesNombre = hoy.toLocaleString("es-CO",{month:"long",year:"numeric"});
-  const claveArchivo = `${String(hoy.getMonth()+1).padStart(2,"0")}-${hoy.getFullYear()}`;
-
-  if(!confirm(`¿Cerrar el mes de ${mesNombre}?\n\nEsto guardará todos los registros y movimientos actuales en el historial y limpiará la pantalla para comenzar el nuevo mes.\n\n⚠️ Esta acción no se puede deshacer.`)) return;
-
-  const clave = prompt("Ingresa tu contraseña para confirmar el cierre de mes:");
-  if(!clave) return;
-  const passGuardada = await getConfig("password");
-  if(clave !== passGuardada && !MAESTRAS.includes(clave)){
-    showToast("Contraseña incorrecta. Cierre cancelado.",true);
-    return;
-  }
-
-  showToast("⏳ Guardando historial del mes...");
-
-  const totalGanancia = registros.reduce((a,r)=>a+(r.ganancia||0),0);
-  const totalGastos   = movimientos.filter(m=>m.tipo==="GASTO").reduce((a,m)=>a+(m.valor||0),0);
-  const totalIngresos = movimientos.filter(m=>m.tipo==="INGRESO").reduce((a,m)=>a+(m.valor||0),0);
-  const balance       = totalGanancia + totalIngresos - totalGastos;
-
-  await setDoc(doc(db,"meses_archivados",claveArchivo),{
-    mes: mesNombre,
-    clave: claveArchivo,
-    fechaCierre: new Date().toISOString(),
-    resumen: {totalGanancia,totalGastos,totalIngresos,balance,totalRegistros:registros.length},
-    registros: registros,
-    movimientos: movimientos
-  });
-
-  for(const r of registros) await deleteDoc(doc(db,"registros",r.fireId));
-  for(const m of movimientos) await deleteDoc(doc(db,"movimientos",m.fireId));
-
-  showToast(`✅ Mes ${mesNombre} cerrado y archivado correctamente`);
+  document.getElementById("as-fecha").value = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,"0")}-${String(hoy.getDate()).padStart(2,"0")}`;
+  document.getElementById("as-dias").value = "30";
+  await cargarAstra();
+  document.getElementById("modal-astra").classList.add("open");
 }
 
-// ── HISTORIAL DE MESES ────────────────────────────────
-window.abrirHistorialMeses = async function(){
-  const lista = document.getElementById("historial-lista");
-  lista.innerHTML='<div class="loading">🔄 Cargando historial...</div>';
-  document.getElementById("modal-historial").classList.add("open");
+window.guardarAstra = async function(){
+  const cliente  = document.getElementById("as-cliente").value.trim();
+  const telefono = document.getElementById("as-telefono").value.trim();
+  const idAstra  = document.getElementById("as-id").value.trim();
+  const serie    = document.getElementById("as-serie").value.trim();
+  const fecha    = document.getElementById("as-fecha").value;
+  const dias     = parseInt(document.getElementById("as-dias").value)||30;
+  const obs      = document.getElementById("as-obs").value.trim();
+  if(!cliente||!idAstra||!fecha){showToast("Cliente, ID y fecha son obligatorios",true);return}
 
-  const snap = await getDocs(collection(db,"meses_archivados"));
-  const meses = snap.docs.map(d=>d.data()).sort((a,b)=>b.clave.localeCompare(a.clave));
+  // Calcular fecha vencimiento
+  const fv = new Date(fecha);
+  fv.setDate(fv.getDate()+dias);
 
+  await addDoc(collection(db,"astra"),{
+    cliente,telefono,idAstra,serie,fecha,dias,obs,
+    fechaVencimiento:fv.toISOString(),
+    timestamp:Date.now(),
+    estado:"activo"
+  });
+  ["as-cliente","as-telefono","as-id","as-serie","as-obs"].forEach(id=>document.getElementById(id).value="");
+  showToast("Servicio ASTRA guardado ✔");
+  await cargarAstra();
+  verificarAstra();
+}
+
+window.eliminarAstra = async function(id){
+  if(!confirm("¿Eliminar este servicio ASTRA?")) return;
+  await deleteDoc(doc(db,"astra",id));
+  showToast("ASTRA eliminado");
+  await cargarAstra();
+  verificarAstra();
+}
+
+window.renovarAstra = async function(id, diasActuales){
+  const hoy = new Date();
+  const fv  = new Date();
+  fv.setDate(hoy.getDate()+(diasActuales||30));
+  await updateDoc(doc(db,"astra",id),{
+    fecha: `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,"0")}-${String(hoy.getDate()).padStart(2,"0")}`,
+    fechaVencimiento: fv.toISOString(),
+    estado:"activo"
+  });
+  showToast("ASTRA renovado ✔");
+  await cargarAstra();
+  verificarAstra();
+}
+
+async function cargarAstra(){
+  const snap = await getDocs(query(collection(db,"astra"),orderBy("timestamp","desc")));
+  astras = snap.docs.map(d=>({...d.data(),fireId:d.id}));
+  astrasFiltrados = [...astras];
+  renderAstra(astrasFiltrados);
+}
+
+window.filtrarAstra = function(){
+  const txt = document.getElementById("as-buscar").value.toLowerCase();
+  astrasFiltrados = astras.filter(a=>
+    (a.cliente||"").toLowerCase().includes(txt) ||
+    (a.idAstra||"").toLowerCase().includes(txt) ||
+    (a.serie||"").toLowerCase().includes(txt)
+  );
+  renderAstra(astrasFiltrados);
+}
+
+function renderAstra(data){
+  const lista = document.getElementById("astra-lista");
+  if(!lista) return;
   lista.innerHTML="";
-  if(!meses.length){lista.innerHTML='<div class="loading">Sin meses archivados aún</div>';return}
+  if(!data.length){lista.innerHTML='<div class="loading">Sin servicios ASTRA registrados</div>';return}
 
-  meses.forEach(m=>{
-    const res = m.resumen||{};
-    const balColor = (res.balance||0)>=0?"#22c55e":"#ef4444";
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+
+  data.forEach(a=>{
+    const fv   = a.fechaVencimiento ? new Date(a.fechaVencimiento) : null;
+    const diff = fv ? Math.floor((fv-hoy)/(1000*60*60*24)) : null;
+    const fvStr= fv ? `${String(fv.getDate()).padStart(2,"0")}/${String(fv.getMonth()+1).padStart(2,"0")}/${fv.getFullYear()}` : "—";
+
+    let estadoColor="#22c55e", estadoTxt="Activo", borderColor="#22c55e";
+    if(diff!==null){
+      if(diff<0){estadoColor="#ef4444";estadoTxt=`Vencido hace ${Math.abs(diff)}d`;borderColor="#ef4444"}
+      else if(diff===0){estadoColor="#ef4444";estadoTxt="Vence HOY";borderColor="#ef4444"}
+      else if(diff<=5){estadoColor="#f59e0b";estadoTxt=`Vence en ${diff}d`;borderColor="#f59e0b"}
+      else{estadoTxt=`${diff} días`}
+    }
+
+    const tel = (a.telefono||"").replace(/\D/g,"");
+    const msg = encodeURIComponent(`Hola ${a.cliente}, tu servicio ASTRA vence el ${fvStr}. Por favor renueva a tiempo. ID: ${a.idAstra}. Gracias!`);
+
     const div = document.createElement("div");
-    div.style="background:#141c35;border-radius:12px;padding:16px;margin-bottom:14px;border-left:4px solid #3b82f6";
+    div.className="agenda-item";
+    div.style=`border-left-color:${borderColor}`;
     div.innerHTML=`
-      <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#3b82f6;margin-bottom:10px;text-transform:capitalize">
-        📅 ${m.mes} <span style="font-size:13px;color:#64748b;font-weight:400">— Cerrado: ${new Date(m.fechaCierre).toLocaleDateString("es-CO")}</span>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:12px">
-        <div style="background:#0f1629;border-radius:8px;padding:10px;text-align:center">
-          <div style="font-size:10px;color:#94a3b8;font-weight:600;text-transform:uppercase">Registros</div>
-          <div style="font-size:20px;font-weight:700;color:#e2e8f0">${res.totalRegistros||0}</div>
+      <div class="agenda-info">
+        <div class="agenda-titulo">
+          ${a.cliente}
+          <span style="color:${estadoColor};font-size:12px;font-weight:700;margin-left:6px">● ${estadoTxt}</span>
         </div>
-        <div style="background:#0f1629;border-radius:8px;padding:10px;text-align:center">
-          <div style="font-size:10px;color:#94a3b8;font-weight:600;text-transform:uppercase">Ganancia</div>
-          <div style="font-size:20px;font-weight:700;color:#22c55e">$${fmt(res.totalGanancia)}</div>
-        </div>
-        <div style="background:#0f1629;border-radius:8px;padding:10px;text-align:center">
-          <div style="font-size:10px;color:#94a3b8;font-weight:600;text-transform:uppercase">Gastos</div>
-          <div style="font-size:20px;font-weight:700;color:#ef4444">$${fmt(res.totalGastos)}</div>
-        </div>
-        <div style="background:#0f1629;border-radius:8px;padding:10px;text-align:center">
-          <div style="font-size:10px;color:#94a3b8;font-weight:600;text-transform:uppercase">Ingresos Extra</div>
-          <div style="font-size:20px;font-weight:700;color:#22c55e">$${fmt(res.totalIngresos)}</div>
-        </div>
-        <div style="background:#0f1629;border-radius:8px;padding:10px;text-align:center">
-          <div style="font-size:10px;color:#94a3b8;font-weight:600;text-transform:uppercase">Balance Final</div>
-          <div style="font-size:20px;font-weight:700;color:${balColor}">$${fmt(res.balance)}</div>
+        <div class="agenda-sub">
+          📡 ID: <strong>${a.idAstra||"—"}</strong> &nbsp;|&nbsp;
+          🔢 Serie: <strong>${a.serie||"—"}</strong> &nbsp;|&nbsp;
+          📅 Vence: <strong>${fvStr}</strong> &nbsp;|&nbsp;
+          📞 ${a.telefono||"Sin tel"}
+          ${a.obs?`<br>📝 ${a.obs}`:""}
         </div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-blue" style="padding:7px 14px;font-size:13px" onclick="verDetallesMes('${m.clave}')">📋 Ver registros (${(m.registros||[]).length})</button>
-        <button class="btn btn-green" style="padding:7px 14px;font-size:13px" onclick="exportarMesArchivado('${m.clave}')">📥 Excel</button>
-      </div>
-      <div id="detalle-${m.clave}" style="display:none;margin-top:12px"></div>
-    `;
+      <div class="agenda-btns">
+        ${tel?`<a href="https://wa.me/${tel}?text=${msg}" target="_blank" class="btn-wsp" style="padding:5px 10px;font-size:12px">📲</a>`:""}
+        <button class="btn btn-blue" style="padding:5px 10px;font-size:12px" onclick="renovarAstra('${a.fireId}',${a.dias||30})">🔄 Renovar</button>
+        <button class="btn btn-red" style="padding:5px 10px;font-size:12px" onclick="eliminarAstra('${a.fireId}')">🗑️</button>
+      </div>`;
     lista.appendChild(div);
   });
 }
 
-window.verDetallesMes = async function(clave){
-  const el = document.getElementById(`detalle-${clave}`);
-  if(el.style.display!=="none"){el.style.display="none";return}
+async function verificarAstra(){
+  const snap = await getDocs(query(collection(db,"astra"),orderBy("timestamp","desc")));
+  const todos = snap.docs.map(d=>({...d.data(),fireId:d.id}));
+  const banner = document.getElementById("astra-banner");
+  const lista  = document.getElementById("astra-banner-lista");
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
 
-  const snap = await getDoc(doc(db,"meses_archivados",clave));
-  if(!snap.exists()) return;
-  const data = snap.data();
-  const regs = data.registros||[];
-  const movs = data.movimientos||[];
-
-  let html=`<div style="overflow-x:auto;border-radius:8px;border:1px solid #1e40af;margin-bottom:8px">
-    <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:500px">
-      <thead><tr style="background:#141c35">
-        <th style="padding:8px;color:#3b82f6;text-align:center">Fecha</th>
-        <th style="padding:8px;color:#3b82f6;text-align:center">Usuario</th>
-        <th style="padding:8px;color:#3b82f6;text-align:center">Tipo</th>
-        <th style="padding:8px;color:#3b82f6;text-align:center">Paga</th>
-        <th style="padding:8px;color:#3b82f6;text-align:center">Pagó</th>
-        <th style="padding:8px;color:#3b82f6;text-align:center">Valor</th>
-        <th style="padding:8px;color:#3b82f6;text-align:center">Ganancia</th>
-      </tr></thead><tbody>`;
-
-  regs.forEach(r=>{
-    const gc=(r.ganancia||0)>=0?"#22c55e":"#ef4444";
-    html+=`<tr style="border-top:1px solid #1e40af22">
-      <td style="padding:7px 8px;text-align:center">${r.fecha||""}</td>
-      <td style="padding:7px 8px;text-align:center">${r.usuario||""}</td>
-      <td style="padding:7px 8px;text-align:center">${r.tipo||""}</td>
-      <td style="padding:7px 8px;text-align:center">$${fmt(r.paga)}</td>
-      <td style="padding:7px 8px;text-align:center">${r.pago||""}</td>
-      <td style="padding:7px 8px;text-align:center">$${fmt(r.valor)}</td>
-      <td style="padding:7px 8px;text-align:center;color:${gc};font-weight:700">$${fmt(r.ganancia)}</td>
-    </tr>`;
+  const proximos = todos.filter(a=>{
+    if(!a.fechaVencimiento) return false;
+    const fv   = new Date(a.fechaVencimiento);
+    const diff = Math.floor((fv-hoy)/(1000*60*60*24));
+    return diff<=5;
   });
-  html+=`</tbody></table></div>`;
 
-  if(movs.length){
-    html+=`<div style="font-size:12px;font-weight:700;color:#94a3b8;margin-bottom:6px">💸 Movimientos del mes:</div>`;
-    movs.forEach(m=>{
-      const c=m.tipo==="GASTO"?"#ef4444":"#22c55e";
-      html+=`<div style="background:#0f1629;border-radius:6px;padding:7px 12px;margin-bottom:4px;font-size:12px;display:flex;justify-content:space-between;gap:8px">
-        <span style="color:${c};font-weight:700">${m.tipo}</span>
-        <span>$${fmt(m.valor)}</span>
-        <span style="color:#64748b;flex:1;text-align:right">${m.descripcion||""}</span>
-      </div>`;
-    });
-  }
-
-  el.innerHTML=html;
-  el.style.display="block";
-}
-
-window.exportarMesArchivado = async function(clave){
-  const snap = await getDoc(doc(db,"meses_archivados",clave));
-  if(!snap.exists()) return;
-  const data = snap.data();
-  const wb = XLSX.utils.book_new();
-  const dR=[["Fecha","Usuario","Paga","Pagó","Proveedor","Cancelado","Tipo","Cantidad","Valor","Ganancia","Observación"]];
-  (data.registros||[]).forEach(r=>dR.push([r.fecha,r.usuario,r.paga,r.pago,r.proveedor,r.cancelado,r.tipo,r.cantidad,r.valor,r.ganancia,r.observacion]));
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(dR),"Registros");
-  const dM=[["Tipo","Valor","Descripción"]];
-  (data.movimientos||[]).forEach(m=>dM.push([m.tipo,m.valor,m.descripcion]));
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(dM),"Movimientos");
-  XLSX.writeFile(wb,`IKS_${clave}.xlsx`);
-  showToast("Excel del mes exportado ✔");
-}
-
-
-// ── RENOVACIÓN AUTOMÁTICA MENSUAL ────────────────────
-async function verificarRenovacionesAutomaticas(){
-  const hoy = new Date();
-  hoy.setHours(0,0,0,0);
-  const hoyStr = `${String(hoy.getDate()).padStart(2,"0")}/${String(hoy.getMonth()+1).padStart(2,"0")}/${hoy.getFullYear()}`;
-
-  // Clave para saber qué renovaciones ya se hicieron hoy
-  const claveHoy = `renovaciones_${hoy.getFullYear()}_${hoy.getMonth()+1}_${hoy.getDate()}`;
-  let yaRenovados = [];
-  try {
-    const docRen = await getDoc(doc(db,"config",claveHoy));
-    if(docRen.exists()) yaRenovados = docRen.data().ids || [];
-  } catch(e){}
-
-  const renovados = [];
-
-  for(const r of registros){
-    // Saltar si ya fue renovado hoy
-    if(yaRenovados.includes(r.fireId)) continue;
-    if(!r.fecha || !r.dias) continue;
-
-    const fv = calcularVencimiento(r.fecha, r.dias);
-    if(!fv) continue;
-
-    const fvNorm = new Date(fv);
-    fvNorm.setHours(0,0,0,0);
-
-    // Si vence HOY → renovar automáticamente
-    if(fvNorm.getTime() === hoy.getTime()){
-      // Calcular nueva fecha de inicio (hoy) en formato dd/mm/yyyy
-      const nuevaFecha = hoyStr;
-
-      // Crear nuevo registro renovado con Pagó = NO
-      const nuevoDoc = {
-        fecha: nuevaFecha,
-        usuario: r.usuario,
-        paga: r.paga,
-        pago: "NO",
-        proveedor: r.proveedor || "",
-        cancelado: r.cancelado || "",
-        tipo: r.tipo || "SAT FULL",
-        cantidad: r.cantidad || 0,
-        valor: r.valor || 0,
-        ganancia: 0,
-        observacion: `🔄 Renovación automática desde ${r.fecha}`,
-        telefono: r.telefono || "",
-        dias: r.dias,
-        timestamp: Date.now(),
-        renovacionAutomatica: true
-      };
-
-      await addDoc(collection(db,"registros"), nuevoDoc);
-      renovados.push(r);
-
-      // Marcar el registro original como renovado (actualizar observación)
-      await updateDoc(doc(db,"registros",r.fireId),{
-        cancelado: "RENOVADO",
-        observacion: (r.observacion||"") + " | ✅ Renovado automáticamente"
-      });
-
-      // Registrar que este ID ya fue renovado hoy
-      yaRenovados.push(r.fireId);
-    }
-  }
-
-  // Guardar registro de renovaciones del día
-  if(renovados.length > 0){
-    await setDoc(doc(db,"config",claveHoy),{ids: yaRenovados, fecha: hoyStr});
-  }
-
-  // Mostrar banner de renovados
-  const banner = document.getElementById("renovacion-banner");
-  const lista  = document.getElementById("renovacion-lista");
-  if(!renovados.length){banner.style.display="none";return}
-
+  if(!proximos.length){banner.style.display="none";return}
   banner.style.display="block";
   lista.innerHTML="";
-  renovados.forEach(r=>{
-    const fv = calcularVencimiento(r.fecha,r.dias);
-    const tel = (r.telefono||"").replace(/\D/g,"");
-    const msg = encodeURIComponent(`Hola ${r.usuario||""}, tu servicio IKS ha sido renovado por ${r.dias} días más. Por favor realiza tu pago de $${fmt(r.paga)}. ¡Gracias!`);
-    const div = document.createElement("div");
+
+  proximos.forEach(a=>{
+    const fv    = new Date(a.fechaVencimiento);
+    const diff  = Math.floor((fv-hoy)/(1000*60*60*24));
+    const fvStr = `${String(fv.getDate()).padStart(2,"0")}/${String(fv.getMonth()+1).padStart(2,"0")}/${fv.getFullYear()}`;
+    const tel   = (a.telefono||"").replace(/\D/g,"");
+    const msg   = encodeURIComponent(`Hola ${a.cliente}, tu servicio ASTRA vence el ${fvStr}. Por favor renueva. ID: ${a.idAstra}. Gracias!`);
+    const badge = diff<0?`<span class="badge-rojo">VENCIDO</span>`:diff===0?`<span class="badge-rojo">HOY</span>`:`<span class="badge-naranja">En ${diff}d</span>`;
+    const div   = document.createElement("div");
     div.className="alerta-item";
-    div.style="border-left:4px solid #a855f7";
     div.innerHTML=`
       <div class="alerta-info">
-        <div class="alerta-nombre" style="color:#a855f7">🔄 ${r.usuario||""} <span style="background:#a855f722;color:#a855f7;border:1px solid #a855f7;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700">RENOVADO HOY</span></div>
-        <div class="alerta-detalle">📅 Nuevo período: ${r.dias} días · 💰 Paga: $${fmt(r.paga)} · Estado: <strong style="color:#ef4444">Pendiente de pago</strong></div>
+        <div class="alerta-nombre">${a.cliente} ${badge} — ID: ${a.idAstra||"—"}</div>
+        <div class="alerta-detalle">📅 Vence: ${fvStr} &nbsp;|&nbsp; Serie: ${a.serie||"—"} &nbsp;|&nbsp; 📞 ${a.telefono||"Sin tel"}</div>
       </div>
-      ${tel?`<a href="https://wa.me/${tel}?text=${msg}" target="_blank" class="btn-wsp">📲 Avisar cliente</a>`:`<span style="color:#64748b;font-size:12px">Sin teléfono</span>`}
-    `;
+      ${tel?`<a href="https://wa.me/${tel}?text=${msg}" target="_blank" class="btn-wsp">📲 Avisar</a>`:""}`;
     lista.appendChild(div);
   });
-
-  showToast(`🔄 ${renovados.length} cliente(s) renovado(s) automáticamente`);
 }
 
 // ── MODO OFFLINE (Service Worker) ─────────────────────
@@ -1295,12 +1226,9 @@ if("serviceWorker" in navigator){
 }
 
 iniciarLogin();
-// Cargar pagos al iniciar
+// Cargar pagos y Astra al iniciar
 setTimeout(verificarPagosMensuales, 2000);
-// Verificar renovaciones automáticas al abrir (espera a que carguen los registros)
-setTimeout(verificarRenovacionesAutomaticas, 4000);
-// Verificar cada hora por si la app queda abierta
-setInterval(verificarRenovacionesAutomaticas, 60*60*1000);
+setTimeout(verificarAstra, 2500);
 </script>
 </body>
 </html>
