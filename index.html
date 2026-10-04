@@ -765,6 +765,7 @@ function renderTablaRegistros(data){
       <td style="white-space:nowrap">
         <button class="btn btn-orange" style="padding:5px 10px;font-size:12px;margin-right:4px" onclick="event.stopPropagation();solicitarEdicion('${r.fireId}')">✏️</button>
         ${tel?`<a href="https://wa.me/${tel}?text=${msg}" target="_blank" onclick="event.stopPropagation()" style="padding:5px 10px;font-size:12px;margin-right:4px;background:#25d366;color:#fff;border-radius:9px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center">📲</a>`:""}
+        <button class="btn btn-blue" style="padding:5px 10px;font-size:12px;margin-right:4px;background:#0891b2;border-color:#0891b2" onclick="event.stopPropagation();renovarRegistro('${r.fireId}',${r.dias||30})">🔄 Renovar</button>
         <button class="btn btn-red" style="padding:5px 10px;font-size:12px" onclick="event.stopPropagation();eliminarUno('${r.fireId}')">🗑️</button>
       </td>`;
     tbody.appendChild(tr);
