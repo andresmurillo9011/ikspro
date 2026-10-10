@@ -109,8 +109,37 @@ tr.selected td{background:#1e3a5f}
 .agenda-titulo{font-weight:700;font-size:14px;color:#e2e8f0}
 .agenda-sub{font-size:12px;color:#64748b}
 .agenda-btns{display:flex;gap:6px;flex-wrap:wrap}
+/* ── PRESUPUESTO SEMANAL ── */
+#vista-general{display:flex;flex-direction:column;gap:14px}
+#vista-presupuesto{display:none;flex-direction:column;gap:14px;max-width:720px;width:100%;margin:0 auto}
+.btn-sm.pres{background:#f59e0b;border-color:#f59e0b;color:#111}
+.pres-hero{position:relative;overflow:hidden}
+.pres-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:18px}
+.pres-kicker{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--b2);letter-spacing:.5px}
+.pres-rango{font-size:13px;color:var(--muted);margin-top:2px}
+.pres-lbl{font-size:12px;font-weight:600;color:var(--label);text-transform:uppercase;letter-spacing:.8px}
+.pres-disp{font-family:'Rajdhani',sans-serif;font-size:56px;font-weight:700;line-height:1.05;margin:2px 0 14px;font-variant-numeric:tabular-nums}
+.pres-bar{position:relative;height:16px;background:var(--field);border-radius:999px;overflow:visible;border:1px solid var(--b1)}
+.pres-fill{height:100%;width:0;border-radius:999px;background:var(--green);transition:width .5s ease,background .3s}
+.pres-mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--label);opacity:.6;border-radius:2px}
+.pres-mark span{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--muted);white-space:nowrap}
+.pres-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:30px}
+.pres-stat{background:var(--field);border-radius:10px;padding:10px 12px;text-align:center}
+.pres-stat .v{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.pres-stat .l{font-size:11px;color:var(--label);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.pres-tip{margin-top:12px;font-size:13px;color:var(--label);text-align:center}
+.pres-gasto{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--field);border-radius:10px;padding:10px 14px;margin-bottom:8px}
+.pres-gasto .d{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pres-gasto .t{font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis}
+.pres-gasto .f{font-size:12px;color:var(--muted)}
+.pres-gasto .m{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;color:var(--red);white-space:nowrap}
+.pres-alerta-icono{font-size:54px;text-align:center;margin-bottom:6px}
+.pres-alerta-txt{text-align:center;color:var(--label);font-size:15px;margin-bottom:18px;line-height:1.5}
+.pres-alerta-txt strong{color:var(--txt)}
+.chk-row{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--label);margin:4px 0 12px;cursor:pointer}
+.modal .chk-row input{width:18px;height:18px;margin:0;padding:0;accent-color:var(--b2)}
 @media(max-width:768px){.logo{font-size:22px}.btn-sm{padding:7px 10px;font-size:12px}main{padding:10px;gap:10px}.card{padding:14px}.form-grid{grid-template-columns:1fr 1fr}table{font-size:12px}th,td{padding:7px 8px}.search-grid{grid-template-columns:1fr 1fr}.edit-form-grid{grid-template-columns:1fr}}
-@media(max-width:420px){.form-grid{grid-template-columns:1fr}.btn-sm{padding:6px 8px;font-size:11px}}
+@media(max-width:420px){.form-grid{grid-template-columns:1fr}.btn-sm{padding:6px 8px;font-size:11px}.pres-disp{font-size:44px}.pres-stats{grid-template-columns:1fr 1fr 1fr;gap:6px}.pres-stat{padding:8px 6px}.pres-stat .v{font-size:16px}}
 </style>
 </head>
 <body>
@@ -130,19 +159,65 @@ tr.selected td{background:#1e3a5f}
   <header>
     <div class="logo"><span class="sync-dot" id="sync-dot"></span>⚡ IKS PRO</div>
     <div class="header-btns">
+      <button class="btn-sm pres" onclick="cambiarVista()" id="btn-vista">💰 Presupuesto</button>
       <button class="btn-sm" onclick="toggleModo()" id="btn-modo">☀️ Modo Claro</button>
-      <button class="btn-sm" onclick="abrirModalPassword()">🔑 Contraseña</button>
-      <button class="btn-sm blue" onclick="mostrarGrafica()">📊 Gráfica</button>
-      <button class="btn-sm blue" onclick="mostrarResumen()">📅 Resumen</button>
-      <button class="btn-sm" style="background:#7c3aed;border-color:#7c3aed;color:#fff" onclick="abrirAgenda()">📅 Agenda</button>
-      <button class="btn-sm" style="background:#0891b2;border-color:#0891b2;color:#fff" onclick="abrirPagosMensuales()">💳 Pagos</button>
-      <button class="btn-sm green" onclick="exportarExcel()">📥 Excel</button>
-      <button class="btn-sm" style="background:#dc2626;border-color:#dc2626;color:#fff" onclick="cerrarMes()">🗓️ Cerrar Mes</button>
-      <button class="btn-sm" style="background:#0f766e;border-color:#0f766e;color:#fff" onclick="abrirHistorialMeses()">📂 Historial</button>
+      <button class="btn-sm solo-general" onclick="abrirModalPassword()">🔑 Contraseña</button>
+      <button class="btn-sm blue solo-general" onclick="mostrarGrafica()">📊 Gráfica</button>
+      <button class="btn-sm blue solo-general" onclick="mostrarResumen()">📅 Resumen</button>
+      <button class="btn-sm solo-general" style="background:#7c3aed;border-color:#7c3aed;color:#fff" onclick="abrirAgenda()">📅 Agenda</button>
+      <button class="btn-sm solo-general" style="background:#0891b2;border-color:#0891b2;color:#fff" onclick="abrirPagosMensuales()">💳 Pagos</button>
+      <button class="btn-sm green solo-general" onclick="exportarExcel()">📥 Excel</button>
+      <button class="btn-sm solo-general" style="background:#dc2626;border-color:#dc2626;color:#fff" onclick="cerrarMes()">🗓️ Cerrar Mes</button>
+      <button class="btn-sm solo-general" style="background:#0f766e;border-color:#0f766e;color:#fff" onclick="abrirHistorialMeses()">📂 Historial</button>
     </div>
   </header>
 
   <main>
+    <!-- ═══════ VISTA PRESUPUESTO SEMANAL ═══════ -->
+    <div id="vista-presupuesto">
+      <div class="card pres-hero">
+        <div class="pres-top">
+          <div>
+            <div class="pres-kicker">💰 Gastos de la semana</div>
+            <div class="pres-rango" id="p-rango">—</div>
+          </div>
+          <button class="btn btn-gray" style="padding:8px 14px;font-size:13px" onclick="abrirConfigPresupuesto()">⚙️ Ajustar</button>
+        </div>
+        <div class="pres-lbl">Disponible</div>
+        <div class="pres-disp pos" id="p-disponible">$0</div>
+        <div class="pres-bar" id="p-bar"><div class="pres-fill" id="p-fill"></div></div>
+        <div class="pres-stats">
+          <div class="pres-stat"><div class="l">Presupuesto</div><div class="v" id="p-total">$0</div></div>
+          <div class="pres-stat"><div class="l">Gastado</div><div class="v neg" id="p-gastado">$0</div></div>
+          <div class="pres-stat"><div class="l">Usado</div><div class="v" id="p-pct">0%</div></div>
+        </div>
+        <div class="pres-tip" id="p-tip"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔻 Registrar gasto</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Monto ($)</label><input type="number" id="p-monto" placeholder="0" inputmode="numeric"></div>
+          <div class="form-group" style="grid-column:span 2"><label>¿En qué?</label><input type="text" id="p-desc" placeholder="Ej: almuerzo, gasolina..."></div>
+        </div>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn btn-red" onclick="agregarGastoPresupuesto()">🔻 Agregar gasto</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🧾 Gastos de esta semana</div>
+        <div id="p-lista"><div class="loading">🔄 Cargando...</div></div>
+      </div>
+    </div>
+
+    <!-- ═══════ VISTA GENERAL ═══════ -->
+    <div id="vista-general">
+    <!-- BANNER PRESUPUESTO (en vista general) -->
+    <div class="alerta-banner" id="pres-banner" style="border-color:#f59e0b;cursor:pointer" onclick="cambiarVista('presupuesto')">
+      <div class="alerta-banner-title" style="color:#f59e0b;margin-bottom:0" id="pres-banner-txt"></div>
+    </div>
+
     <!-- AGENDA RECORDATORIOS HOY -->
     <div class="alerta-banner" id="agenda-hoy-banner" style="border-color:#f59e0b">
       <div class="alerta-banner-title" style="color:#f59e0b">📅 Soportes programados para hoy</div>
@@ -240,6 +315,7 @@ tr.selected td{background:#1e3a5f}
       <div class="resumen-card"><div class="lbl">🔺 Ingresos Extra</div><div class="val pos" id="r-ingresos">$0</div></div>
       <div class="resumen-card"><div class="lbl">📊 Balance Final</div><div class="val" id="r-balance">$0</div></div>
     </div>
+    </div><!-- /vista-general -->
   </main>
 </div>
 
@@ -406,6 +482,34 @@ tr.selected td{background:#1e3a5f}
   </div>
 </div>
 
+<!-- MODAL CONFIG PRESUPUESTO -->
+<div class="modal-overlay" id="modal-pres-config">
+  <div class="modal">
+    <h3>⚙️ Presupuesto semanal</h3>
+    <label class="modal-label">Valor a gastar por semana ($)</label>
+    <input type="number" id="pc-monto" placeholder="100000" inputmode="numeric">
+    <label class="modal-label">Avisarme al llegar al (%)</label>
+    <input type="text" id="pc-topes" placeholder="50, 80, 100">
+    <label class="chk-row"><input type="checkbox" id="pc-general" checked> Sumar estos gastos también a los Gastos generales</label>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">La semana va de lunes a domingo y se reinicia sola cada lunes.</div>
+    <div class="modal-error" id="pc-error"></div>
+    <div class="modal-btns">
+      <button class="btn btn-blue btn-full" onclick="guardarConfigPresupuesto()">💾 Guardar</button>
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-pres-config')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ALERTA PRESUPUESTO -->
+<div class="modal-overlay" id="modal-pres-alerta">
+  <div class="modal" style="max-width:380px">
+    <div class="pres-alerta-icono" id="pa-icono">⚠️</div>
+    <h3 style="text-align:center" id="pa-titulo">Atención</h3>
+    <div class="pres-alerta-txt" id="pa-txt"></div>
+    <button class="btn btn-blue btn-full" style="justify-content:center" onclick="cerrarModal('modal-pres-alerta')">Entendido</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -458,6 +562,7 @@ function abrirApp(){
   if(modo==="light") aplicarModo("light");
   escucharCambios();
   cargarSoportes();
+  iniciarPresupuesto();
 }
 
 function escucharCambios(){
@@ -605,6 +710,8 @@ window.guardarEdicionMov=async function(){
   const valor=parseFloat(document.getElementById("em-valor").value)||0;
   if(valor<=0){document.getElementById("edit-mov-error").textContent="El valor debe ser mayor a 0";return}
   await updateDoc(doc(db,"movimientos",editandoMovId),{tipo:document.getElementById("em-tipo").value,valor,descripcion:document.getElementById("em-desc").value});
+  const mv=movimientos.find(x=>x.fireId===editandoMovId);
+  if(mv?.presId) await updateDoc(doc(db,"gastos_presupuesto",mv.presId),{valor,descripcion:document.getElementById("em-desc").value.replace(/^💰\s*/,"")}).catch(()=>{});
   cerrarModal("modal-editar-mov");showToast("Movimiento actualizado ✔");
 }
 
@@ -620,7 +727,10 @@ window.eliminarSeleccionados=async function(){
 }
 window.eliminarMov=async function(fireId){
   if(!confirm("¿Eliminar este movimiento?")) return;
-  await deleteDoc(doc(db,"movimientos",fireId));showToast("Movimiento eliminado");
+  const mv=movimientos.find(x=>x.fireId===fireId);
+  await deleteDoc(doc(db,"movimientos",fireId));
+  if(mv?.presId) await deleteDoc(doc(db,"gastos_presupuesto",mv.presId)).catch(()=>{});
+  showToast("Movimiento eliminado");
 }
 
 function calcularVencimiento(fecha, dias){
@@ -1285,6 +1395,244 @@ async function verificarRenovacionesAutomaticas(){
   });
 
   showToast(`🔄 ${renovados.length} cliente(s) renovado(s) automáticamente`);
+}
+
+// ── PRESUPUESTO SEMANAL ───────────────────────────────
+// config/presupuesto      -> {monto, topes:[50,80,100], sumarGeneral:true, vista:"presupuesto"|"general"}
+// config/presupuesto_avisos -> {semana:"2026-10-05", avisados:[50,80]}
+// gastos_presupuesto/{id} -> {valor, descripcion, timestamp, movId}
+let presCfg = {monto:0, topes:[50,80,100], sumarGeneral:true, vista:"general"};
+let presGastos = [];
+let presAvisos = {semana:"", avisados:[]};
+let presListo = false;
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+function inicioSemana(d=new Date()){
+  const x=new Date(d);x.setHours(0,0,0,0);
+  const dia=(x.getDay()+6)%7; // lunes=0
+  x.setDate(x.getDate()-dia);
+  return x;
+}
+function claveSemana(){
+  const s=inicioSemana();
+  return `${s.getFullYear()}-${String(s.getMonth()+1).padStart(2,"0")}-${String(s.getDate()).padStart(2,"0")}`;
+}
+function gastosDeEstaSemana(){
+  const desde=inicioSemana().getTime();
+  return presGastos.filter(g=>(g.timestamp||0)>=desde);
+}
+
+async function iniciarPresupuesto(){
+  // Vista guardada localmente primero (rápido), luego la de la nube
+  let vistaLocal=null;
+  try{vistaLocal=localStorage.getItem("iks_vista")}catch{}
+  if(vistaLocal) aplicarVista(vistaLocal,false);
+
+  const c=await getConfig("presupuesto");
+  if(c) presCfg={...presCfg,...c};
+  const a=await getConfig("presupuesto_avisos");
+  if(a) presAvisos=a;
+  aplicarVista(vistaLocal||presCfg.vista||"general",false);
+
+  onSnapshot(query(collection(db,"gastos_presupuesto"),orderBy("timestamp","desc")),snap=>{
+    presGastos=snap.docs.map(d=>({...d.data(),fireId:d.id}));
+    presListo=true;
+    renderPresupuesto();
+    revisarTopes();
+  });
+  // Por si la app queda abierta y cambia la semana
+  setInterval(()=>{renderPresupuesto();revisarTopes()},10*60*1000);
+}
+
+function aplicarVista(vista,guardar=true){
+  const pres=vista==="presupuesto";
+  document.getElementById("vista-presupuesto").style.display=pres?"flex":"none";
+  document.getElementById("vista-general").style.display=pres?"none":"flex";
+  document.querySelectorAll(".solo-general").forEach(b=>b.style.display=pres?"none":"");
+  const btn=document.getElementById("btn-vista");
+  btn.textContent=pres?"📊 Ver General":"💰 Presupuesto";
+  btn.className=pres?"btn-sm blue":"btn-sm pres";
+  presCfg.vista=vista;
+  try{localStorage.setItem("iks_vista",vista)}catch{}
+  if(guardar) setConfig("presupuesto",presCfg).catch(()=>{});
+  window.scrollTo({top:0});
+}
+
+window.cambiarVista=function(forzar){
+  const nueva=typeof forzar==="string"?forzar:(presCfg.vista==="presupuesto"?"general":"presupuesto");
+  if(nueva==="presupuesto"&&!presCfg.monto){aplicarVista("presupuesto");abrirConfigPresupuesto();return}
+  aplicarVista(nueva);
+}
+
+function colorPct(p){
+  const t=[...presCfg.topes].sort((a,b)=>a-b);
+  if(p>=100) return "var(--red)";
+  if(t.length>=2&&p>=t[t.length-2]) return "#f97316";
+  if(t.length&&p>=t[0]) return "#f59e0b";
+  return "var(--green)";
+}
+
+function renderPresupuesto(){
+  const total=Number(presCfg.monto)||0;
+  const semana=gastosDeEstaSemana();
+  const gastado=semana.reduce((a,g)=>a+(g.valor||0),0);
+  const disp=total-gastado;
+  const pct=total>0?Math.round(gastado/total*100):0;
+
+  // Rango de la semana
+  const ini=inicioSemana(),fin=new Date(ini);fin.setDate(fin.getDate()+6);
+  const f=d=>d.toLocaleDateString("es-CO",{day:"numeric",month:"short"});
+  document.getElementById("p-rango").textContent=`${f(ini)} – ${f(fin)}`;
+
+  const dEl=document.getElementById("p-disponible");
+  dEl.textContent=`${disp<0?"-":""}$${fmt(Math.abs(disp))}`;
+  dEl.className=`pres-disp ${disp<0?"neg":"pos"}`;
+  dEl.style.color=disp<0?"":colorPct(pct);
+  document.getElementById("p-total").textContent=`$${fmt(total)}`;
+  document.getElementById("p-gastado").textContent=`$${fmt(gastado)}`;
+  const pEl=document.getElementById("p-pct");
+  pEl.textContent=`${pct}%`;pEl.style.color=colorPct(pct);
+
+  const fill=document.getElementById("p-fill");
+  fill.style.width=`${Math.min(pct,100)}%`;
+  fill.style.background=colorPct(pct);
+
+  // Marcas de los topes en la barra
+  const bar=document.getElementById("p-bar");
+  bar.querySelectorAll(".pres-mark").forEach(m=>m.remove());
+  presCfg.topes.filter(t=>t>0&&t<100).forEach(t=>{
+    const m=document.createElement("div");m.className="pres-mark";m.style.left=`${t}%`;
+    m.innerHTML=`<span>${t}%</span>`;bar.appendChild(m);
+  });
+
+  // Consejo del día
+  const hoy=new Date();hoy.setHours(0,0,0,0);
+  const diasRest=Math.round((fin-hoy)/86400000)+1;
+  const tip=document.getElementById("p-tip");
+  if(!total) tip.textContent="Toca ⚙️ Ajustar para definir cuánto quieres gastar esta semana.";
+  else if(disp<=0) tip.innerHTML=`<strong style="color:var(--red)">Te pasaste por $${fmt(Math.abs(disp))}.</strong> La semana se reinicia el lunes.`;
+  else tip.textContent=`Quedan ${diasRest} día${diasRest===1?"":"s"} · puedes gastar unos $${fmt(Math.floor(disp/diasRest))} por día`;
+
+  // Lista
+  const lista=document.getElementById("p-lista");
+  if(!presListo) return;
+  if(!semana.length){lista.innerHTML='<div class="loading">Aún no hay gastos esta semana 🎉</div>'}
+  else{
+    lista.innerHTML=semana.map(g=>{
+      const d=new Date(g.timestamp);
+      const fecha=d.toLocaleDateString("es-CO",{weekday:"short",day:"numeric",month:"short"})+" · "+d.toLocaleTimeString("es-CO",{hour:"2-digit",minute:"2-digit"});
+      return `<div class="pres-gasto"><div class="d"><div class="t">${esc(g.descripcion||"Gasto")}</div><div class="f">${fecha}</div></div>
+        <div style="display:flex;align-items:center;gap:10px"><div class="m">-$${fmt(g.valor)}</div>
+        <button class="btn btn-gray" style="padding:5px 9px;font-size:12px" onclick="eliminarGastoPresupuesto('${g.fireId}')">🗑️</button></div></div>`;
+    }).join("");
+  }
+
+  // Banner en la vista general
+  const banner=document.getElementById("pres-banner");
+  const primerTope=Math.min(...presCfg.topes);
+  if(total&&pct>=primerTope){
+    banner.style.display="block";
+    document.getElementById("pres-banner-txt").textContent=disp<0
+      ?`💰 Presupuesto semanal superado: te pasaste $${fmt(Math.abs(disp))} (${pct}%)`
+      :`💰 Presupuesto semanal: llevas ${pct}% gastado — te quedan $${fmt(disp)}`;
+  } else banner.style.display="none";
+}
+
+async function revisarTopes(){
+  const total=Number(presCfg.monto)||0;
+  if(!total||!presListo) return;
+  const semana=claveSemana();
+  if(presAvisos.semana!==semana) presAvisos={semana,avisados:[]};
+  const gastado=gastosDeEstaSemana().reduce((a,g)=>a+(g.valor||0),0);
+  const pct=gastado/total*100;
+  const topes=[...presCfg.topes].sort((a,b)=>a-b);
+
+  // Si bajó el gasto (borró algo), permitir volver a avisar
+  const antes=presAvisos.avisados.length;
+  presAvisos.avisados=presAvisos.avisados.filter(t=>pct>=t);
+  const nuevos=topes.filter(t=>pct>=t&&!presAvisos.avisados.includes(t));
+  if(!nuevos.length){
+    if(presAvisos.avisados.length!==antes) setConfig("presupuesto_avisos",presAvisos).catch(()=>{});
+    return;
+  }
+  presAvisos.avisados.push(...nuevos);
+  await setConfig("presupuesto_avisos",presAvisos).catch(()=>{});
+  mostrarAlertaPresupuesto(Math.max(...nuevos),gastado,total);
+}
+
+function mostrarAlertaPresupuesto(tope,gastado,total){
+  const disp=total-gastado;
+  const pasado=gastado>total;
+  const icono=tope>=100?"🚨":tope>=80?"⚠️":"💡";
+  const titulo=tope>=100?(pasado?"¡Te pasaste del presupuesto!":"¡Llegaste al límite!"):`Ya gastaste el ${tope}%`;
+  const txt=pasado
+    ?`Llevas <strong>$${fmt(gastado)}</strong> de <strong>$${fmt(total)}</strong> esta semana.<br>Te pasaste por <strong style="color:var(--red)">$${fmt(-disp)}</strong>.`
+    :`Llevas <strong>$${fmt(gastado)}</strong> de <strong>$${fmt(total)}</strong> esta semana.<br>Te quedan <strong>$${fmt(disp)}</strong>.`;
+  document.getElementById("pa-icono").textContent=icono;
+  document.getElementById("pa-titulo").textContent=titulo;
+  document.getElementById("pa-titulo").style.color=tope>=100?"var(--red)":"#f59e0b";
+  document.getElementById("pa-txt").innerHTML=txt;
+  document.getElementById("modal-pres-alerta").classList.add("open");
+  try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch{}
+  // Notificación del sistema (si el usuario dio permiso)
+  try{
+    if("Notification" in window&&Notification.permission==="granted"){
+      const cuerpo=pasado?`Te pasaste por $${fmt(-disp)}`:`Te quedan $${fmt(disp)} de $${fmt(total)}`;
+      if(navigator.serviceWorker?.ready){
+        navigator.serviceWorker.ready.then(r=>r.showNotification(`IKS PRO · ${titulo}`,{body:cuerpo,tag:"iks-presupuesto"})).catch(()=>new Notification(`IKS PRO · ${titulo}`,{body:cuerpo}));
+      } else new Notification(`IKS PRO · ${titulo}`,{body:cuerpo});
+    }
+  }catch{}
+}
+
+window.agregarGastoPresupuesto=async function(){
+  const v=parseFloat(document.getElementById("p-monto").value)||0;
+  if(v<=0){showToast("Ingresa un monto mayor a 0",true);return}
+  if(!presCfg.monto){showToast("Primero define tu presupuesto en ⚙️ Ajustar",true);abrirConfigPresupuesto();return}
+  const descripcion=document.getElementById("p-desc").value.trim();
+  const ts=Date.now();
+  let movId=null;
+  if(presCfg.sumarGeneral!==false){
+    const ref=await addDoc(collection(db,"movimientos"),{tipo:"GASTO",valor:v,descripcion:`💰 ${descripcion||"Gasto semanal"}`,timestamp:ts,presupuesto:true});
+    movId=ref.id;
+  }
+  const pref=await addDoc(collection(db,"gastos_presupuesto"),{valor:v,descripcion,timestamp:ts,movId});
+  if(movId) updateDoc(doc(db,"movimientos",movId),{presId:pref.id}).catch(()=>{});
+  document.getElementById("p-monto").value="";document.getElementById("p-desc").value="";
+  showToast("Gasto agregado ✔");
+}
+
+window.eliminarGastoPresupuesto=async function(id){
+  if(!confirm("¿Eliminar este gasto?")) return;
+  const g=presGastos.find(x=>x.fireId===id);
+  await deleteDoc(doc(db,"gastos_presupuesto",id));
+  if(g?.movId) await deleteDoc(doc(db,"movimientos",g.movId)).catch(()=>{});
+  showToast("Gasto eliminado");
+}
+
+window.abrirConfigPresupuesto=function(){
+  document.getElementById("pc-monto").value=presCfg.monto||"";
+  document.getElementById("pc-topes").value=(presCfg.topes||[50,80,100]).join(", ");
+  document.getElementById("pc-general").checked=presCfg.sumarGeneral!==false;
+  document.getElementById("pc-error").textContent="";
+  document.getElementById("modal-pres-config").classList.add("open");
+  setTimeout(()=>document.getElementById("pc-monto").focus(),100);
+}
+
+window.guardarConfigPresupuesto=async function(){
+  const monto=parseFloat(document.getElementById("pc-monto").value)||0;
+  const err=document.getElementById("pc-error");
+  if(monto<=0){err.textContent="Escribe un valor mayor a 0";return}
+  const topes=[...new Set(document.getElementById("pc-topes").value.split(/[,;\s]+/).map(x=>parseInt(x)).filter(x=>x>0&&x<=200))].sort((a,b)=>a-b);
+  if(!topes.length){err.textContent="Escribe al menos un porcentaje (ej: 50, 80, 100)";return}
+  presCfg={...presCfg,monto,topes,sumarGeneral:document.getElementById("pc-general").checked};
+  await setConfig("presupuesto",presCfg);
+  cerrarModal("modal-pres-config");
+  showToast("Presupuesto guardado ✔");
+  try{if("Notification" in window&&Notification.permission==="default") Notification.requestPermission()}catch{}
+  renderPresupuesto();
+  revisarTopes();
 }
 
 // ── MODO OFFLINE (Service Worker) ─────────────────────

@@ -10,6 +10,7 @@ Sistema de gestión de registros — Web App
 - 📊 Gráfica de ganancias mensuales
 - 📅 Resumen mensual
 - 📥 Exportar a Excel
+- 💰 Presupuesto semanal con avisos por topes (vista propia)
 - ☀️ Modo claro / oscuro
 - 📱 Compatible con iPhone y Android
 
