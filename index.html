@@ -167,6 +167,87 @@ tr.selected td{background:#1e3a5f}
 .abono-row .m{font-weight:700;color:var(--green);white-space:nowrap}
 @media(max-width:768px){.logo{font-size:22px}.btn-sm{padding:7px 10px;font-size:12px}main{padding:10px;gap:10px}.card{padding:14px}.form-grid{grid-template-columns:1fr 1fr}table{font-size:12px}th,td{padding:7px 8px}.search-grid{grid-template-columns:1fr 1fr}.edit-form-grid{grid-template-columns:1fr}}
 @media(max-width:420px){.form-grid{grid-template-columns:1fr}.btn-sm{padding:6px 8px;font-size:11px}.pres-disp{font-size:44px}.pres-stats{grid-template-columns:1fr 1fr 1fr;gap:6px}.pres-stat{padding:8px 6px}.pres-stat .v{font-size:16px}}
+
+/* ══════ NUEVO DISEÑO: MENÚ + SECCIONES ══════ */
+:root{--r2:18px}
+body{background:radial-gradient(1200px 600px at 10% -10%,#1d4ed822,transparent 60%),radial-gradient(900px 500px at 110% 10%,#7c3aed1c,transparent 60%),var(--bg);background-attachment:fixed}
+header{gap:10px;padding:10px 14px;backdrop-filter:blur(12px);background:color-mix(in srgb,var(--card) 88%,transparent);border-bottom:1px solid #1e40af55;flex-wrap:nowrap}
+.logo{cursor:pointer;font-size:22px}
+.hdr-back{display:none;background:var(--field);border:1px solid var(--b1);color:var(--txt);width:38px;height:38px;border-radius:12px;font-size:26px;line-height:1;cursor:pointer;padding-bottom:3px;flex-shrink:0}
+.hdr-title{display:none;font-family:'Rajdhani',sans-serif;font-size:21px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.en-seccion .hdr-back,body.en-seccion .hdr-title{display:block}
+body.en-seccion .logo{display:none}
+.header-btns{flex-wrap:nowrap}
+.hdr-ico{background:var(--field);border:1px solid var(--b1);color:var(--txt);width:38px;height:38px;border-radius:12px;font-size:17px;cursor:pointer}
+main{max-width:980px;padding-bottom:96px}
+.page{display:none;flex-direction:column;gap:14px;animation:entra .25s ease}
+.page.active{display:flex}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{border-radius:var(--r2);border-color:#1e40af66}
+/* páginas que antes eran ventanas */
+.page-card{background:var(--card);border:1px solid #1e40af66;border-radius:var(--r2);padding:20px;box-shadow:var(--shadow)}
+.page-card>h3{display:none}
+.page-card>.modal-btns:last-child{display:none}
+#modal-grafica{display:none!important}
+/* inicio */
+.hola{display:flex;justify-content:space-between;align-items:center;padding:4px 2px}
+.hola-t{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700}
+.hola-d{color:var(--muted);font-size:13px;text-transform:capitalize}
+.hero{border-radius:22px;padding:20px 20px 16px;color:#fff;background:linear-gradient(135deg,#2563eb 0%,#7c3aed 60%,#db2777 130%);box-shadow:0 12px 40px #2563eb40;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:#ffffff18}
+.hero-l{font-size:13px;opacity:.85;font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+.hero-v{font-family:'Rajdhani',sans-serif;font-size:46px;font-weight:700;line-height:1.1;margin:2px 0 12px;font-variant-numeric:tabular-nums}
+.hero-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;position:relative;z-index:1}
+.hero-row div{background:#ffffff1f;border-radius:12px;padding:8px 10px}
+.hero-row span{display:block;font-size:11px;opacity:.85}
+.hero-row b{font-family:'Rajdhani',sans-serif;font-size:18px;font-variant-numeric:tabular-nums}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.quick button{background:var(--card);border:1px solid #1e40af66;color:var(--txt);border-radius:16px;padding:12px 4px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:transform .15s}
+.quick button span{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:19px;background:var(--field)}
+.quick button:active,.tile:active,.tools button:active{transform:scale(.96)}
+.sec-t{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700;color:var(--label);margin:6px 2px -4px}
+.avisos{display:flex;flex-direction:column;gap:10px}
+.avisos .alerta-banner{border-radius:16px;background:var(--card)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.tile{border:none;border-radius:20px;padding:16px 14px;min-height:120px;color:#fff;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:4px;font-family:inherit;position:relative;overflow:hidden;box-shadow:0 8px 24px #0004;transition:transform .15s}
+.tile::after{content:'';position:absolute;right:-26px;bottom:-26px;width:90px;height:90px;border-radius:50%;background:#ffffff1c}
+.tile-ico{font-size:28px;margin-bottom:auto}
+.tile-name{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700;line-height:1.1;margin-top:10px}
+.tile-sub{font-size:12px;opacity:.92;font-weight:500}
+.t-blue{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
+.t-green{background:linear-gradient(135deg,#10b981,#047857)}
+.t-amber{background:linear-gradient(135deg,#f59e0b,#c2410c)}
+.t-rose{background:linear-gradient(135deg,#f43f5e,#9f1239)}
+.t-cyan{background:linear-gradient(135deg,#06b6d4,#0e7490)}
+.t-violet{background:linear-gradient(135deg,#a855f7,#6d28d9)}
+.t-indigo{background:linear-gradient(135deg,#6366f1,#3730a3)}
+.t-teal{background:linear-gradient(135deg,#14b8a6,#0f766e)}
+.tile .dot{position:absolute;top:12px;right:12px;background:#fff;color:#be123c;font-size:11px;font-weight:800;border-radius:20px;padding:2px 8px}
+.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tools button{background:var(--card);border:1px solid #1e40af66;color:var(--txt);border-radius:16px;padding:14px 8px;font-family:inherit;font-size:22px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px}
+.tools button span{font-size:12px;font-weight:600;color:var(--label)}
+.tools button.danger{border-color:#ef444466}
+.tools button.danger span{color:#f87171}
+/* barra inferior */
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;z-index:200;display:flex;gap:2px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(14px);border:1px solid #1e40af66;border-radius:22px;padding:6px;box-shadow:0 10px 30px #0006;width:min(520px,calc(100% - 24px))}
+.tabbar button{flex:1;background:none;border:none;color:var(--muted);font-family:inherit;font-size:11px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border-radius:16px;cursor:pointer}
+.tabbar button span{font-size:20px;filter:grayscale(.6);opacity:.8}
+.tabbar button.on{background:var(--field);color:var(--txt)}
+.tabbar button.on span{filter:none;opacity:1}
+.seg{display:flex;background:var(--field);border-radius:12px;padding:4px;margin-bottom:14px}
+.seg button{flex:1;border:none;background:none;color:var(--label);font-family:inherit;font-weight:600;font-size:14px;padding:9px;border-radius:9px;cursor:pointer}
+.seg button.on{background:var(--b2);color:#fff}
+#vista-presupuesto{max-width:720px;width:100%;margin:0 auto}
+#vista-presupuesto.page.active{display:flex}
+@media(max-width:600px){.resumen{grid-template-columns:1fr 1fr;gap:10px}.resumen-card{padding:12px}.resumen-card .val{font-size:20px}}
+.btn{border-radius:12px}
+.toast{bottom:96px;left:50%;right:auto;transform:translate(-50%,80px)}
+.toast.show{transform:translate(-50%,0)}
+html[data-theme=light] body{background:radial-gradient(1200px 600px at 10% -10%,#3b82f622,transparent 60%),var(--bg)}
+html[data-theme=light] .avisos .alerta-banner,html[data-theme=light] .page-card{box-shadow:0 4px 18px #1e3a8a14}
+html[data-theme=light] .alerta-item,html[data-theme=light] .pago-item,html[data-theme=light] .agenda-item{background:var(--field)}
+html[data-theme=light] .alerta-nombre,html[data-theme=light] .pago-titulo,html[data-theme=light] .agenda-titulo{color:var(--txt)}
+@media(max-width:420px){.hero-v{font-size:40px}.hero-row b{font-size:15px}.quick{gap:8px}.quick button{font-size:11px}.tiles{grid-template-columns:1fr 1fr;gap:10px}.tile{min-height:112px;padding:14px 12px}.tile-name{font-size:17px}}
 </style>
 </head>
 <body>
@@ -184,26 +265,167 @@ tr.selected td{background:#1e3a5f}
 
 <div id="app">
   <header>
-    <div class="logo"><span class="sync-dot" id="sync-dot"></span>⚡ IKS PRO</div>
+    <div class="logo" onclick="irA('inicio')"><span class="sync-dot" id="sync-dot"></span>⚡ IKS PRO</div>
+    <button class="hdr-back" id="hdr-back" onclick="irA('inicio')" aria-label="Volver al inicio">‹</button>
+    <div class="hdr-title" id="hdr-title">Inicio</div>
     <div class="header-btns">
-      <button class="btn-sm pres" onclick="cambiarVista()" id="btn-vista">💰 Presupuesto</button>
-      <button class="btn-sm" onclick="toggleModo()" id="btn-modo">☀️</button>
-      <button class="btn-sm solo-general" onclick="abrirModalPassword()">🔑</button>
-      <button class="btn-sm solo-general" style="background:#7c3aed;border-color:#7c3aed;color:#fff" onclick="abrirAstra()">📡 Astra</button>
-      <button class="btn-sm blue solo-general" onclick="mostrarResumen()">📅 Resumen</button>
-      <button class="btn-sm solo-general" style="background:#7c3aed;border-color:#7c3aed;color:#fff" onclick="abrirAgenda()">📅 Agenda</button>
-      <button class="btn-sm solo-general" style="background:#0891b2;border-color:#0891b2;color:#fff" onclick="abrirPagosMensuales()">💳 Pagos</button>
-      <button class="btn-sm solo-general" style="background:#e11d48;border-color:#e11d48;color:#fff" onclick="abrirDeudas()">🧾 Deudas</button>
-      <button class="btn-sm blue solo-general" onclick="mostrarGrafica()">📊 Gráfica</button>
-      <button class="btn-sm solo-general" style="background:#dc2626;border-color:#dc2626;color:#fff" onclick="cerrarMes()">📦 Cerrar Mes</button>
-      <button class="btn-sm solo-general" style="background:#f59e0b;border-color:#f59e0b;color:#fff" onclick="abrirHistorial()">🗂️ Historial</button>
-      <button class="btn-sm green solo-general" onclick="exportarExcel()">📥 Excel</button>
+      <button class="hdr-ico" onclick="toggleModo()" id="btn-modo" aria-label="Cambiar tema">☀️</button>
+      <button class="hdr-ico" onclick="abrirModalPassword()" aria-label="Cambiar contraseña">🔑</button>
     </div>
   </header>
 
   <main>
-    <!-- ═══════ VISTA PRESUPUESTO SEMANAL ═══════ -->
-    <div id="vista-presupuesto">
+    <section class="page active" data-page="inicio">
+      <div class="hola">
+        <div><div class="hola-t" id="hola-t">¡Hola! 👋</div><div class="hola-d" id="hola-d"></div></div>
+      </div>
+      <div class="hero">
+        <div class="hero-l">Balance del mes</div>
+        <div class="hero-v" id="h-balance">$0</div>
+        <div class="hero-row">
+          <div><span>Ganancia</span><b id="h-ganancia">$0</b></div>
+          <div><span>Gastos</span><b id="h-gastos">$0</b></div>
+          <div><span>Ingresos extra</span><b id="h-ingresos">$0</b></div>
+        </div>
+      </div>
+      <div class="quick">
+        <button onclick="accionRapida('cliente')"><span>➕</span>Cliente</button>
+        <button onclick="accionRapida('gasto')"><span>🔻</span>Gasto</button>
+        <button onclick="accionRapida('semana')"><span>💰</span>Gasto semana</button>
+        <button onclick="accionRapida('deuda')"><span>💵</span>Pagar deuda</button>
+      </div>
+      <div class="sec-t" id="avisos-t">🔔 Avisos</div>
+      <div class="avisos">
+    <!-- BANNER PRESUPUESTO (en vista general) -->
+    <div class="alerta-banner" id="pres-banner" style="border-color:#f59e0b;cursor:pointer" onclick="irA('presupuesto')">
+      <div class="alerta-banner-title" style="color:#f59e0b;margin-bottom:0" id="pres-banner-txt"></div>
+    </div>
+
+    <!-- AGENDA RECORDATORIOS HOY -->
+    <div class="alerta-banner" id="agenda-hoy-banner" style="border-color:#f59e0b">
+      <div class="alerta-banner-title" style="color:#f59e0b">📅 Soportes programados para hoy</div>
+      <div id="agenda-hoy-lista"></div>
+    </div>
+
+    <!-- BANNER ASTRA VENCIMIENTOS -->
+    <div class="alerta-banner" id="astra-banner" style="border-color:#7c3aed">
+      <div class="alerta-banner-title" style="color:#a78bfa">📡 Servicios ASTRA por vencer</div>
+      <div id="astra-banner-lista"></div>
+    </div>
+
+    <!-- BANNER PAGOS MENSUALES -->
+    <div class="alerta-banner" id="pagos-banner" style="border-color:#0891b2">
+      <div class="alerta-banner-title" style="color:#0891b2">💳 Pagos mensuales próximos a vencer</div>
+      <div id="pagos-banner-lista"></div>
+    </div>
+
+    <!-- BANNER DEUDAS -->
+    <div class="alerta-banner" id="deudas-banner" style="border-color:#e11d48;cursor:pointer" onclick="abrirDeudas()">
+      <div class="alerta-banner-title" style="color:#fb7185">🧾 Cuotas de deudas por pagar</div>
+      <div id="deudas-banner-lista"></div>
+    </div>
+
+    <!-- BANNER ALERTAS VENCIMIENTO -->
+    <div class="alerta-banner" id="alerta-banner">
+      <div class="alerta-banner-title">⚠️ Clientes por vencer hoy y en los próximos 5 días</div>
+      <div id="alerta-lista"></div>
+    </div>
+      </div>
+      <div class="sec-t">Secciones</div>
+      <div class="tiles">
+        <button class="tile t-blue" onclick="irA('clientes')"><span class="tile-ico">👥</span><span class="tile-name">Clientes</span><span class="tile-sub" id="t-clientes">—</span></button>
+        <button class="tile t-green" onclick="irA('movimientos')"><span class="tile-ico">💸</span><span class="tile-name">Gastos e ingresos</span><span class="tile-sub" id="t-movs">—</span></button>
+        <button class="tile t-amber" onclick="irA('presupuesto')"><span class="tile-ico">💰</span><span class="tile-name">Gastos de la semana</span><span class="tile-sub" id="t-semana">—</span></button>
+        <button class="tile t-rose" onclick="irA('deudas')"><span class="tile-ico">🧾</span><span class="tile-name">Deudas</span><span class="tile-sub" id="t-deudas">—</span></button>
+        <button class="tile t-cyan" onclick="irA('pagos')"><span class="tile-ico">💳</span><span class="tile-name">Pagos fijos</span><span class="tile-sub" id="t-pagos">—</span></button>
+        <button class="tile t-violet" onclick="irA('agenda')"><span class="tile-ico">📅</span><span class="tile-name">Agenda</span><span class="tile-sub" id="t-agenda">—</span></button>
+        <button class="tile t-indigo" onclick="irA('astra')"><span class="tile-ico">📡</span><span class="tile-name">ASTRA</span><span class="tile-sub" id="t-astra">—</span></button>
+        <button class="tile t-teal" onclick="irA('resumen')"><span class="tile-ico">📊</span><span class="tile-name">Resumen y gráfica</span><span class="tile-sub" id="t-resumen">—</span></button>
+      </div>
+      <div class="sec-t">Herramientas</div>
+      <div class="tools">
+        <button onclick="irA('historial')">🗂️<span>Historial de meses</span></button>
+        <button onclick="exportarExcel()">📥<span>Exportar a Excel</span></button>
+        <button class="danger" onclick="cerrarMes()">📦<span>Cerrar mes</span></button>
+      </div>
+    </section>
+
+    <section class="page" data-page="clientes">
+    <div class="card">
+      <div class="card-title">📋 Nuevo Registro</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Fecha</label><input type="text" id="f-fecha"></div>
+        <div class="form-group"><label>Usuario</label><input type="text" id="f-usuario" placeholder="Nombre del cliente"></div>
+        <div class="form-group"><label>Paga ($)</label><input type="number" id="f-paga" placeholder="0"></div>
+        <div class="form-group"><label>¿Pagó?</label><select id="f-pago"><option>SI</option><option>NO</option></select></div>
+        <div class="form-group"><label>Proveedor</label><input type="text" id="f-proveedor" placeholder="Proveedor"></div>
+        <div class="form-group"><label>Cancelado</label><input type="text" id="f-cancelado" placeholder="Estado"></div>
+        <div class="form-group"><label>Tipo</label><select id="f-tipo" onchange="toggleCantidad()"><option>SAT FULL</option><option>IKS</option></select></div>
+        <div class="form-group"><label>Cantidad</label><input type="number" id="f-cantidad" placeholder="Solo IKS" disabled></div>
+        <div class="form-group"><label>Valor ($)</label><input type="number" id="f-valor" placeholder="0"></div>
+        <div class="form-group"><label>WhatsApp cliente</label><input type="text" id="f-telefono" placeholder="573001234567"></div>
+        <div class="form-group"><label>Días de servicio</label><input type="number" id="f-dias" placeholder="30" min="1"></div>
+        <div class="form-group obs-group"><label>Observaciones</label><input type="text" id="f-obs" placeholder="Notas adicionales..."></div>
+      </div>
+      <div class="btn-row" style="margin-top:14px">
+        <button class="btn btn-blue" onclick="guardar()">💾 Guardar Registro</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔍 Buscar y Filtrar</div>
+      <div class="search-grid">
+        <div class="form-group"><label>Buscar usuario</label><input type="text" id="s-usuario" placeholder="Nombre..." oninput="buscar()"></div>
+        <div class="form-group"><label>Filtrar fecha (mm/aaaa)</label><input type="text" id="s-fecha" placeholder="05/2026" oninput="buscar()"></div>
+        <button class="btn btn-blue" onclick="buscar()">🔍 Buscar</button>
+        <button class="btn btn-gray" onclick="limpiarFiltro()">↺ Limpiar</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Historial de Registros</div>
+      <div class="table-wrap" style="max-height:360px;overflow-y:auto">
+        <table>
+          <thead><tr>
+            <th>ID</th><th>Fecha</th><th>Usuario</th><th>Vence</th><th>Paga</th><th>Pagó</th>
+            <th>Proveedor</th><th>Cancelado</th><th>Tipo</th><th>Cant.</th>
+            <th>Valor</th><th>Ganancia</th><th>Obs</th><th>Acciones</th>
+          </tr></thead>
+          <tbody id="tbody-registros"><tr><td colspan="13" class="loading">🔄 Cargando...</td></tr></tbody>
+        </table>
+      </div>
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn btn-red" onclick="eliminarSeleccionados()">🗑️ Eliminar Seleccionados</button>
+      </div>
+    </div>
+    </section>
+
+    <section class="page" data-page="movimientos">
+    <div class="resumen">
+      <div class="resumen-card"><div class="lbl">💰 Ganancia Total</div><div class="val pos" id="r-ganancia">$0</div></div>
+      <div class="resumen-card"><div class="lbl">🔻 Gastos</div><div class="val neg" id="r-gastos">$0</div></div>
+      <div class="resumen-card"><div class="lbl">🔺 Ingresos Extra</div><div class="val pos" id="r-ingresos">$0</div></div>
+      <div class="resumen-card"><div class="lbl">📊 Balance Final</div><div class="val" id="r-balance">$0</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💸 Gastos e Ingresos Extra</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Monto Gasto ($)</label><input type="number" id="m-gasto" placeholder="0"></div>
+        <div class="form-group"><label>Monto Ingreso ($)</label><input type="number" id="m-ingreso" placeholder="0"></div>
+        <div class="form-group obs-group"><label>Descripción</label><input type="text" id="m-desc" placeholder="Descripción del movimiento"></div>
+      </div>
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn btn-red" onclick="agregarGasto()">🔻 Agregar Gasto</button>
+        <button class="btn btn-green" onclick="agregarIngreso()">🔺 Agregar Ingreso</button>
+      </div>
+      <div class="table-wrap" style="margin-top:14px;max-height:200px;overflow-y:auto">
+        <table>
+          <thead><tr><th>Tipo</th><th>Valor</th><th>Descripción</th><th>Acciones</th></tr></thead>
+          <tbody id="tbody-movimientos"><tr><td colspan="4" class="loading">🔄 Cargando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    </section>
+
+    <section class="page" data-page="presupuesto" id="vista-presupuesto">
       <div class="card pres-hero">
         <div class="pres-top">
           <div>
@@ -238,153 +460,90 @@ tr.selected td{background:#1e3a5f}
         <div class="card-title">🧾 Gastos de esta semana</div>
         <div id="p-lista"><div class="loading">🔄 Cargando...</div></div>
       </div>
-    </div>
+    </section>
 
-    <!-- ═══════ VISTA GENERAL ═══════ -->
-    <div id="vista-general">
-    <!-- BANNER PRESUPUESTO (en vista general) -->
-    <div class="alerta-banner" id="pres-banner" style="border-color:#f59e0b;cursor:pointer" onclick="cambiarVista('presupuesto')">
-      <div class="alerta-banner-title" style="color:#f59e0b;margin-bottom:0" id="pres-banner-txt"></div>
+    <section class="page" data-page="deudas" id="modal-deudas">
+  <div class="page-card">
+    <h3>🧾 Control de Deudas</h3>
+    <div class="deuda-res">
+      <div class="pres-stat"><div class="l">Debo en total</div><div class="v" id="d-total">$0</div></div>
+      <div class="pres-stat"><div class="l">Capital pagado</div><div class="v pos" id="d-pagado">$0</div></div>
+      <div class="pres-stat"><div class="l">Me falta</div><div class="v" style="color:#fb7185" id="d-saldo">$0</div></div>
     </div>
-
-    <!-- AGENDA RECORDATORIOS HOY -->
-    <div class="alerta-banner" id="agenda-hoy-banner" style="border-color:#f59e0b">
-      <div class="alerta-banner-title" style="color:#f59e0b">📅 Soportes programados para hoy</div>
-      <div id="agenda-hoy-lista"></div>
-    </div>
-
-    <!-- BANNER ASTRA VENCIMIENTOS -->
-    <div class="alerta-banner" id="astra-banner" style="border-color:#7c3aed">
-      <div class="alerta-banner-title" style="color:#a78bfa">📡 Servicios ASTRA por vencer</div>
-      <div id="astra-banner-lista"></div>
-    </div>
-
-    <!-- BANNER PAGOS MENSUALES -->
-    <div class="alerta-banner" id="pagos-banner" style="border-color:#0891b2">
-      <div class="alerta-banner-title" style="color:#0891b2">💳 Pagos mensuales próximos a vencer</div>
-      <div id="pagos-banner-lista"></div>
-    </div>
-
-    <!-- BANNER DEUDAS -->
-    <div class="alerta-banner" id="deudas-banner" style="border-color:#e11d48;cursor:pointer" onclick="abrirDeudas()">
-      <div class="alerta-banner-title" style="color:#fb7185">🧾 Cuotas de deudas por pagar</div>
-      <div id="deudas-banner-lista"></div>
-    </div>
-
-    <!-- BANNER ALERTAS VENCIMIENTO -->
-    <div class="alerta-banner" id="alerta-banner">
-      <div class="alerta-banner-title">⚠️ Clientes por vencer hoy y en los próximos 5 días</div>
-      <div id="alerta-lista"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📋 Nuevo Registro</div>
-      <div class="form-grid">
-        <div class="form-group"><label>Fecha</label><input type="text" id="f-fecha"></div>
-        <div class="form-group"><label>Usuario</label><input type="text" id="f-usuario" placeholder="Nombre del cliente"></div>
-        <div class="form-group"><label>Paga ($)</label><input type="number" id="f-paga" placeholder="0"></div>
-        <div class="form-group"><label>¿Pagó?</label><select id="f-pago"><option>SI</option><option>NO</option></select></div>
-        <div class="form-group"><label>Proveedor</label><input type="text" id="f-proveedor" placeholder="Proveedor"></div>
-        <div class="form-group"><label>Cancelado</label><input type="text" id="f-cancelado" placeholder="Estado"></div>
-        <div class="form-group"><label>Tipo</label><select id="f-tipo" onchange="toggleCantidad()"><option>SAT FULL</option><option>IKS</option></select></div>
-        <div class="form-group"><label>Cantidad</label><input type="number" id="f-cantidad" placeholder="Solo IKS" disabled></div>
-        <div class="form-group"><label>Valor ($)</label><input type="number" id="f-valor" placeholder="0"></div>
-        <div class="form-group"><label>WhatsApp cliente</label><input type="text" id="f-telefono" placeholder="573001234567"></div>
-        <div class="form-group"><label>Días de servicio</label><input type="number" id="f-dias" placeholder="30" min="1"></div>
-        <div class="form-group obs-group"><label>Observaciones</label><input type="text" id="f-obs" placeholder="Notas adicionales..."></div>
+    <div style="font-size:12px;color:var(--muted);text-align:center;margin:-8px 0 14px" id="d-intereses"></div>
+    <div id="deudas-lista"></div>
+    <div style="background:var(--field);border-radius:10px;padding:16px;margin-top:14px">
+      <div style="font-size:13px;font-weight:700;color:#fb7185;margin-bottom:10px">➕ Nueva deuda</div>
+      <div class="edit-form-grid" style="gap:10px">
+        <div class="form-group"><label class="modal-label">¿A quién / qué?</label><input type="text" id="dn-nombre" placeholder="Ej: Préstamo Juan, Banco..."></div>
+        <div class="form-group"><label class="modal-label">Valor total ($)</label><input type="number" id="dn-total" placeholder="0" inputmode="numeric"></div>
+        <div class="form-group"><label class="modal-label">Interés mensual % (opcional)</label><input type="number" id="dn-interes" placeholder="Ej: 6" step="0.01" inputmode="decimal"></div>
+        <div class="form-group"><label class="modal-label">Cuota (opcional)</label><input type="number" id="dn-cuota" placeholder="Ej: 200000" inputmode="numeric"></div>
+        <div class="form-group"><label class="modal-label">Día de pago (opcional)</label><input type="number" id="dn-dia" placeholder="Ej: 15" min="1" max="31"></div>
+        <div class="form-group obs-group"><label class="modal-label">Notas</label><input type="text" id="dn-notas" placeholder="Opcional"></div>
       </div>
-      <div class="btn-row" style="margin-top:14px">
-        <button class="btn btn-blue" onclick="guardar()">💾 Guardar Registro</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">🔍 Buscar y Filtrar</div>
-      <div class="search-grid">
-        <div class="form-group"><label>Buscar usuario</label><input type="text" id="s-usuario" placeholder="Nombre..." oninput="buscar()"></div>
-        <div class="form-group"><label>Filtrar fecha (mm/aaaa)</label><input type="text" id="s-fecha" placeholder="05/2026" oninput="buscar()"></div>
-        <button class="btn btn-blue" onclick="buscar()">🔍 Buscar</button>
-        <button class="btn btn-gray" onclick="limpiarFiltro()">↺ Limpiar</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📊 Historial de Registros</div>
-      <div class="table-wrap" style="max-height:360px;overflow-y:auto">
-        <table>
-          <thead><tr>
-            <th>ID</th><th>Fecha</th><th>Usuario</th><th>Vence</th><th>Paga</th><th>Pagó</th>
-            <th>Proveedor</th><th>Cancelado</th><th>Tipo</th><th>Cant.</th>
-            <th>Valor</th><th>Ganancia</th><th>Obs</th><th>Acciones</th>
-          </tr></thead>
-          <tbody id="tbody-registros"><tr><td colspan="13" class="loading">🔄 Cargando...</td></tr></tbody>
-        </table>
-      </div>
-      <div class="btn-row" style="margin-top:12px">
-        <button class="btn btn-red" onclick="eliminarSeleccionados()">🗑️ Eliminar Seleccionados</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">💸 Gastos e Ingresos Extra</div>
-      <div class="form-grid">
-        <div class="form-group"><label>Monto Gasto ($)</label><input type="number" id="m-gasto" placeholder="0"></div>
-        <div class="form-group"><label>Monto Ingreso ($)</label><input type="number" id="m-ingreso" placeholder="0"></div>
-        <div class="form-group obs-group"><label>Descripción</label><input type="text" id="m-desc" placeholder="Descripción del movimiento"></div>
-      </div>
-      <div class="btn-row" style="margin-top:12px">
-        <button class="btn btn-red" onclick="agregarGasto()">🔻 Agregar Gasto</button>
-        <button class="btn btn-green" onclick="agregarIngreso()">🔺 Agregar Ingreso</button>
-      </div>
-      <div class="table-wrap" style="margin-top:14px;max-height:200px;overflow-y:auto">
-        <table>
-          <thead><tr><th>Tipo</th><th>Valor</th><th>Descripción</th><th>Acciones</th></tr></thead>
-          <tbody id="tbody-movimientos"><tr><td colspan="4" class="loading">🔄 Cargando...</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="resumen">
-      <div class="resumen-card"><div class="lbl">💰 Ganancia Total</div><div class="val pos" id="r-ganancia">$0</div></div>
-      <div class="resumen-card"><div class="lbl">🔻 Gastos</div><div class="val neg" id="r-gastos">$0</div></div>
-      <div class="resumen-card"><div class="lbl">🔺 Ingresos Extra</div><div class="val pos" id="r-ingresos">$0</div></div>
-      <div class="resumen-card"><div class="lbl">📊 Balance Final</div><div class="val" id="r-balance">$0</div></div>
-    </div>
-    </div><!-- /vista-general -->
-  </main>
-</div>
-
-<!-- MODAL HISTORIAL -->
-<div class="modal-overlay" id="modal-historial">
-  <div class="modal" style="max-width:800px">
-    <h3>🗂️ Historial de Meses</h3>
-    <div id="historial-meses" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"></div>
-    <div id="historial-detalle" style="display:none">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-        <button class="btn btn-gray" style="padding:5px 12px;font-size:12px" onclick="document.getElementById('historial-detalle').style.display='none';document.getElementById('historial-meses').style.display='flex'">← Volver</button>
-        <span id="historial-titulo" style="font-weight:700;color:#3b82f6;font-size:16px"></span>
-      </div>
-      <div class="table-wrap" style="max-height:400px;overflow-y:auto">
-        <table>
-          <thead><tr><th>Usuario</th><th>Fecha</th><th>Paga</th><th>Pagó</th><th>Proveedor</th><th>Tipo</th><th>Valor</th><th>Ganancia</th></tr></thead>
-          <tbody id="historial-tbody"></tbody>
-        </table>
-      </div>
-      <div style="margin-top:10px;padding:10px;background:#141c35;border-radius:8px;display:flex;gap:20px;flex-wrap:wrap">
-        <span>📋 Registros: <strong id="h-total-regs">0</strong></span>
-        <span>💰 Ganancia: <strong id="h-total-gan" style="color:#22c55e">$0</strong></span>
-        <span>💸 Cobrado: <strong id="h-total-cob">$0</strong></span>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn btn-blue" onclick="guardarDeuda()">💾 Guardar deuda</button>
       </div>
     </div>
     <div class="modal-btns" style="margin-top:16px">
-      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-historial')">Cerrar</button>
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-deudas')">Cerrar</button>
     </div>
   </div>
-</div>
+</section>
+    <section class="page" data-page="pagos" id="modal-pagos">
+  <div class="page-card">
+    <h3>💳 Pagos Mensuales Fijos</h3>
+    <div style="background:#141c35;border-radius:10px;padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:#0891b2;margin-bottom:10px">➕ Nuevo Pago Fijo</div>
+      <div class="edit-form-grid" style="gap:10px">
+        <div class="form-group"><label class="modal-label">Nombre</label><input type="text" id="pm-nombre" placeholder="Ej: Internet, IKS, Arriendo..."></div>
+        <div class="form-group"><label class="modal-label">Monto ($)</label><input type="number" id="pm-monto" placeholder="0"></div>
+        <div class="form-group"><label class="modal-label">Día de pago (del mes)</label><input type="number" id="pm-dia" placeholder="Ej: 5" min="1" max="31"></div>
+        <div class="form-group"><label class="modal-label">Recordar (días antes)</label><input type="number" id="pm-aviso" placeholder="3" min="1" max="15"></div>
+        <div class="form-group obs-group"><label class="modal-label">Descripción</label><input type="text" id="pm-desc" placeholder="Descripción opcional"></div>
+      </div>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn btn-blue" onclick="guardarPagoMensual()">💾 Guardar Pago Fijo</button>
+      </div>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:#94a3b8;margin-bottom:8px">📋 Pagos Registrados</div>
+    <div id="pagos-lista" style="max-height:300px;overflow-y:auto"></div>
+    <div class="modal-btns" style="margin-top:16px">
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-pagos')">Cerrar</button>
+    </div>
+  </div>
+</section>
+    <section class="page" data-page="agenda" id="modal-agenda">
+  <div class="page-card">
+    <h3>📅 Agenda de Soportes</h3>
 
-<!-- MODAL ASTRA -->
-<div class="modal-overlay" id="modal-astra">
-  <div class="modal" style="max-width:700px">
+    <!-- Formulario nuevo soporte -->
+    <div style="background:#141c35;border-radius:10px;padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:#3b82f6;margin-bottom:10px">➕ Nuevo Soporte</div>
+      <div class="edit-form-grid" style="gap:10px">
+        <div class="form-group"><label class="modal-label">Cliente</label><input type="text" id="ag-cliente" placeholder="Nombre del cliente"></div>
+        <div class="form-group"><label class="modal-label">Teléfono WhatsApp</label><input type="text" id="ag-telefono" placeholder="573001234567"></div>
+        <div class="form-group"><label class="modal-label">Fecha</label><input type="date" id="ag-fecha"></div>
+        <div class="form-group"><label class="modal-label">Hora</label><input type="time" id="ag-hora"></div>
+        <div class="form-group" style="grid-column:1/-1"><label class="modal-label">Descripción del soporte</label><input type="text" id="ag-desc" placeholder="Ej: Configurar router, instalar decoder..."></div>
+      </div>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn btn-blue" onclick="guardarSoporte()">💾 Agendar Soporte</button>
+      </div>
+    </div>
+
+    <!-- Lista de soportes -->
+    <div style="font-size:13px;font-weight:700;color:#94a3b8;margin-bottom:8px">📋 Soportes Agendados</div>
+    <div id="agenda-lista" style="max-height:300px;overflow-y:auto"></div>
+
+    <div class="modal-btns" style="margin-top:16px">
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-agenda')">Cerrar</button>
+    </div>
+  </div>
+</section>
+    <section class="page" data-page="astra" id="modal-astra">
+  <div class="page-card">
     <h3>📡 Gestión ASTRA</h3>
 
     <!-- Formulario -->
@@ -417,63 +576,68 @@ tr.selected td{background:#1e3a5f}
       <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-astra')">Cerrar</button>
     </div>
   </div>
+</section>
+    <section class="page" data-page="historial" id="modal-historial">
+  <div class="page-card">
+    <h3>🗂️ Historial de Meses</h3>
+    <div id="historial-meses" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"></div>
+    <div id="historial-detalle" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <button class="btn btn-gray" style="padding:5px 12px;font-size:12px" onclick="document.getElementById('historial-detalle').style.display='none';document.getElementById('historial-meses').style.display='flex'">← Volver</button>
+        <span id="historial-titulo" style="font-weight:700;color:#3b82f6;font-size:16px"></span>
+      </div>
+      <div class="table-wrap" style="max-height:400px;overflow-y:auto">
+        <table>
+          <thead><tr><th>Usuario</th><th>Fecha</th><th>Paga</th><th>Pagó</th><th>Proveedor</th><th>Tipo</th><th>Valor</th><th>Ganancia</th></tr></thead>
+          <tbody id="historial-tbody"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:10px;padding:10px;background:#141c35;border-radius:8px;display:flex;gap:20px;flex-wrap:wrap">
+        <span>📋 Registros: <strong id="h-total-regs">0</strong></span>
+        <span>💰 Ganancia: <strong id="h-total-gan" style="color:#22c55e">$0</strong></span>
+        <span>💸 Cobrado: <strong id="h-total-cob">$0</strong></span>
+      </div>
+    </div>
+    <div class="modal-btns" style="margin-top:16px">
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-historial')">Cerrar</button>
+    </div>
+  </div>
+</section>
+    <section class="page" data-page="resumen" id="modal-resumen">
+  <div class="page-card">
+    <div class="seg"><button class="on" onclick="verResumenTab('tabla',this)">📅 Por mes</button><button onclick="verResumenTab('grafica',this)">📊 Gráfica</button></div>
+    <div id="res-tabla">
+    <h3>📅 Resumen Mensual</h3>
+    <div class="table-wrap" style="max-height:360px;overflow-y:auto">
+      <table><thead><tr><th>Mes</th><th>Registros</th><th>Cobrado</th><th>Costo</th><th>Ganancia</th></tr></thead>
+      <tbody id="tbody-resumen"></tbody></table>
+    </div>
+    </div><div id="res-grafica" style="display:none"><div id="chart-container"><canvas id="myChart"></canvas></div></div>
+    <div class="modal-btns" style="margin-top:16px"><button class="btn btn-gray btn-full" onclick="cerrarModal('modal-resumen')">Cerrar</button></div>
+  </div>
+</section>
+  </main>
+
+  <nav class="tabbar">
+    <button data-tab="inicio" onclick="irA('inicio')"><span>🏠</span>Inicio</button>
+    <button data-tab="clientes" onclick="irA('clientes')"><span>👥</span>Clientes</button>
+    <button data-tab="movimientos" onclick="irA('movimientos')"><span>💸</span>Gastos</button>
+    <button data-tab="presupuesto" onclick="irA('presupuesto')"><span>💰</span>Semana</button>
+    <button data-tab="deudas" onclick="irA('deudas')"><span>🧾</span>Deudas</button>
+  </nav>
 </div>
+
+<!-- MODAL HISTORIAL -->
+
+
+<!-- MODAL ASTRA -->
+
 
 <!-- MODAL PAGOS MENSUALES -->
-<div class="modal-overlay" id="modal-pagos">
-  <div class="modal" style="max-width:600px">
-    <h3>💳 Pagos Mensuales Fijos</h3>
-    <div style="background:#141c35;border-radius:10px;padding:16px;margin-bottom:16px">
-      <div style="font-size:13px;font-weight:700;color:#0891b2;margin-bottom:10px">➕ Nuevo Pago Fijo</div>
-      <div class="edit-form-grid" style="gap:10px">
-        <div class="form-group"><label class="modal-label">Nombre</label><input type="text" id="pm-nombre" placeholder="Ej: Internet, IKS, Arriendo..."></div>
-        <div class="form-group"><label class="modal-label">Monto ($)</label><input type="number" id="pm-monto" placeholder="0"></div>
-        <div class="form-group"><label class="modal-label">Día de pago (del mes)</label><input type="number" id="pm-dia" placeholder="Ej: 5" min="1" max="31"></div>
-        <div class="form-group"><label class="modal-label">Recordar (días antes)</label><input type="number" id="pm-aviso" placeholder="3" min="1" max="15"></div>
-        <div class="form-group obs-group"><label class="modal-label">Descripción</label><input type="text" id="pm-desc" placeholder="Descripción opcional"></div>
-      </div>
-      <div class="btn-row" style="margin-top:10px">
-        <button class="btn btn-blue" onclick="guardarPagoMensual()">💾 Guardar Pago Fijo</button>
-      </div>
-    </div>
-    <div style="font-size:13px;font-weight:700;color:#94a3b8;margin-bottom:8px">📋 Pagos Registrados</div>
-    <div id="pagos-lista" style="max-height:300px;overflow-y:auto"></div>
-    <div class="modal-btns" style="margin-top:16px">
-      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-pagos')">Cerrar</button>
-    </div>
-  </div>
-</div>
+
 
 <!-- MODAL DEUDAS -->
-<div class="modal-overlay" id="modal-deudas">
-  <div class="modal" style="max-width:600px">
-    <h3>🧾 Control de Deudas</h3>
-    <div class="deuda-res">
-      <div class="pres-stat"><div class="l">Debo en total</div><div class="v" id="d-total">$0</div></div>
-      <div class="pres-stat"><div class="l">Capital pagado</div><div class="v pos" id="d-pagado">$0</div></div>
-      <div class="pres-stat"><div class="l">Me falta</div><div class="v" style="color:#fb7185" id="d-saldo">$0</div></div>
-    </div>
-    <div style="font-size:12px;color:var(--muted);text-align:center;margin:-8px 0 14px" id="d-intereses"></div>
-    <div id="deudas-lista"></div>
-    <div style="background:var(--field);border-radius:10px;padding:16px;margin-top:14px">
-      <div style="font-size:13px;font-weight:700;color:#fb7185;margin-bottom:10px">➕ Nueva deuda</div>
-      <div class="edit-form-grid" style="gap:10px">
-        <div class="form-group"><label class="modal-label">¿A quién / qué?</label><input type="text" id="dn-nombre" placeholder="Ej: Préstamo Juan, Banco..."></div>
-        <div class="form-group"><label class="modal-label">Valor total ($)</label><input type="number" id="dn-total" placeholder="0" inputmode="numeric"></div>
-        <div class="form-group"><label class="modal-label">Interés mensual % (opcional)</label><input type="number" id="dn-interes" placeholder="Ej: 6" step="0.01" inputmode="decimal"></div>
-        <div class="form-group"><label class="modal-label">Cuota (opcional)</label><input type="number" id="dn-cuota" placeholder="Ej: 200000" inputmode="numeric"></div>
-        <div class="form-group"><label class="modal-label">Día de pago (opcional)</label><input type="number" id="dn-dia" placeholder="Ej: 15" min="1" max="31"></div>
-        <div class="form-group obs-group"><label class="modal-label">Notas</label><input type="text" id="dn-notas" placeholder="Opcional"></div>
-      </div>
-      <div class="btn-row" style="margin-top:10px">
-        <button class="btn btn-blue" onclick="guardarDeuda()">💾 Guardar deuda</button>
-      </div>
-    </div>
-    <div class="modal-btns" style="margin-top:16px">
-      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-deudas')">Cerrar</button>
-    </div>
-  </div>
-</div>
+
 
 <!-- MODAL ABONO -->
 <div class="modal-overlay" id="modal-abono">
@@ -502,34 +666,7 @@ tr.selected td{background:#1e3a5f}
 </div>
 
 <!-- MODAL AGENDA -->
-<div class="modal-overlay" id="modal-agenda">
-  <div class="modal" style="max-width:700px">
-    <h3>📅 Agenda de Soportes</h3>
 
-    <!-- Formulario nuevo soporte -->
-    <div style="background:#141c35;border-radius:10px;padding:16px;margin-bottom:16px">
-      <div style="font-size:13px;font-weight:700;color:#3b82f6;margin-bottom:10px">➕ Nuevo Soporte</div>
-      <div class="edit-form-grid" style="gap:10px">
-        <div class="form-group"><label class="modal-label">Cliente</label><input type="text" id="ag-cliente" placeholder="Nombre del cliente"></div>
-        <div class="form-group"><label class="modal-label">Teléfono WhatsApp</label><input type="text" id="ag-telefono" placeholder="573001234567"></div>
-        <div class="form-group"><label class="modal-label">Fecha</label><input type="date" id="ag-fecha"></div>
-        <div class="form-group"><label class="modal-label">Hora</label><input type="time" id="ag-hora"></div>
-        <div class="form-group" style="grid-column:1/-1"><label class="modal-label">Descripción del soporte</label><input type="text" id="ag-desc" placeholder="Ej: Configurar router, instalar decoder..."></div>
-      </div>
-      <div class="btn-row" style="margin-top:10px">
-        <button class="btn btn-blue" onclick="guardarSoporte()">💾 Agendar Soporte</button>
-      </div>
-    </div>
-
-    <!-- Lista de soportes -->
-    <div style="font-size:13px;font-weight:700;color:#94a3b8;margin-bottom:8px">📋 Soportes Agendados</div>
-    <div id="agenda-lista" style="max-height:300px;overflow-y:auto"></div>
-
-    <div class="modal-btns" style="margin-top:16px">
-      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-agenda')">Cerrar</button>
-    </div>
-  </div>
-</div>
 
 <!-- MODALES -->
 <div class="modal-overlay" id="modal-auth-edit">
@@ -609,24 +746,9 @@ tr.selected td{background:#1e3a5f}
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-grafica">
-  <div class="modal" style="max-width:700px">
-    <h3>📊 Ganancias por Mes</h3>
-    <div id="chart-container"><canvas id="myChart"></canvas></div>
-    <div class="modal-btns" style="margin-top:16px"><button class="btn btn-gray btn-full" onclick="cerrarModal('modal-grafica')">Cerrar</button></div>
-  </div>
-</div>
 
-<div class="modal-overlay" id="modal-resumen">
-  <div class="modal" style="max-width:700px">
-    <h3>📅 Resumen Mensual</h3>
-    <div class="table-wrap" style="max-height:360px;overflow-y:auto">
-      <table><thead><tr><th>Mes</th><th>Registros</th><th>Cobrado</th><th>Costo</th><th>Ganancia</th></tr></thead>
-      <tbody id="tbody-resumen"></tbody></table>
-    </div>
-    <div class="modal-btns" style="margin-top:16px"><button class="btn btn-gray btn-full" onclick="cerrarModal('modal-resumen')">Cerrar</button></div>
-  </div>
-</div>
+
+
 
 <!-- MODAL CONFIG PRESUPUESTO -->
 <div class="modal-overlay" id="modal-pres-config">
@@ -656,6 +778,7 @@ tr.selected td{background:#1e3a5f}
   </div>
 </div>
 
+<div id="modal-grafica" hidden></div>
 <div class="toast" id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -710,6 +833,10 @@ function abrirApp(){
   cargarSoportes();
   iniciarPresupuesto();
   iniciarDeudas();
+  let ini="inicio";try{ini=(location.hash.slice(1))||localStorage.getItem("iks_seccion")||"inicio"}catch{}
+  history.replaceState({pg:"inicio"},"","#inicio");
+  if(ini!=="inicio"){history.pushState({pg:ini},"","#"+ini)}
+  mostrarSeccion(ini);
 }
 
 function escucharCambios(){
@@ -1055,12 +1182,12 @@ window.cambiarPassword=async function(){
   await setConfig("password",nueva);cerrarModal("modal-pass");showToast("Contraseña actualizada ✔");
 }
 
-window.toggleModo=function(){aplicarModo(localStorage.getItem("modo")==="dark"?"light":"dark")}
+window.toggleModo=function(){aplicarModo((localStorage.getItem("modo")||"dark")==="dark"?"light":"dark")}
 function aplicarModo(modo){
   localStorage.setItem("modo",modo);
   const btn=document.getElementById("btn-modo");
-  if(modo==="light"){document.documentElement.style.setProperty("--bg","#f0f4ff");document.documentElement.style.setProperty("--card","#ffffff");document.documentElement.style.setProperty("--field","#e8eef8");document.documentElement.style.setProperty("--txt","#0f172a");document.documentElement.style.setProperty("--label","#334155");document.documentElement.style.setProperty("--muted","#94a3b8");btn.textContent="🌙 Modo Oscuro";}
-  else{document.documentElement.style.setProperty("--bg","#0a0f1e");document.documentElement.style.setProperty("--card","#0f1629");document.documentElement.style.setProperty("--field","#141c35");document.documentElement.style.setProperty("--txt","#e2e8f0");document.documentElement.style.setProperty("--label","#94a3b8");document.documentElement.style.setProperty("--muted","#64748b");btn.textContent="☀️ Modo Claro";}
+  if(modo==="light"){document.documentElement.style.setProperty("--bg","#f0f4ff");document.documentElement.style.setProperty("--card","#ffffff");document.documentElement.style.setProperty("--field","#e8eef8");document.documentElement.style.setProperty("--txt","#0f172a");document.documentElement.style.setProperty("--label","#334155");document.documentElement.style.setProperty("--muted","#94a3b8");btn.textContent="🌙";document.documentElement.dataset.theme="light";}
+  else{document.documentElement.style.setProperty("--bg","#0a0f1e");document.documentElement.style.setProperty("--card","#0f1629");document.documentElement.style.setProperty("--field","#141c35");document.documentElement.style.setProperty("--txt","#e2e8f0");document.documentElement.style.setProperty("--label","#94a3b8");document.documentElement.style.setProperty("--muted","#64748b");btn.textContent="☀️";document.documentElement.dataset.theme="dark";}
 }
 
 window.toggleCantidad=function(){const c=document.getElementById("f-cantidad");c.disabled=document.getElementById("f-tipo").value!=="IKS";if(c.disabled)c.value=""}
@@ -1575,13 +1702,11 @@ async function iniciarPresupuesto(){
   // Vista guardada localmente primero (rápido), luego la de la nube
   let vistaLocal=null;
   try{vistaLocal=localStorage.getItem("iks_vista")}catch{}
-  if(vistaLocal) aplicarVista(vistaLocal,false);
 
   const c=await getConfig("presupuesto");
   if(c) presCfg={...presCfg,...c};
   const a=await getConfig("presupuesto_avisos");
   if(a) presAvisos=a;
-  aplicarVista(vistaLocal||presCfg.vista||"general",false);
 
   onSnapshot(query(collection(db,"gastos_presupuesto"),orderBy("timestamp","desc")),snap=>{
     presGastos=snap.docs.map(d=>({...d.data(),fireId:d.id}));
@@ -1593,25 +1718,8 @@ async function iniciarPresupuesto(){
   setInterval(()=>{renderPresupuesto();revisarTopes()},10*60*1000);
 }
 
-function aplicarVista(vista,guardar=true){
-  const pres=vista==="presupuesto";
-  document.getElementById("vista-presupuesto").style.display=pres?"flex":"none";
-  document.getElementById("vista-general").style.display=pres?"none":"flex";
-  document.querySelectorAll(".solo-general").forEach(b=>b.style.display=pres?"none":"");
-  const btn=document.getElementById("btn-vista");
-  btn.textContent=pres?"📊 Ver General":"💰 Presupuesto";
-  btn.className=pres?"btn-sm blue":"btn-sm pres";
-  presCfg.vista=vista;
-  try{localStorage.setItem("iks_vista",vista)}catch{}
-  if(guardar) setConfig("presupuesto",presCfg).catch(()=>{});
-  window.scrollTo({top:0});
-}
-
-window.cambiarVista=function(forzar){
-  const nueva=typeof forzar==="string"?forzar:(presCfg.vista==="presupuesto"?"general":"presupuesto");
-  if(nueva==="presupuesto"&&!presCfg.monto){aplicarVista("presupuesto");abrirConfigPresupuesto();return}
-  aplicarVista(nueva);
-}
+function aplicarVista(){ /* reemplazado por el menú de secciones */ }
+window.cambiarVista=function(){irA("presupuesto")}
 
 function colorPct(p){
   const t=[...presCfg.topes].sort((a,b)=>a-b);
@@ -2029,6 +2137,85 @@ window.eliminarAbono=async function(id){
   if(a?.movId) await deleteDoc(doc(db,"movimientos",a.movId)).catch(()=>{});
   showToast("Pago eliminado");
 }
+
+
+// ── NAVEGACIÓN POR SECCIONES ──────────────────────────
+const TITULOS={inicio:"Inicio",clientes:"👥 Clientes",movimientos:"💸 Gastos e ingresos",presupuesto:"💰 Semana",
+  deudas:"🧾 Deudas",pagos:"💳 Pagos fijos",agenda:"📅 Agenda",astra:"📡 ASTRA",historial:"🗂️ Historial",resumen:"📊 Resumen"};
+const ABRIR={deudas:()=>window.abrirDeudas&&abrirDeudas(),pagos:()=>abrirPagosMensuales(),agenda:()=>abrirAgenda(),
+  astra:()=>abrirAstra(),historial:()=>abrirHistorial(),resumen:()=>mostrarResumen(),
+  presupuesto:()=>{if(!presCfg.monto) setTimeout(abrirConfigPresupuesto,250)}};
+let seccionActual="inicio";
+function mostrarSeccion(pg){
+  if(!TITULOS[pg]) pg="inicio";
+  seccionActual=pg;
+  document.querySelectorAll("main .page").forEach(el=>el.classList.toggle("active",el.dataset.page===pg));
+  document.querySelectorAll(".tabbar button").forEach(b=>b.classList.toggle("on",b.dataset.tab===pg));
+  document.body.classList.toggle("en-seccion",pg!=="inicio");
+  document.getElementById("hdr-title").textContent=TITULOS[pg];
+  try{localStorage.setItem("iks_seccion",pg)}catch{}
+  window.scrollTo({top:0});
+  if(pg==="inicio") actualizarInicio();
+  if(ABRIR[pg]) try{ABRIR[pg]()}catch(e){console.error(e)}
+}
+window.irA=function(pg){
+  if(pg===seccionActual){window.scrollTo({top:0,behavior:"smooth"});return}
+  history.pushState({pg},"","#"+pg);
+  mostrarSeccion(pg);
+}
+window.addEventListener("popstate",e=>{
+  const abierto=[...document.querySelectorAll(".modal-overlay.open")];
+  if(abierto.length){abierto.forEach(m=>m.classList.remove("open"));history.pushState({pg:seccionActual},"","#"+seccionActual);return}
+  mostrarSeccion(e.state?.pg||"inicio");
+});
+// Los "Cerrar" de las secciones que antes eran ventanas vuelven al inicio
+const _cerrarModal=window.cerrarModal;
+window.cerrarModal=function(id){
+  const el=document.getElementById(id);
+  if(el&&el.classList.contains("page")){irA("inicio");return}
+  _cerrarModal(id);
+};
+window.verResumenTab=function(t,btn){
+  document.querySelectorAll("#modal-resumen .seg button").forEach(b=>b.classList.toggle("on",b===btn));
+  document.getElementById("res-tabla").style.display=t==="tabla"?"":"none";
+  document.getElementById("res-grafica").style.display=t==="grafica"?"":"none";
+  if(t==="grafica") mostrarGrafica();
+};
+window.accionRapida=function(a){
+  const foco={cliente:["clientes","f-usuario"],gasto:["movimientos","m-gasto"],semana:["presupuesto","p-monto"],deuda:["deudas",null]}[a];
+  irA(foco[0]);
+  if(foco[1]) setTimeout(()=>{const el=document.getElementById(foco[1]);el.scrollIntoView({behavior:"smooth",block:"center"});el.focus()},150);
+};
+function txt(id){return document.getElementById(id)?.textContent||"$0"}
+function setSub(id,html,badge){const el=document.getElementById(id);if(!el)return;el.innerHTML=html;
+  const tile=el.closest(".tile");tile.querySelector(".dot")?.remove();
+  if(badge){const d=document.createElement("span");d.className="dot";d.textContent=badge;tile.appendChild(d)}}
+function hijosVisibles(id){const b=document.getElementById(id);return b&&b.style.display!=="none"&&b.style.display!==""?b:null}
+function actualizarInicio(){
+  const h=new Date(),hr=h.getHours();
+  document.getElementById("hola-t").textContent=(hr<12?"Buenos días":hr<19?"Buenas tardes":"Buenas noches")+" 👋";
+  document.getElementById("hola-d").textContent=h.toLocaleDateString("es-CO",{weekday:"long",day:"numeric",month:"long"});
+  document.getElementById("h-balance").textContent=txt("r-balance");
+  document.getElementById("h-ganancia").textContent=txt("r-ganancia");
+  document.getElementById("h-gastos").textContent=txt("r-gastos");
+  document.getElementById("h-ingresos").textContent=txt("r-ingresos");
+  const nVence=document.querySelectorAll("#alerta-lista .alerta-item").length;
+  setSub("t-clientes",`${registros.length} registro${registros.length===1?"":"s"}`,nVence?`${nVence} por vencer`:"");
+  setSub("t-movs",`Balance ${txt("r-balance")}`);
+  setSub("t-semana",presCfg.monto?`Disponible ${txt("p-disponible")}`:"Toca para configurar");
+  const nd=(typeof deudas!=="undefined"?deudas:[]).filter(d=>calcDeuda(d).capital>0).length;
+  setSub("t-deudas",nd?`Debes ${txt("d-saldo")}`:"Sin deudas 🎉",document.querySelectorAll("#deudas-banner-lista .alerta-item").length?"¡Cuota!":"");
+  const np=document.querySelectorAll("#pagos-banner-lista .alerta-item").length;
+  setSub("t-pagos",np?`${np} por pagar pronto`:"Todo al día",np?String(np):"");
+  const na=document.querySelectorAll("#agenda-hoy-lista > *").length;
+  setSub("t-agenda",na&&hijosVisibles("agenda-hoy-banner")?`${na} soporte(s) hoy`:"Nada para hoy",na&&hijosVisibles("agenda-hoy-banner")?"Hoy":"");
+  const ns=document.querySelectorAll("#astra-banner-lista .alerta-item").length;
+  setSub("t-astra",ns?`${ns} por vencer`:"Servicios al día",ns?String(ns):"");
+  setSub("t-resumen","Ganancias por mes");
+  const algun=[...document.querySelectorAll(".avisos .alerta-banner")].some(b=>b.style.display==="block");
+  document.getElementById("avisos-t").style.display=algun?"":"none";
+}
+setInterval(()=>{if(seccionActual==="inicio"&&document.getElementById("app").style.display==="flex") actualizarInicio()},1500);
 
 // ── MODO OFFLINE (Service Worker) ─────────────────────
 // Limpiar service workers viejos

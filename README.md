@@ -3,6 +3,7 @@
 Sistema de gestión de registros — Web App
 
 ## Funcionalidades
+- 🏠 Menú de inicio con balance del mes, accesos rápidos, avisos y una sección para cada cosa (barra inferior para moverse)
 - 🔐 Login con contraseña personal
 - 📋 Registro de clientes (SAT FULL / IKS)
 - 💸 Gastos e ingresos extra
