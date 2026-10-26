@@ -11,7 +11,7 @@ Sistema de gestión de registros — Web App
 - 📅 Resumen mensual
 - 📥 Exportar a Excel
 - 💰 Presupuesto semanal con avisos por topes (vista propia)
-- 🧾 Control de deudas: total, pagos/abonos, saldo pendiente y aviso de cuota
+- 🧾 Control de deudas con interés mensual sobre saldo: cuotas (interés + capital), abonos a capital, tabla de abonos y aviso de cuota
 - ☀️ Modo claro / oscuro
 - 📱 Compatible con iPhone y Android
 

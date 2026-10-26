@@ -154,6 +154,15 @@ tr.selected td{background:#1e3a5f}
 .deuda-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--label);gap:8px;flex-wrap:wrap}
 .deuda-btns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
 .deuda-btns .btn{padding:6px 12px;font-size:12px}
+.abonos-tabla{width:100%;min-width:0;font-size:12px;margin-top:6px}
+.abonos-tabla th{background:var(--dis);padding:6px 4px;font-size:11px}
+.abonos-tabla td{padding:6px 4px;white-space:nowrap}
+.abonos-tabla th,.abonos-tabla td{font-size:11px}
+.tipo-pill{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;border:1px solid}
+.tipo-pill.cuota{color:#60a5fa;border-color:#60a5fa;background:#60a5fa1a}
+.tipo-pill.capital{color:#22c55e;border-color:#22c55e;background:#22c55e1a}
+.ab-preview{background:var(--field);border-radius:10px;padding:10px 12px;margin:2px 0 10px;font-size:13px;color:var(--label);line-height:1.6}
+.ab-preview b{color:var(--txt)}
 .abono-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-top:1px solid #1e40af33;font-size:13px}
 .abono-row .m{font-weight:700;color:var(--green);white-space:nowrap}
 @media(max-width:768px){.logo{font-size:22px}.btn-sm{padding:7px 10px;font-size:12px}main{padding:10px;gap:10px}.card{padding:14px}.form-grid{grid-template-columns:1fr 1fr}table{font-size:12px}th,td{padding:7px 8px}.search-grid{grid-template-columns:1fr 1fr}.edit-form-grid{grid-template-columns:1fr}}
@@ -441,15 +450,17 @@ tr.selected td{background:#1e3a5f}
     <h3>🧾 Control de Deudas</h3>
     <div class="deuda-res">
       <div class="pres-stat"><div class="l">Debo en total</div><div class="v" id="d-total">$0</div></div>
-      <div class="pres-stat"><div class="l">Ya pagué</div><div class="v pos" id="d-pagado">$0</div></div>
+      <div class="pres-stat"><div class="l">Capital pagado</div><div class="v pos" id="d-pagado">$0</div></div>
       <div class="pres-stat"><div class="l">Me falta</div><div class="v" style="color:#fb7185" id="d-saldo">$0</div></div>
     </div>
+    <div style="font-size:12px;color:var(--muted);text-align:center;margin:-8px 0 14px" id="d-intereses"></div>
     <div id="deudas-lista"></div>
     <div style="background:var(--field);border-radius:10px;padding:16px;margin-top:14px">
       <div style="font-size:13px;font-weight:700;color:#fb7185;margin-bottom:10px">➕ Nueva deuda</div>
       <div class="edit-form-grid" style="gap:10px">
         <div class="form-group"><label class="modal-label">¿A quién / qué?</label><input type="text" id="dn-nombre" placeholder="Ej: Préstamo Juan, Banco..."></div>
         <div class="form-group"><label class="modal-label">Valor total ($)</label><input type="number" id="dn-total" placeholder="0" inputmode="numeric"></div>
+        <div class="form-group"><label class="modal-label">Interés mensual % (opcional)</label><input type="number" id="dn-interes" placeholder="Ej: 6" step="0.01" inputmode="decimal"></div>
         <div class="form-group"><label class="modal-label">Cuota (opcional)</label><input type="number" id="dn-cuota" placeholder="Ej: 200000" inputmode="numeric"></div>
         <div class="form-group"><label class="modal-label">Día de pago (opcional)</label><input type="number" id="dn-dia" placeholder="Ej: 15" min="1" max="31"></div>
         <div class="form-group obs-group"><label class="modal-label">Notas</label><input type="text" id="dn-notas" placeholder="Opcional"></div>
@@ -469,10 +480,16 @@ tr.selected td{background:#1e3a5f}
   <div class="modal" style="max-width:400px">
     <h3 id="ab-titulo">💵 Registrar pago</h3>
     <div style="font-size:13px;color:var(--label);margin-bottom:12px" id="ab-saldo"></div>
+    <label class="modal-label">Tipo de pago</label>
+    <select id="ab-tipo" onchange="previewAbono()">
+      <option value="cuota">Cuota (primero interés, el resto a capital)</option>
+      <option value="capital">Abono a capital (todo baja la deuda)</option>
+    </select>
     <label class="modal-label">Valor pagado ($)</label>
-    <input type="number" id="ab-valor" placeholder="0" inputmode="numeric">
+    <input type="number" id="ab-valor" placeholder="0" inputmode="numeric" oninput="previewAbono()">
+    <div class="ab-preview" id="ab-preview"></div>
     <label class="modal-label">Fecha</label>
-    <input type="date" id="ab-fecha">
+    <input type="date" id="ab-fecha" onchange="previewAbono()">
     <label class="modal-label">Nota (opcional)</label>
     <input type="text" id="ab-nota" placeholder="Ej: cuota 3, transferencia...">
     <label class="chk-row"><input type="checkbox" id="ab-general" checked> Registrar también en Gastos generales</label>
@@ -1768,8 +1785,10 @@ window.guardarConfigPresupuesto=async function(){
 
 
 // ── CONTROL DE DEUDAS ─────────────────────────────────
-// deudas/{id}       -> {nombre, total, cuota, dia, notas, timestamp}
-// abonos_deuda/{id} -> {deudaId, valor, nota, timestamp, movId}
+// deudas/{id}       -> {nombre, total, interes(% mensual), cuota, dia, notas, timestamp}
+// abonos_deuda/{id} -> {deudaId, valor, tipo:"cuota"|"capital", nota, timestamp, movId}
+// Interés sobre saldo: cada CUOTA paga primero el interés del capital que queda
+// (capital × %), y el resto baja el capital. Un ABONO A CAPITAL baja todo el capital.
 let deudas=[], abonos=[], abonoDeudaId=null, deudaAbierta=null;
 
 function iniciarDeudas(){
@@ -1784,7 +1803,36 @@ function iniciarDeudas(){
 }
 
 function abonosDe(id){return abonos.filter(a=>a.deudaId===id)}
-function pagadoDe(id){return abonosDe(id).reduce((s,a)=>s+(Number(a.valor)||0),0)}
+function tasaDe(d){return Math.max(Number(d.interes)||0,0)/100}
+function tipoDe(a,d){return a.tipo||(tasaDe(d)?"cuota":"capital")}
+function partirPago(valor,capital,tasa,tipo){
+  if(tipo==="capital"||!tasa) return {interes:0,capital:valor};
+  const int=Math.min(valor,Math.round(capital*tasa));
+  return {interes:int,capital:valor-int};
+}
+// Recalcula toda la deuda en orden de fecha (así editar/borrar un pago siempre cuadra)
+function calcDeuda(d,extra){
+  const tasa=tasaDe(d);
+  let capital=Number(d.total)||0;
+  const lista=abonosDe(d.fireId).slice();
+  if(extra) lista.push(extra);
+  lista.sort((x,y)=>(x.timestamp||0)-(y.timestamp||0));
+  let pagado=0,intPag=0,capPag=0;
+  const filas=lista.map(a=>{
+    const v=Number(a.valor)||0,t=tipoDe(a,d);
+    const p=partirPago(v,capital,tasa,t);
+    const cap=Math.min(p.capital,capital);
+    capital-=cap;pagado+=v;intPag+=p.interes;capPag+=cap;
+    return {a,tipo:t,valor:v,interes:p.interes,capital:cap,sobra:p.capital-cap,saldo:capital};
+  });
+  return {capital,pagado,intPag,capPag,filas,tasa,proxInteres:Math.round(capital*tasa)};
+}
+function cuotasRestantes(capital,tasa,cuota){
+  if(!cuota||capital<=0) return 0;
+  let c=capital,n=0;
+  while(c>0&&n<600){const i=Math.round(c*tasa);if(cuota<=i) return Infinity;c-=cuota-i;n++}
+  return n;
+}
 function pagadoEsteMes(id){
   const h=new Date(),ini=new Date(h.getFullYear(),h.getMonth(),1).getTime();
   return abonosDe(id).filter(a=>(a.timestamp||0)>=ini).reduce((s,a)=>s+(Number(a.valor)||0),0);
@@ -1796,53 +1844,70 @@ function diasParaPago(dia){
   const f=new Date(h.getFullYear(),h.getMonth(),Math.min(dia,fin));
   return Math.round((f-h)/86400000);
 }
-function fechaCorta(ts){return new Date(ts).toLocaleDateString("es-CO",{day:"2-digit",month:"short",year:"numeric"})}
+function fechaCorta(ts){const d=new Date(ts);return `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getFullYear()).slice(2)}`}
+const pctTxt=t=>(t*100).toLocaleString("es-CO",{maximumFractionDigits:2})+"%";
 
 function renderDeudas(){
-  let T=0,P=0;
+  let T=0,P=0,I=0;
   const lista=document.getElementById("deudas-lista");
   const items=deudas.map(d=>{
-    const total=Number(d.total)||0,pag=pagadoDe(d.fireId),saldo=Math.max(total-pag,0);
-    T+=total;P+=Math.min(pag,total);
-    return {d,total,pag,saldo};
+    const total=Number(d.total)||0,c=calcDeuda(d);
+    T+=total;P+=c.capPag;I+=c.intPag;
+    return {d,total,c,saldo:c.capital};
   }).sort((a,b)=>(a.saldo===0)-(b.saldo===0));
   document.getElementById("d-total").textContent=`$${fmt(T)}`;
   document.getElementById("d-pagado").textContent=`$${fmt(P)}`;
   document.getElementById("d-saldo").textContent=`$${fmt(T-P)}`;
+  document.getElementById("d-intereses").textContent=I?`Intereses pagados: $${fmt(I)}`:"";
 
   if(!items.length){lista.innerHTML='<div class="loading">Aún no tienes deudas registradas. Agrega una abajo 👇</div>'}
-  else lista.innerHTML=items.map(({d,total,pag,saldo})=>{
-    const pct=total?Math.min(100,Math.round(pag/total*100)):0;
+  else lista.innerHTML=items.map(({d,total,c,saldo})=>{
+    const pct=total?Math.min(100,Math.round(c.capPag/total*100)):0;
     const cuota=Number(d.cuota)||0;
     const dias=diasParaPago(d.dia);
     const cuotaLista=cuota&&pagadoEsteMes(d.fireId)>=cuota;
     const pronto=saldo>0&&dias!==null&&dias>=0&&dias<=5&&!cuotaLista;
-    const restantes=cuota&&saldo>0?Math.ceil(saldo/cuota):0;
+    const restantes=cuotasRestantes(saldo,c.tasa,cuota);
     let estado="";
     if(saldo===0) estado='<span class="badge-naranja" style="color:#22c55e;border-color:#22c55e;background:#22c55e22">✔ PAGADA</span>';
     else if(cuotaLista) estado='<span class="badge-naranja" style="color:#22c55e;border-color:#22c55e;background:#22c55e22">Cuota del mes ✔</span>';
     else if(dias!==null&&dias<0) estado='<span class="badge-rojo">Cuota atrasada</span>';
     else if(pronto) estado=`<span class="badge-naranja">${dias===0?"Paga HOY":`Paga en ${dias}d`}</span>`;
     const subs=[];
+    if(c.tasa) subs.push(`Interés ${pctTxt(c.tasa)} mensual`);
     if(cuota) subs.push(`Cuota $${fmt(cuota)}`);
-    if(d.dia) subs.push(`día ${d.dia} de cada mes`);
-    if(restantes) subs.push(`≈ ${restantes} cuota${restantes>1?"s":""} más`);
+    if(d.dia) subs.push(`día ${d.dia}`);
+    if(restantes===Infinity) subs.push(`<span style="color:#f59e0b">la cuota no alcanza ni para el interés</span>`);
+    else if(restantes) subs.push(`≈ ${restantes} cuota${restantes>1?"s":""} más`);
     if(d.notas) subs.push(esc(d.notas));
-    const hist=abonosDe(d.fireId);
     const abierta=deudaAbierta===d.fireId;
+    const tabla=c.filas.length?`<div class="table-wrap" style="margin-top:10px"><table class="abonos-tabla">
+      <thead><tr><th>Fecha</th><th>Tipo</th><th>Pagado</th><th>Interés</th><th>A capital</th><th>Saldo</th><th></th></tr></thead>
+      <tbody>${c.filas.map(f=>`<tr>
+        <td>${fechaCorta(f.a.timestamp)}${f.a.nota?`<div style="font-size:10px;color:var(--muted)">${esc(f.a.nota)}</div>`:""}</td>
+        <td><span class="tipo-pill ${f.tipo}">${f.tipo==="capital"?"ABONO":"CUOTA"}</span></td>
+        <td>$${fmt(f.valor)}</td>
+        <td style="color:#f59e0b">${f.interes?`$${fmt(f.interes)}`:"—"}</td>
+        <td class="pos">$${fmt(f.capital)}</td>
+        <td style="font-weight:700">$${fmt(f.saldo)}</td>
+        <td><button class="btn btn-gray" style="padding:2px 7px;font-size:11px" onclick="eliminarAbono('${f.a.fireId}')">✕</button></td>
+      </tr>`).join("")}</tbody></table></div>`
+      :'<div class="deuda-sub" style="padding:8px 0">Sin pagos todavía</div>';
     return `<div class="deuda-item${saldo===0?" pagada":pronto||(dias!==null&&dias<0&&!cuotaLista)?" pronto":""}">
       <div class="deuda-head">
         <div style="min-width:0"><div class="deuda-nombre">${esc(d.nombre)} ${estado}</div><div class="deuda-sub">${subs.join(" · ")||"&nbsp;"}</div></div>
-        <div class="deuda-saldo">$${fmt(saldo)}<small>me falta</small></div>
+        <div class="deuda-saldo">$${fmt(saldo)}<small>capital que debo</small></div>
       </div>
       <div class="deuda-bar"><div class="deuda-fill" style="width:${pct}%"></div></div>
-      <div class="deuda-meta"><span>Pagado $${fmt(pag)} de $${fmt(total)}</span><span>${pct}%</span></div>
+      <div class="deuda-meta"><span>Capital pagado $${fmt(c.capPag)} de $${fmt(total)}</span><span>${pct}%</span></div>
+      ${c.tasa&&saldo>0?`<div class="deuda-meta" style="margin-top:4px"><span>Próximo interés: <b style="color:#f59e0b">$${fmt(c.proxInteres)}</b></span>${cuota?`<span>Próxima cuota a capital: <b class="pos">$${fmt(Math.max(cuota-c.proxInteres,0))}</b></span>`:""}</div>`:""}
+      ${c.intPag?`<div class="deuda-meta" style="margin-top:4px"><span>Intereses pagados: $${fmt(c.intPag)}</span><span>Total pagado: $${fmt(c.pagado)}</span></div>`:""}
       <div class="deuda-btns">
         ${saldo>0?`<button class="btn btn-green" onclick="abrirAbono('${d.fireId}')">💵 Registrar pago</button>`:""}
-        <button class="btn btn-gray" onclick="toggleHistDeuda('${d.fireId}')">📜 Pagos (${hist.length})</button>
+        <button class="btn btn-gray" onclick="toggleHistDeuda('${d.fireId}')">📜 Abonos (${c.filas.length})</button>
         <button class="btn btn-gray" onclick="eliminarDeuda('${d.fireId}')">🗑️</button>
       </div>
-      ${abierta?`<div style="margin-top:8px">${hist.length?hist.map(a=>`<div class="abono-row"><span>${fechaCorta(a.timestamp)}${a.nota?` · ${esc(a.nota)}`:""}</span><span style="display:flex;gap:8px;align-items:center"><span class="m">$${fmt(a.valor)}</span><button class="btn btn-gray" style="padding:3px 8px;font-size:11px" onclick="eliminarAbono('${a.fireId}')">✕</button></span></div>`).join(""):'<div class="deuda-sub" style="padding:6px 0">Sin pagos todavía</div>'}</div>`:""}
+      ${abierta?tabla:""}
     </div>`;
   }).join("");
   verificarDeudas();
@@ -1851,16 +1916,16 @@ function renderDeudas(){
 function verificarDeudas(){
   const banner=document.getElementById("deudas-banner"),lista=document.getElementById("deudas-banner-lista");
   const prox=deudas.map(d=>{
-    const total=Number(d.total)||0,saldo=Math.max(total-pagadoDe(d.fireId),0),cuota=Number(d.cuota)||0;
+    const c=calcDeuda(d),cuota=Number(d.cuota)||0;
     const dias=diasParaPago(d.dia);
     const lista=cuota?pagadoEsteMes(d.fireId)>=cuota:pagadoEsteMes(d.fireId)>0;
-    return {d,saldo,cuota,dias,lista};
+    return {d,saldo:c.capital,c,cuota,dias,lista};
   }).filter(x=>x.saldo>0&&x.dias!==null&&x.dias<=3&&!x.lista);
   if(!prox.length){banner.style.display="none";return}
   banner.style.display="block";
   lista.innerHTML=prox.map(x=>`<div class="alerta-item"><div class="alerta-info">
     <div class="alerta-nombre">${esc(x.d.nombre)} ${x.dias<0?'<span class="badge-rojo">ATRASADA</span>':x.dias===0?'<span class="badge-rojo">HOY</span>':`<span class="badge-naranja">En ${x.dias}d</span>`}</div>
-    <div class="alerta-detalle">${x.cuota?`Cuota $${fmt(x.cuota)} · `:""}Te falta $${fmt(x.saldo)} en total</div></div></div>`).join("");
+    <div class="alerta-detalle">${x.cuota?`Cuota $${fmt(x.cuota)} · `:""}${x.c.tasa?`Interés $${fmt(x.c.proxInteres)} · `:""}Capital $${fmt(x.saldo)}</div></div></div>`).join("");
 }
 
 window.abrirDeudas=function(){
@@ -1871,14 +1936,16 @@ window.abrirDeudas=function(){
 window.guardarDeuda=async function(){
   const nombre=document.getElementById("dn-nombre").value.trim();
   const total=parseFloat(document.getElementById("dn-total").value)||0;
+  const interes=parseFloat(document.getElementById("dn-interes").value)||0;
   const cuota=parseFloat(document.getElementById("dn-cuota").value)||0;
   const dia=parseInt(document.getElementById("dn-dia").value)||0;
   const notas=document.getElementById("dn-notas").value.trim();
   if(!nombre){showToast("Escribe a quién o qué le debes",true);return}
   if(total<=0){showToast("El valor total debe ser mayor a 0",true);return}
+  if(interes<0||interes>100){showToast("El interés debe estar entre 0 y 100%",true);return}
   if(dia&&(dia<1||dia>31)){showToast("El día debe estar entre 1 y 31",true);return}
-  await addDoc(collection(db,"deudas"),{nombre,total,cuota,dia,notas,timestamp:Date.now()});
-  ["dn-nombre","dn-total","dn-cuota","dn-dia","dn-notas"].forEach(id=>document.getElementById(id).value="");
+  await addDoc(collection(db,"deudas"),{nombre,total,interes,cuota,dia,notas,timestamp:Date.now()});
+  ["dn-nombre","dn-total","dn-interes","dn-cuota","dn-dia","dn-notas"].forEach(id=>document.getElementById(id).value="");
   showToast("Deuda guardada ✔");
 }
 
@@ -1893,17 +1960,40 @@ window.eliminarDeuda=async function(id){
 
 window.toggleHistDeuda=function(id){deudaAbierta=deudaAbierta===id?null:id;renderDeudas()}
 
+function tsDeFecha(){
+  const f=document.getElementById("ab-fecha").value,hoy=new Date();
+  if(!f) return Date.now();
+  const [y,m,dd]=f.split("-").map(Number);
+  return new Date(y,m-1,dd,hoy.getHours(),hoy.getMinutes(),hoy.getSeconds()).getTime();
+}
+
+window.previewAbono=function(){
+  const d=deudas.find(x=>x.fireId===abonoDeudaId),box=document.getElementById("ab-preview");
+  if(!d){box.innerHTML="";return}
+  const valor=parseFloat(document.getElementById("ab-valor").value)||0;
+  const tipo=document.getElementById("ab-tipo").value;
+  const antes=calcDeuda(d,{valor:0,tipo,timestamp:tsDeFecha(),deudaId:d.fireId});
+  const f0=antes.filas.find(f=>f.a.valor===0&&f.valor===0);
+  const capAntes=f0?f0.saldo:antes.capital;
+  if(valor<=0){box.innerHTML=`Capital que debes: <b>$${fmt(capAntes)}</b>${antes.tasa?` · Interés de este mes: <b style="color:#f59e0b">$${fmt(Math.round(capAntes*antes.tasa))}</b>`:""}`;return}
+  const p=partirPago(valor,capAntes,antes.tasa,tipo);
+  const cap=Math.min(p.capital,capAntes);
+  box.innerHTML=`${p.interes?`Interés: <b style="color:#f59e0b">$${fmt(p.interes)}</b> · `:""}A capital: <b class="pos">$${fmt(cap)}</b><br>Capital queda en: <b>$${fmt(capAntes-cap)}</b>${p.interes&&p.capital<=0?`<br><span style="color:#f59e0b">Este pago no alcanza a cubrir el interés.</span>`:""}`;
+}
+
 window.abrirAbono=function(id){
   const d=deudas.find(x=>x.fireId===id);if(!d) return;
   abonoDeudaId=id;
-  const saldo=Math.max((Number(d.total)||0)-pagadoDe(id),0);
+  const c=calcDeuda(d);
   document.getElementById("ab-titulo").textContent=`💵 Pago a ${d.nombre}`;
-  document.getElementById("ab-saldo").textContent=`Te falta $${fmt(saldo)}`;
-  document.getElementById("ab-valor").value=d.cuota?Math.min(d.cuota,saldo):"";
+  document.getElementById("ab-saldo").textContent=`Capital que debes: $${fmt(c.capital)}`;
+  document.getElementById("ab-tipo").value=tasaDe(d)?"cuota":"capital";
+  document.getElementById("ab-valor").value=d.cuota?d.cuota:"";
   const h=new Date();
   document.getElementById("ab-fecha").value=`${h.getFullYear()}-${String(h.getMonth()+1).padStart(2,"0")}-${String(h.getDate()).padStart(2,"0")}`;
   document.getElementById("ab-nota").value="";
   document.getElementById("ab-error").textContent="";
+  previewAbono();
   document.getElementById("modal-abono").classList.add("open");
   setTimeout(()=>document.getElementById("ab-valor").focus(),100);
 }
@@ -1911,29 +2001,29 @@ window.abrirAbono=function(id){
 window.guardarAbono=async function(){
   const d=deudas.find(x=>x.fireId===abonoDeudaId);if(!d) return;
   const valor=parseFloat(document.getElementById("ab-valor").value)||0;
+  const tipo=document.getElementById("ab-tipo").value;
   const err=document.getElementById("ab-error");
   if(valor<=0){err.textContent="Escribe un valor mayor a 0";return}
-  const saldo=Math.max((Number(d.total)||0)-pagadoDe(d.fireId),0);
-  if(valor>saldo&&!confirm(`Ese pago es mayor a lo que te falta ($${fmt(saldo)}). ¿Guardarlo igual?`)) return;
-  const f=document.getElementById("ab-fecha").value;
-  const hoy=new Date();
-  let ts=Date.now();
-  if(f){const [y,m,dd]=f.split("-").map(Number);const x=new Date(y,m-1,dd,hoy.getHours(),hoy.getMinutes());ts=x.getTime()}
+  const ts=tsDeFecha();
+  const sim=calcDeuda(d,{valor,tipo,timestamp:ts,deudaId:d.fireId,_nuevo:true});
+  const fila=sim.filas.find(f=>f.a._nuevo);
+  if(fila&&fila.sobra>0&&!confirm(`Ese pago es mayor a lo que debes. Sobran $${fmt(fila.sobra)}. ¿Guardarlo igual?`)) return;
   const nota=document.getElementById("ab-nota").value.trim();
   let movId=null;
   if(document.getElementById("ab-general").checked){
-    const ref=await addDoc(collection(db,"movimientos"),{tipo:"GASTO",valor,descripcion:`🧾 Pago deuda: ${d.nombre}${nota?` (${nota})`:""}`,timestamp:ts,deuda:true});
+    const ref=await addDoc(collection(db,"movimientos"),{tipo:"GASTO",valor,descripcion:`🧾 ${tipo==="capital"?"Abono":"Cuota"} deuda: ${d.nombre}${nota?` (${nota})`:""}`,timestamp:ts,deuda:true});
     movId=ref.id;
   }
-  const aref=await addDoc(collection(db,"abonos_deuda"),{deudaId:d.fireId,valor,nota,timestamp:ts,movId});
+  const aref=await addDoc(collection(db,"abonos_deuda"),{deudaId:d.fireId,valor,tipo,nota,timestamp:ts,movId});
   if(movId) updateDoc(doc(db,"movimientos",movId),{abonoId:aref.id}).catch(()=>{});
   cerrarModal("modal-abono");
-  const nuevo=saldo-valor;
-  showToast(nuevo<=0?`🎉 ¡Terminaste de pagar a ${d.nombre}!`:`Pago guardado ✔ — te falta $${fmt(nuevo)}`);
+  deudaAbierta=d.fireId;
+  const queda=calcDeuda(d,{valor,tipo,timestamp:ts,deudaId:d.fireId}).capital;
+  showToast(queda<=0?`🎉 ¡Terminaste de pagar a ${d.nombre}!`:`Pago guardado ✔ — capital queda en $${fmt(queda)}`);
 }
 
 window.eliminarAbono=async function(id){
-  if(!confirm("¿Eliminar este pago? También se quitará de Gastos generales si estaba allí.")) return;
+  if(!confirm("¿Eliminar este pago? También se quitará de Gastos generales si estaba allí. Los saldos se recalculan solos.")) return;
   const a=abonos.find(x=>x.fireId===id);
   await deleteDoc(doc(db,"abonos_deuda",id));
   if(a?.movId) await deleteDoc(doc(db,"movimientos",a.movId)).catch(()=>{});
