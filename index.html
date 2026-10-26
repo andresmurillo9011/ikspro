@@ -138,6 +138,24 @@ tr.selected td{background:#1e3a5f}
 .pres-alerta-txt strong{color:var(--txt)}
 .chk-row{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--label);margin:4px 0 12px;cursor:pointer}
 .modal .chk-row input{width:18px;height:18px;margin:0;padding:0;accent-color:var(--b2)}
+/* ── DEUDAS ── */
+.deuda-res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.deuda-res .pres-stat .v{font-size:18px}
+.deuda-item{background:var(--field);border-radius:12px;padding:14px 16px;margin-bottom:10px;border-left:4px solid #e11d48}
+.deuda-item.pagada{border-left-color:var(--green);opacity:.75}
+.deuda-item.pronto{border-left-color:#f59e0b}
+.deuda-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.deuda-nombre{font-weight:700;font-size:15px}
+.deuda-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.deuda-saldo{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:#fb7185;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+.deuda-saldo small{display:block;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);font-weight:500}
+.deuda-bar{height:10px;background:var(--dis);border-radius:999px;margin:10px 0 6px;overflow:hidden;border:1px solid var(--b1)}
+.deuda-fill{height:100%;background:var(--green);border-radius:999px;transition:width .4s}
+.deuda-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--label);gap:8px;flex-wrap:wrap}
+.deuda-btns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.deuda-btns .btn{padding:6px 12px;font-size:12px}
+.abono-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-top:1px solid #1e40af33;font-size:13px}
+.abono-row .m{font-weight:700;color:var(--green);white-space:nowrap}
 @media(max-width:768px){.logo{font-size:22px}.btn-sm{padding:7px 10px;font-size:12px}main{padding:10px;gap:10px}.card{padding:14px}.form-grid{grid-template-columns:1fr 1fr}table{font-size:12px}th,td{padding:7px 8px}.search-grid{grid-template-columns:1fr 1fr}.edit-form-grid{grid-template-columns:1fr}}
 @media(max-width:420px){.form-grid{grid-template-columns:1fr}.btn-sm{padding:6px 8px;font-size:11px}.pres-disp{font-size:44px}.pres-stats{grid-template-columns:1fr 1fr 1fr;gap:6px}.pres-stat{padding:8px 6px}.pres-stat .v{font-size:16px}}
 </style>
@@ -166,6 +184,7 @@ tr.selected td{background:#1e3a5f}
       <button class="btn-sm blue solo-general" onclick="mostrarResumen()">📅 Resumen</button>
       <button class="btn-sm solo-general" style="background:#7c3aed;border-color:#7c3aed;color:#fff" onclick="abrirAgenda()">📅 Agenda</button>
       <button class="btn-sm solo-general" style="background:#0891b2;border-color:#0891b2;color:#fff" onclick="abrirPagosMensuales()">💳 Pagos</button>
+      <button class="btn-sm solo-general" style="background:#e11d48;border-color:#e11d48;color:#fff" onclick="abrirDeudas()">🧾 Deudas</button>
       <button class="btn-sm blue solo-general" onclick="mostrarGrafica()">📊 Gráfica</button>
       <button class="btn-sm solo-general" style="background:#dc2626;border-color:#dc2626;color:#fff" onclick="cerrarMes()">📦 Cerrar Mes</button>
       <button class="btn-sm solo-general" style="background:#f59e0b;border-color:#f59e0b;color:#fff" onclick="abrirHistorial()">🗂️ Historial</button>
@@ -235,6 +254,12 @@ tr.selected td{background:#1e3a5f}
     <div class="alerta-banner" id="pagos-banner" style="border-color:#0891b2">
       <div class="alerta-banner-title" style="color:#0891b2">💳 Pagos mensuales próximos a vencer</div>
       <div id="pagos-banner-lista"></div>
+    </div>
+
+    <!-- BANNER DEUDAS -->
+    <div class="alerta-banner" id="deudas-banner" style="border-color:#e11d48;cursor:pointer" onclick="abrirDeudas()">
+      <div class="alerta-banner-title" style="color:#fb7185">🧾 Cuotas de deudas por pagar</div>
+      <div id="deudas-banner-lista"></div>
     </div>
 
     <!-- BANNER ALERTAS VENCIMIENTO -->
@@ -406,6 +431,55 @@ tr.selected td{background:#1e3a5f}
     <div id="pagos-lista" style="max-height:300px;overflow-y:auto"></div>
     <div class="modal-btns" style="margin-top:16px">
       <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-pagos')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DEUDAS -->
+<div class="modal-overlay" id="modal-deudas">
+  <div class="modal" style="max-width:600px">
+    <h3>🧾 Control de Deudas</h3>
+    <div class="deuda-res">
+      <div class="pres-stat"><div class="l">Debo en total</div><div class="v" id="d-total">$0</div></div>
+      <div class="pres-stat"><div class="l">Ya pagué</div><div class="v pos" id="d-pagado">$0</div></div>
+      <div class="pres-stat"><div class="l">Me falta</div><div class="v" style="color:#fb7185" id="d-saldo">$0</div></div>
+    </div>
+    <div id="deudas-lista"></div>
+    <div style="background:var(--field);border-radius:10px;padding:16px;margin-top:14px">
+      <div style="font-size:13px;font-weight:700;color:#fb7185;margin-bottom:10px">➕ Nueva deuda</div>
+      <div class="edit-form-grid" style="gap:10px">
+        <div class="form-group"><label class="modal-label">¿A quién / qué?</label><input type="text" id="dn-nombre" placeholder="Ej: Préstamo Juan, Banco..."></div>
+        <div class="form-group"><label class="modal-label">Valor total ($)</label><input type="number" id="dn-total" placeholder="0" inputmode="numeric"></div>
+        <div class="form-group"><label class="modal-label">Cuota (opcional)</label><input type="number" id="dn-cuota" placeholder="Ej: 200000" inputmode="numeric"></div>
+        <div class="form-group"><label class="modal-label">Día de pago (opcional)</label><input type="number" id="dn-dia" placeholder="Ej: 15" min="1" max="31"></div>
+        <div class="form-group obs-group"><label class="modal-label">Notas</label><input type="text" id="dn-notas" placeholder="Opcional"></div>
+      </div>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn btn-blue" onclick="guardarDeuda()">💾 Guardar deuda</button>
+      </div>
+    </div>
+    <div class="modal-btns" style="margin-top:16px">
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-deudas')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ABONO -->
+<div class="modal-overlay" id="modal-abono">
+  <div class="modal" style="max-width:400px">
+    <h3 id="ab-titulo">💵 Registrar pago</h3>
+    <div style="font-size:13px;color:var(--label);margin-bottom:12px" id="ab-saldo"></div>
+    <label class="modal-label">Valor pagado ($)</label>
+    <input type="number" id="ab-valor" placeholder="0" inputmode="numeric">
+    <label class="modal-label">Fecha</label>
+    <input type="date" id="ab-fecha">
+    <label class="modal-label">Nota (opcional)</label>
+    <input type="text" id="ab-nota" placeholder="Ej: cuota 3, transferencia...">
+    <label class="chk-row"><input type="checkbox" id="ab-general" checked> Registrar también en Gastos generales</label>
+    <div class="modal-error" id="ab-error"></div>
+    <div class="modal-btns">
+      <button class="btn btn-green btn-full" style="justify-content:center" onclick="guardarAbono()">✔ Guardar pago</button>
+      <button class="btn btn-gray btn-full" style="justify-content:center" onclick="cerrarModal('modal-abono')">Cancelar</button>
     </div>
   </div>
 </div>
@@ -618,6 +692,7 @@ function abrirApp(){
   escucharCambios();
   cargarSoportes();
   iniciarPresupuesto();
+  iniciarDeudas();
 }
 
 function escucharCambios(){
@@ -767,6 +842,7 @@ window.guardarEdicionMov=async function(){
   await updateDoc(doc(db,"movimientos",editandoMovId),{tipo:document.getElementById("em-tipo").value,valor,descripcion:document.getElementById("em-desc").value});
   const mv=movimientos.find(x=>x.fireId===editandoMovId);
   if(mv?.presId) await updateDoc(doc(db,"gastos_presupuesto",mv.presId),{valor,descripcion:document.getElementById("em-desc").value.replace(/^💰\s*/,"")}).catch(()=>{});
+  if(mv?.abonoId) await updateDoc(doc(db,"abonos_deuda",mv.abonoId),{valor}).catch(()=>{});
   cerrarModal("modal-editar-mov");showToast("Movimiento actualizado ✔");
 }
 
@@ -785,6 +861,7 @@ window.eliminarMov=async function(fireId){
   const mv=movimientos.find(x=>x.fireId===fireId);
   await deleteDoc(doc(db,"movimientos",fireId));
   if(mv?.presId) await deleteDoc(doc(db,"gastos_presupuesto",mv.presId)).catch(()=>{});
+  if(mv?.abonoId) await deleteDoc(doc(db,"abonos_deuda",mv.abonoId)).catch(()=>{});
   showToast("Movimiento eliminado");
 }
 
@@ -1687,6 +1764,180 @@ window.guardarConfigPresupuesto=async function(){
   try{if("Notification" in window&&Notification.permission==="default") Notification.requestPermission()}catch{}
   renderPresupuesto();
   revisarTopes();
+}
+
+
+// ── CONTROL DE DEUDAS ─────────────────────────────────
+// deudas/{id}       -> {nombre, total, cuota, dia, notas, timestamp}
+// abonos_deuda/{id} -> {deudaId, valor, nota, timestamp, movId}
+let deudas=[], abonos=[], abonoDeudaId=null, deudaAbierta=null;
+
+function iniciarDeudas(){
+  onSnapshot(query(collection(db,"deudas"),orderBy("timestamp","asc")),snap=>{
+    deudas=snap.docs.map(d=>({...d.data(),fireId:d.id}));
+    renderDeudas();
+  });
+  onSnapshot(query(collection(db,"abonos_deuda"),orderBy("timestamp","desc")),snap=>{
+    abonos=snap.docs.map(d=>({...d.data(),fireId:d.id}));
+    renderDeudas();
+  });
+}
+
+function abonosDe(id){return abonos.filter(a=>a.deudaId===id)}
+function pagadoDe(id){return abonosDe(id).reduce((s,a)=>s+(Number(a.valor)||0),0)}
+function pagadoEsteMes(id){
+  const h=new Date(),ini=new Date(h.getFullYear(),h.getMonth(),1).getTime();
+  return abonosDe(id).filter(a=>(a.timestamp||0)>=ini).reduce((s,a)=>s+(Number(a.valor)||0),0);
+}
+function diasParaPago(dia){
+  if(!dia) return null;
+  const h=new Date();h.setHours(0,0,0,0);
+  const fin=new Date(h.getFullYear(),h.getMonth()+1,0).getDate();
+  const f=new Date(h.getFullYear(),h.getMonth(),Math.min(dia,fin));
+  return Math.round((f-h)/86400000);
+}
+function fechaCorta(ts){return new Date(ts).toLocaleDateString("es-CO",{day:"2-digit",month:"short",year:"numeric"})}
+
+function renderDeudas(){
+  let T=0,P=0;
+  const lista=document.getElementById("deudas-lista");
+  const items=deudas.map(d=>{
+    const total=Number(d.total)||0,pag=pagadoDe(d.fireId),saldo=Math.max(total-pag,0);
+    T+=total;P+=Math.min(pag,total);
+    return {d,total,pag,saldo};
+  }).sort((a,b)=>(a.saldo===0)-(b.saldo===0));
+  document.getElementById("d-total").textContent=`$${fmt(T)}`;
+  document.getElementById("d-pagado").textContent=`$${fmt(P)}`;
+  document.getElementById("d-saldo").textContent=`$${fmt(T-P)}`;
+
+  if(!items.length){lista.innerHTML='<div class="loading">Aún no tienes deudas registradas. Agrega una abajo 👇</div>'}
+  else lista.innerHTML=items.map(({d,total,pag,saldo})=>{
+    const pct=total?Math.min(100,Math.round(pag/total*100)):0;
+    const cuota=Number(d.cuota)||0;
+    const dias=diasParaPago(d.dia);
+    const cuotaLista=cuota&&pagadoEsteMes(d.fireId)>=cuota;
+    const pronto=saldo>0&&dias!==null&&dias>=0&&dias<=5&&!cuotaLista;
+    const restantes=cuota&&saldo>0?Math.ceil(saldo/cuota):0;
+    let estado="";
+    if(saldo===0) estado='<span class="badge-naranja" style="color:#22c55e;border-color:#22c55e;background:#22c55e22">✔ PAGADA</span>';
+    else if(cuotaLista) estado='<span class="badge-naranja" style="color:#22c55e;border-color:#22c55e;background:#22c55e22">Cuota del mes ✔</span>';
+    else if(dias!==null&&dias<0) estado='<span class="badge-rojo">Cuota atrasada</span>';
+    else if(pronto) estado=`<span class="badge-naranja">${dias===0?"Paga HOY":`Paga en ${dias}d`}</span>`;
+    const subs=[];
+    if(cuota) subs.push(`Cuota $${fmt(cuota)}`);
+    if(d.dia) subs.push(`día ${d.dia} de cada mes`);
+    if(restantes) subs.push(`≈ ${restantes} cuota${restantes>1?"s":""} más`);
+    if(d.notas) subs.push(esc(d.notas));
+    const hist=abonosDe(d.fireId);
+    const abierta=deudaAbierta===d.fireId;
+    return `<div class="deuda-item${saldo===0?" pagada":pronto||(dias!==null&&dias<0&&!cuotaLista)?" pronto":""}">
+      <div class="deuda-head">
+        <div style="min-width:0"><div class="deuda-nombre">${esc(d.nombre)} ${estado}</div><div class="deuda-sub">${subs.join(" · ")||"&nbsp;"}</div></div>
+        <div class="deuda-saldo">$${fmt(saldo)}<small>me falta</small></div>
+      </div>
+      <div class="deuda-bar"><div class="deuda-fill" style="width:${pct}%"></div></div>
+      <div class="deuda-meta"><span>Pagado $${fmt(pag)} de $${fmt(total)}</span><span>${pct}%</span></div>
+      <div class="deuda-btns">
+        ${saldo>0?`<button class="btn btn-green" onclick="abrirAbono('${d.fireId}')">💵 Registrar pago</button>`:""}
+        <button class="btn btn-gray" onclick="toggleHistDeuda('${d.fireId}')">📜 Pagos (${hist.length})</button>
+        <button class="btn btn-gray" onclick="eliminarDeuda('${d.fireId}')">🗑️</button>
+      </div>
+      ${abierta?`<div style="margin-top:8px">${hist.length?hist.map(a=>`<div class="abono-row"><span>${fechaCorta(a.timestamp)}${a.nota?` · ${esc(a.nota)}`:""}</span><span style="display:flex;gap:8px;align-items:center"><span class="m">$${fmt(a.valor)}</span><button class="btn btn-gray" style="padding:3px 8px;font-size:11px" onclick="eliminarAbono('${a.fireId}')">✕</button></span></div>`).join(""):'<div class="deuda-sub" style="padding:6px 0">Sin pagos todavía</div>'}</div>`:""}
+    </div>`;
+  }).join("");
+  verificarDeudas();
+}
+
+function verificarDeudas(){
+  const banner=document.getElementById("deudas-banner"),lista=document.getElementById("deudas-banner-lista");
+  const prox=deudas.map(d=>{
+    const total=Number(d.total)||0,saldo=Math.max(total-pagadoDe(d.fireId),0),cuota=Number(d.cuota)||0;
+    const dias=diasParaPago(d.dia);
+    const lista=cuota?pagadoEsteMes(d.fireId)>=cuota:pagadoEsteMes(d.fireId)>0;
+    return {d,saldo,cuota,dias,lista};
+  }).filter(x=>x.saldo>0&&x.dias!==null&&x.dias<=3&&!x.lista);
+  if(!prox.length){banner.style.display="none";return}
+  banner.style.display="block";
+  lista.innerHTML=prox.map(x=>`<div class="alerta-item"><div class="alerta-info">
+    <div class="alerta-nombre">${esc(x.d.nombre)} ${x.dias<0?'<span class="badge-rojo">ATRASADA</span>':x.dias===0?'<span class="badge-rojo">HOY</span>':`<span class="badge-naranja">En ${x.dias}d</span>`}</div>
+    <div class="alerta-detalle">${x.cuota?`Cuota $${fmt(x.cuota)} · `:""}Te falta $${fmt(x.saldo)} en total</div></div></div>`).join("");
+}
+
+window.abrirDeudas=function(){
+  renderDeudas();
+  document.getElementById("modal-deudas").classList.add("open");
+}
+
+window.guardarDeuda=async function(){
+  const nombre=document.getElementById("dn-nombre").value.trim();
+  const total=parseFloat(document.getElementById("dn-total").value)||0;
+  const cuota=parseFloat(document.getElementById("dn-cuota").value)||0;
+  const dia=parseInt(document.getElementById("dn-dia").value)||0;
+  const notas=document.getElementById("dn-notas").value.trim();
+  if(!nombre){showToast("Escribe a quién o qué le debes",true);return}
+  if(total<=0){showToast("El valor total debe ser mayor a 0",true);return}
+  if(dia&&(dia<1||dia>31)){showToast("El día debe estar entre 1 y 31",true);return}
+  await addDoc(collection(db,"deudas"),{nombre,total,cuota,dia,notas,timestamp:Date.now()});
+  ["dn-nombre","dn-total","dn-cuota","dn-dia","dn-notas"].forEach(id=>document.getElementById(id).value="");
+  showToast("Deuda guardada ✔");
+}
+
+window.eliminarDeuda=async function(id){
+  const d=deudas.find(x=>x.fireId===id);
+  const hist=abonosDe(id);
+  if(!confirm(`¿Eliminar la deuda "${d?.nombre||""}"${hist.length?` y sus ${hist.length} pago(s)`:""}?\n\nLos gastos generales que ya se registraron NO se borran.`)) return;
+  for(const a of hist) await deleteDoc(doc(db,"abonos_deuda",a.fireId)).catch(()=>{});
+  await deleteDoc(doc(db,"deudas",id));
+  showToast("Deuda eliminada");
+}
+
+window.toggleHistDeuda=function(id){deudaAbierta=deudaAbierta===id?null:id;renderDeudas()}
+
+window.abrirAbono=function(id){
+  const d=deudas.find(x=>x.fireId===id);if(!d) return;
+  abonoDeudaId=id;
+  const saldo=Math.max((Number(d.total)||0)-pagadoDe(id),0);
+  document.getElementById("ab-titulo").textContent=`💵 Pago a ${d.nombre}`;
+  document.getElementById("ab-saldo").textContent=`Te falta $${fmt(saldo)}`;
+  document.getElementById("ab-valor").value=d.cuota?Math.min(d.cuota,saldo):"";
+  const h=new Date();
+  document.getElementById("ab-fecha").value=`${h.getFullYear()}-${String(h.getMonth()+1).padStart(2,"0")}-${String(h.getDate()).padStart(2,"0")}`;
+  document.getElementById("ab-nota").value="";
+  document.getElementById("ab-error").textContent="";
+  document.getElementById("modal-abono").classList.add("open");
+  setTimeout(()=>document.getElementById("ab-valor").focus(),100);
+}
+
+window.guardarAbono=async function(){
+  const d=deudas.find(x=>x.fireId===abonoDeudaId);if(!d) return;
+  const valor=parseFloat(document.getElementById("ab-valor").value)||0;
+  const err=document.getElementById("ab-error");
+  if(valor<=0){err.textContent="Escribe un valor mayor a 0";return}
+  const saldo=Math.max((Number(d.total)||0)-pagadoDe(d.fireId),0);
+  if(valor>saldo&&!confirm(`Ese pago es mayor a lo que te falta ($${fmt(saldo)}). ¿Guardarlo igual?`)) return;
+  const f=document.getElementById("ab-fecha").value;
+  const hoy=new Date();
+  let ts=Date.now();
+  if(f){const [y,m,dd]=f.split("-").map(Number);const x=new Date(y,m-1,dd,hoy.getHours(),hoy.getMinutes());ts=x.getTime()}
+  const nota=document.getElementById("ab-nota").value.trim();
+  let movId=null;
+  if(document.getElementById("ab-general").checked){
+    const ref=await addDoc(collection(db,"movimientos"),{tipo:"GASTO",valor,descripcion:`🧾 Pago deuda: ${d.nombre}${nota?` (${nota})`:""}`,timestamp:ts,deuda:true});
+    movId=ref.id;
+  }
+  const aref=await addDoc(collection(db,"abonos_deuda"),{deudaId:d.fireId,valor,nota,timestamp:ts,movId});
+  if(movId) updateDoc(doc(db,"movimientos",movId),{abonoId:aref.id}).catch(()=>{});
+  cerrarModal("modal-abono");
+  const nuevo=saldo-valor;
+  showToast(nuevo<=0?`🎉 ¡Terminaste de pagar a ${d.nombre}!`:`Pago guardado ✔ — te falta $${fmt(nuevo)}`);
+}
+
+window.eliminarAbono=async function(id){
+  if(!confirm("¿Eliminar este pago? También se quitará de Gastos generales si estaba allí.")) return;
+  const a=abonos.find(x=>x.fireId===id);
+  await deleteDoc(doc(db,"abonos_deuda",id));
+  if(a?.movId) await deleteDoc(doc(db,"movimientos",a.movId)).catch(()=>{});
+  showToast("Pago eliminado");
 }
 
 // ── MODO OFFLINE (Service Worker) ─────────────────────
