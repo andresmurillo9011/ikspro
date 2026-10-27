@@ -669,6 +669,25 @@ html[data-theme=light] .alerta-nombre,html[data-theme=light] .pago-titulo,html[d
 
 
 <!-- MODALES -->
+<div class="modal-overlay" id="modal-dias">
+  <div class="modal" style="max-width:360px;text-align:center">
+    <h3>⏱️ Días de servicio</h3>
+    <p style="color:var(--label);font-size:14px;margin-bottom:14px" id="dias-cliente"></p>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:12px">
+      <button class="btn btn-gray" onclick="document.getElementById('dias-input').value=10">10</button>
+      <button class="btn btn-gray" onclick="document.getElementById('dias-input').value=15">15</button>
+      <button class="btn btn-gray" onclick="document.getElementById('dias-input').value=30">30</button>
+      <button class="btn btn-gray" onclick="document.getElementById('dias-input').value=60">60</button>
+      <button class="btn btn-gray" onclick="document.getElementById('dias-input').value=90">90</button>
+    </div>
+    <input type="number" id="dias-input" min="1" placeholder="Otro número de días">
+    <div class="modal-error" id="dias-error"></div>
+    <div class="modal-btns">
+      <button class="btn btn-blue btn-full" onclick="guardarDias()">💾 Guardar</button>
+      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-dias')">Cancelar</button>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="modal-auth-edit">
   <div class="modal" style="max-width:360px;text-align:center">
     <h3>🔐 Confirmar Identidad</h3>
@@ -990,6 +1009,22 @@ window.guardarEdicionMov=async function(){
   cerrarModal("modal-editar-mov");showToast("Movimiento actualizado ✔");
 }
 
+let diasId=null;
+window.abrirDias=function(fireId){
+  const r=registros.find(x=>x.fireId===fireId); if(!r) return;
+  diasId=fireId;
+  document.getElementById("dias-cliente").textContent=`Cliente: ${r.usuario||""} · desde ${r.fecha||"?"}`;
+  document.getElementById("dias-input").value=r.dias||"";
+  document.getElementById("dias-error").textContent="";
+  document.getElementById("modal-dias").classList.add("open");
+  setTimeout(()=>document.getElementById("dias-input").focus(),100);
+}
+window.guardarDias=async function(){
+  const dias=parseInt(document.getElementById("dias-input").value)||0;
+  if(dias<1){document.getElementById("dias-error").textContent="Escribe un número de días mayor a 0";return}
+  await updateDoc(doc(db,"registros",diasId),{dias});
+  cerrarModal("modal-dias");showToast(`Días de servicio: ${dias} ✔`);
+}
 window.eliminarUno=async function(fireId){
   if(!confirm("¿Eliminar este registro?")) return;
   await deleteDoc(doc(db,"registros",fireId));showToast("Registro eliminado");
@@ -1089,7 +1124,8 @@ function renderTablaRegistros(data){
     const tel=(r.telefono||"").replace(/\D/g,"");
     const msg=encodeURIComponent(`Hola ${r.usuario||""}, te recordamos que tu servicio IKS vence el ${fvStr}. Por favor renueva a tiempo. Gracias!`);
     tr.innerHTML=`<td>${r.fireId.slice(-4)}</td><td>${r.fecha||""}</td><td>${r.usuario||""}</td>
-      <td style="color:${ev.cls};font-weight:700">${fvStr}<br><small>${ev.txt}</small></td>
+      <td style="color:${ev.cls};font-weight:700;white-space:nowrap">${fvStr}<br><small>${ev.txt}</small><br>
+        <button class="btn btn-purple" style="padding:3px 8px;font-size:11px;margin-top:4px" onclick="event.stopPropagation();abrirDias('${r.fireId}')">⏱️ ${r.dias?r.dias+" días":"Poner días"}</button></td>
       <td>$${fmt(r.paga)}</td><td>${r.pago||""}</td><td>${r.proveedor||""}</td><td>${r.cancelado||""}</td>
       <td>${r.tipo||""}</td><td>${r.cantidad||0}</td><td>$${fmt(r.valor)}</td>
       <td class="${gc}">$${fmt(r.ganancia)}</td><td>${r.observacion||""}</td>
