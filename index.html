@@ -273,6 +273,36 @@ html[data-theme=light] .alerta-nombre,html[data-theme=light] .pago-titulo,html[d
 .g-indigo{background:linear-gradient(135deg,#6366f1,#4338ca 65%,#1e1b4b)}
 .g-teal{background:linear-gradient(135deg,#14b8a6,#0f766e 70%,#134e4a)}
 .g-slate{background:linear-gradient(135deg,#475569,#1e293b 75%,#0f172a)}
+
+/* ══════ SEMANA v2 ══════ */
+.g-amber{background:linear-gradient(135deg,#f59e0b,#d97706 55%,#9a3412)}
+.wk-rango{font-size:12.5px;opacity:.9;margin-top:2px}
+.wk-cfg{border:none;background:#ffffff2b;color:#fff;width:42px;height:42px;border-radius:13px;font-size:18px;cursor:pointer;flex-shrink:0;box-shadow:inset 0 0 0 1px #ffffff40}
+.wk-cfg:active{transform:scale(.93)}
+.wk-bar{position:relative;z-index:1;height:12px;background:#00000033;border-radius:999px;margin-top:16px;box-shadow:inset 0 1px 3px #0004}
+.wk-fill{height:100%;width:0;border-radius:999px;background:#fff;transition:width .6s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 12px #fff8}
+.wk-bar .pres-mark{background:#ffffffb0;opacity:1;top:-3px;bottom:-3px}
+.wk-bar .pres-mark span{color:#fff;opacity:.85;top:17px}
+.sec-hero .wk-bar+.sh-stats{margin-top:26px}
+.wk-tip{position:relative;z-index:1;margin-top:12px;font-size:13px;font-weight:600;background:#00000026;border-radius:12px;padding:9px 12px;text-align:center}
+.wk-tip:empty{display:none}
+.wk-tip strong{color:#fff}
+.wk-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:118px}
+.wk-d{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:5px;min-width:0}
+.wk-d .col{width:100%;max-width:34px;flex:1;display:flex;align-items:flex-end;background:var(--field);border-radius:10px;overflow:hidden}
+.wk-d .col i{display:block;width:100%;border-radius:10px;background:linear-gradient(180deg,#fbbf24,#ea580c);transition:height .5s ease;min-height:0}
+.wk-d.over .col i{background:linear-gradient(180deg,#f87171,#b91c1c)}
+.wk-d small{font-size:10.5px;color:var(--muted);font-weight:700;text-transform:uppercase}
+.wk-d b{font-family:'Rajdhani',sans-serif;font-size:11.5px;color:var(--label);white-space:nowrap;font-variant-numeric:tabular-nums}
+.wk-d.hoy small{color:#f59e0b}
+.wk-d.hoy .col{box-shadow:0 0 0 1.5px #f59e0b}
+.wk-d.fut{opacity:.45}
+.wk-cats .chip{font-size:12.5px;padding:7px 11px}
+.wk-cats .chip.on{background:#f59e0b;border-color:#f59e0b;box-shadow:0 4px 14px #f59e0b55}
+.wk-dia{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:14px 0 2px;display:flex;justify-content:space-between}
+.wk-dia:first-child{margin-top:0}
+.wk-dia em{font-style:normal;color:var(--label)}
+.mov-ic.w{background:#f59e0b22}
 /* plegables "Nuevo…" */
 .fold{border-radius:18px}
 .fold>summary{list-style:none;cursor:pointer}
@@ -609,40 +639,38 @@ html[data-theme=light] .svc-head{color:#1d4ed8}html[data-theme=light] .ib.vio{co
     </section>
 
     <section class="page" data-page="presupuesto" id="vista-presupuesto">
-      <div class="card pres-hero">
-        <div class="pres-top">
-          <div>
-            <div class="pres-kicker">💰 Gastos de la semana</div>
-            <div class="pres-rango" id="p-rango">—</div>
-          </div>
-          <button class="btn btn-gray" style="padding:8px 14px;font-size:13px" onclick="abrirConfigPresupuesto()">⚙️ Ajustar</button>
-        </div>
-        <div class="pres-lbl">Disponible</div>
-        <div class="pres-disp pos" id="p-disponible">$0</div>
-        <div class="pres-bar" id="p-bar"><div class="pres-fill" id="p-fill"></div></div>
-        <div class="pres-stats">
-          <div class="pres-stat"><div class="l">Presupuesto</div><div class="v" id="p-total">$0</div></div>
-          <div class="pres-stat"><div class="l">Gastado</div><div class="v neg" id="p-gastado">$0</div></div>
-          <div class="pres-stat"><div class="l">Usado</div><div class="v" id="p-pct">0%</div></div>
-        </div>
-        <div class="pres-tip" id="p-tip"></div>
+    <div class="sec-hero g-amber">
+      <div class="sh-row">
+        <div class="sh-ico">💰</div>
+        <div style="flex:1;min-width:0"><div class="sh-l">Disponible esta semana</div><div class="sh-v" id="p-disponible">$0</div><div class="wk-rango" id="p-rango">—</div></div>
+        <button class="wk-cfg" onclick="abrirConfigPresupuesto()" aria-label="Ajustar presupuesto">⚙️</button>
       </div>
+      <div class="wk-bar" id="p-bar"><div class="wk-fill" id="p-fill"></div></div>
+      <div class="sh-stats">
+        <div><span>Presupuesto</span><b id="p-total">$0</b></div>
+        <div><span>Gastado</span><b id="p-gastado">$0</b></div>
+        <div><span>Usado</span><b id="p-pct">0%</b></div>
+      </div>
+      <div class="wk-tip" id="p-tip"></div>
+    </div>
 
-      <div class="card">
-        <div class="card-title">🔻 Registrar gasto</div>
-        <div class="form-grid">
-          <div class="form-group"><label>Monto ($)</label><input type="number" id="p-monto" placeholder="0" inputmode="numeric"></div>
-          <div class="form-group" style="grid-column:span 2"><label>¿En qué?</label><input type="text" id="p-desc" placeholder="Ej: almuerzo, gasolina..."></div>
-        </div>
-        <div class="btn-row" style="margin-top:12px">
-          <button class="btn btn-red" onclick="agregarGastoPresupuesto()">🔻 Agregar gasto</button>
-        </div>
-      </div>
+    <div class="card">
+      <div class="card-title">📆 Día a día</div>
+      <div class="wk-days" id="p-dias"></div>
+    </div>
 
-      <div class="card">
-        <div class="card-title">🧾 Gastos de esta semana</div>
-        <div id="p-lista"><div class="loading">🔄 Cargando...</div></div>
-      </div>
+    <div class="card">
+      <div class="card-title">🔻 Registrar gasto</div>
+      <div class="amount-in"><span>$</span><input type="number" id="p-monto" placeholder="0" inputmode="numeric"></div>
+      <div class="chips wk-cats" id="p-cats"></div>
+      <div class="form-group" style="margin-top:10px"><label>¿En qué?</label><input type="text" id="p-desc" placeholder="Ej: almuerzo, gasolina..." oninput="marcarCat()"></div>
+      <button class="btn btn-red btn-full big" onclick="agregarGastoPresupuesto()">🔻 Agregar gasto</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🧾 Gastos de esta semana</div>
+      <div id="p-lista"><div class="loading">🔄 Cargando...</div></div>
+    </div>
     </section>
 
     <section class="page" data-page="deudas" id="modal-deudas">
@@ -1991,7 +2019,30 @@ function colorPct(p){
   return "var(--green)";
 }
 
+const CATS_SEM=[["🍔","Comida"],["⛽","Gasolina"],["🚌","Transporte"],["🛒","Mercado"],["☕","Café"],["🎉","Salida"],["💊","Salud"],["📱","Recarga"]];
+function iconoGasto(t){
+  t=(t||"").toLowerCase();
+  const m=[["🍔",/comida|almuerzo|desayuno|cena|pizza|hambur|pollo|restaur|empanada|arepa/],["⛽",/gasolina|tanque|combustible/],["🚌",/transporte|bus|taxi|uber|pasaje|moto|metro|parqueadero/],["🛒",/mercado|tienda|super|d1|ara|éxito|exito/],["☕",/café|cafe|tinto|bebida|gaseosa|jugo/],["🎉",/salida|cine|fiesta|cerveza|trago|rumba|paseo/],["💊",/salud|droguer|farmacia|medic|pastilla/],["📱",/recarga|celular|datos|plan|internet/]];
+  for(const [e,r] of m) if(r.test(t)) return e;
+  return "🔻";
+}
+function pintarCats(){
+  const box=document.getElementById("p-cats");if(!box||box.dataset.ok) return;
+  box.dataset.ok=1;
+  box.innerHTML=CATS_SEM.map(([e,n])=>`<button type="button" class="chip" data-c="${n}" onclick="elegirCat('${n}')">${e} ${n}</button>`).join("");
+}
+window.elegirCat=function(n){
+  const inp=document.getElementById("p-desc");
+  inp.value=inp.value.trim().toLowerCase()===n.toLowerCase()?"":n;
+  marcarCat();
+};
+window.marcarCat=function(){
+  const v=document.getElementById("p-desc").value.trim().toLowerCase();
+  document.querySelectorAll("#p-cats .chip").forEach(c=>c.classList.toggle("on",c.dataset.c.toLowerCase()===v));
+};
+
 function renderPresupuesto(){
+  pintarCats();
   const total=Number(presCfg.monto)||0;
   const semana=gastosDeEstaSemana();
   const gastado=semana.reduce((a,g)=>a+(g.valor||0),0);
@@ -2005,16 +2056,17 @@ function renderPresupuesto(){
 
   const dEl=document.getElementById("p-disponible");
   dEl.textContent=`${disp<0?"-":""}$${fmt(Math.abs(disp))}`;
-  dEl.className=`pres-disp ${disp<0?"neg":"pos"}`;
-  dEl.style.color=disp<0?"":colorPct(pct);
+  dEl.className="sh-v";
+  const hero=dEl.closest(".sec-hero");
+  if(hero) hero.className=`sec-hero ${disp<0||pct>=100?"g-rose":"g-amber"}`;
   document.getElementById("p-total").textContent=`$${fmt(total)}`;
   document.getElementById("p-gastado").textContent=`$${fmt(gastado)}`;
   const pEl=document.getElementById("p-pct");
-  pEl.textContent=`${pct}%`;pEl.style.color=colorPct(pct);
+  pEl.textContent=`${pct}%`;
 
   const fill=document.getElementById("p-fill");
   fill.style.width=`${Math.min(pct,100)}%`;
-  fill.style.background=colorPct(pct);
+  fill.style.background="#fff";
 
   // Marcas de los topes en la barra
   const bar=document.getElementById("p-bar");
@@ -2029,20 +2081,42 @@ function renderPresupuesto(){
   const diasRest=Math.round((fin-hoy)/86400000)+1;
   const tip=document.getElementById("p-tip");
   if(!total) tip.textContent="Toca ⚙️ Ajustar para definir cuánto quieres gastar esta semana.";
-  else if(disp<=0) tip.innerHTML=`<strong style="color:var(--red)">Te pasaste por $${fmt(Math.abs(disp))}.</strong> La semana se reinicia el lunes.`;
+  else if(disp<=0) tip.innerHTML=`🚨 <strong>Te pasaste por $${fmt(Math.abs(disp))}.</strong> La semana se reinicia el lunes.`;
   else tip.textContent=`Quedan ${diasRest} día${diasRest===1?"":"s"} · puedes gastar unos $${fmt(Math.floor(disp/diasRest))} por día`;
+
+  // Día a día
+  const porDia=[0,0,0,0,0,0,0];
+  semana.forEach(g=>{const d=new Date(g.timestamp);const k=Math.floor((new Date(d.getFullYear(),d.getMonth(),d.getDate())-ini)/86400000);if(k>=0&&k<7)porDia[k]+=g.valor||0});
+  const maxD=Math.max(1,...porDia);
+  const diario=total?total/7:0;
+  const nomD=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+  const hoyIdx=Math.floor((hoy-ini)/86400000);
+  const corto=v=>v>=1000000?`${(v/1000000).toFixed(1).replace(".0","")}M`:v>=1000?`${Math.round(v/1000)}k`:v?`${v}`:"–";
+  document.getElementById("p-dias").innerHTML=porDia.map((v,k)=>`<div class="wk-d${k===hoyIdx?" hoy":""}${k>hoyIdx?" fut":""}${diario&&v>diario?" over":""}">
+    <b>${corto(v)}</b><div class="col"><i style="height:${Math.round(v/maxD*100)}%"></i></div><small>${nomD[k]}</small></div>`).join("");
 
   // Lista
   const lista=document.getElementById("p-lista");
   if(!presListo) return;
-  if(!semana.length){lista.innerHTML='<div class="loading">Aún no hay gastos esta semana 🎉</div>'}
+  if(!semana.length){lista.innerHTML='<div class="empty" style="border:none;background:none"><div>🎉</div>Aún no hay gastos esta semana</div>'}
   else{
-    lista.innerHTML=semana.map(g=>{
-      const d=new Date(g.timestamp);
-      const fecha=d.toLocaleDateString("es-CO",{weekday:"short",day:"numeric",month:"short"})+" · "+d.toLocaleTimeString("es-CO",{hour:"2-digit",minute:"2-digit"});
-      return `<div class="pres-gasto"><div class="d"><div class="t">${esc(g.descripcion||"Gasto")}</div><div class="f">${fecha}</div></div>
-        <div style="display:flex;align-items:center;gap:10px"><div class="m">-$${fmt(g.valor)}</div>
-        <button class="btn btn-gray" style="padding:5px 9px;font-size:12px" onclick="eliminarGastoPresupuesto('${g.fireId}')">🗑️</button></div></div>`;
+    const grupos={};
+    semana.slice().sort((a,b)=>b.timestamp-a.timestamp).forEach(g=>{
+      const d=new Date(g.timestamp);const k=d.toDateString();
+      (grupos[k]=grupos[k]||{d,items:[],tot:0}).items.push(g);grupos[k].tot+=g.valor||0;
+    });
+    const hoyS=new Date().toDateString(),ay=new Date();ay.setDate(ay.getDate()-1);
+    lista.innerHTML=Object.values(grupos).map(gr=>{
+      const k=gr.d.toDateString();
+      const tit=k===hoyS?"Hoy":k===ay.toDateString()?"Ayer":gr.d.toLocaleDateString("es-CO",{weekday:"long",day:"numeric",month:"short"});
+      return `<div class="wk-dia"><span>${tit}</span><em>−$${fmt(gr.tot)}</em></div>`+gr.items.map(g=>{
+        const h=new Date(g.timestamp).toLocaleTimeString("es-CO",{hour:"2-digit",minute:"2-digit"});
+        return `<div class="mov-row">
+          <div class="mov-ic w">${iconoGasto(g.descripcion)}</div>
+          <div class="mov-tx"><b>${esc(g.descripcion||"Gasto")}</b><small>${h}</small></div>
+          <div class="mov-v neg">−$${fmt(g.valor)}</div>
+          <button class="ib del" onclick="eliminarGastoPresupuesto('${g.fireId}')" aria-label="Eliminar">🗑️</button>
+        </div>`}).join("");
     }).join("");
   }
 
@@ -2117,7 +2191,7 @@ window.agregarGastoPresupuesto=async function(){
   }
   const pref=await addDoc(collection(db,"gastos_presupuesto"),{valor:v,descripcion,timestamp:ts,movId});
   if(movId) updateDoc(doc(db,"movimientos",movId),{presId:pref.id}).catch(()=>{});
-  document.getElementById("p-monto").value="";document.getElementById("p-desc").value="";
+  document.getElementById("p-monto").value="";document.getElementById("p-desc").value="";marcarCat();
   showToast("Gasto agregado ✔");
 }
 
