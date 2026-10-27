@@ -165,6 +165,38 @@ tr.selected td{background:#1e3a5f}
 button.tipo-pill{cursor:pointer;font-family:inherit}
 .abonos-tabla .acc{display:flex;gap:4px}
 .abonos-tabla .acc .ib{height:30px;min-width:32px;padding:0 7px;font-size:12px}
+#modal-deudas .sh-stats b{font-size:15px!important}
+#modal-deudas .sh-stats>div{padding:8px}
+.int-box{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.int-box>div{background:var(--card);border:1px solid #f59e0b33;border-radius:12px;padding:8px 9px;min-width:0}
+.int-box span{display:block;font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--label)}
+.int-box b{display:block;font-family:'Rajdhani',sans-serif;font-size:17px;color:#fbbf24;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.int-box small{display:block;font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.int-box.off>div{border-color:#64748b44}.int-box.off b{color:var(--muted)}
+.pagos-panel{margin-top:12px;background:var(--card);border:1px solid #1e40af55;border-radius:16px;padding:12px;animation:pgIn .25s ease}
+@keyframes pgIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.pagos-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:13px;font-weight:700}
+.pagos-head small{font-weight:500;color:var(--muted);font-size:11px}
+.pago-card{position:relative;background:var(--field);border:1px solid #1e40af44;border-radius:14px;padding:11px 12px 10px 16px;margin-bottom:8px;overflow:hidden}
+.pago-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:#22c55e}
+.pago-card.cuota::before{background:#60a5fa}
+.pago-top{display:flex;align-items:center;gap:8px}
+.pago-fecha{font-size:11.5px;color:var(--label)}
+.pago-nota{font-size:11px;color:var(--muted);margin-top:2px}
+.pago-acc{margin-left:auto;display:flex;gap:5px}
+.pago-acc .ib{height:30px;min-width:32px;padding:0 8px;font-size:12px}
+.pago-valor{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;margin:4px 0 6px}
+.pago-valor small{font-family:inherit;font-size:11px;font-weight:600;color:var(--muted);margin-left:4px}
+.pago-split{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pago-split>div{background:var(--card);border-radius:10px;padding:6px 8px;min-width:0}
+.pago-split span{display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+.pago-split b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pago-split .i b{color:#fbbf24}.pago-split .c b{color:#4ade80}
+.pago-split em{font-style:normal;font-size:10px;color:var(--muted);display:block}
+.pago-bar{display:flex;height:5px;border-radius:5px;overflow:hidden;margin-top:8px;background:var(--card)}
+.pago-bar i{display:block;height:100%}
+html[data-theme=light] .int-box b,html[data-theme=light] .pago-split .i b{color:#b45309}
+html[data-theme=light] .pago-split .c b{color:#15803d}
 .sin-int-aviso{margin-top:8px;padding:8px 10px;border-radius:10px;font-size:12px;background:#f59e0b14;border:1px solid #f59e0b55;color:#fbbf24}
 .sin-int-aviso button{background:none;border:none;color:inherit;font:inherit;font-weight:700;text-decoration:underline;cursor:pointer;padding:0}
 html[data-theme=light] .sin-int-aviso{color:#b45309}
@@ -685,6 +717,7 @@ html[data-theme=light] .svc-head{color:#1d4ed8}html[data-theme=light] .ib.vio{co
       <div class="sh-stats">
         <div><span>Debo en total</span><b id="d-total">$0</b></div>
         <div><span>Capital pagado</span><b id="d-pagado">$0</b></div>
+        <div><span>Intereses pagados</span><b id="d-int-pag">$0</b></div>
       </div>
       <div class="sh-note" id="d-intereses"></div>
     </div>
@@ -2333,7 +2366,8 @@ function renderDeudas(){
   document.getElementById("d-total").textContent=`$${fmt(T)}`;
   document.getElementById("d-pagado").textContent=`$${fmt(P)}`;
   document.getElementById("d-saldo").textContent=`$${fmt(T-P)}`;
-  document.getElementById("d-intereses").textContent=I?`Intereses pagados: $${fmt(I)}`:"";
+  document.getElementById("d-int-pag").textContent=`$${fmt(I)}`;
+  document.getElementById("d-intereses").textContent="";
 
   if(!items.length){lista.innerHTML='<div class="empty"><div>🎉</div>Aún no tienes deudas registradas. Agrega una abajo 👇</div>'}
   else lista.innerHTML=items.map(({d,total,c,saldo})=>{
@@ -2356,18 +2390,35 @@ function renderDeudas(){
     else if(restantes) subs.push(`≈ ${restantes} cuota${restantes>1?"s":""} más`);
     if(d.notas) subs.push(esc(d.notas));
     const abierta=deudaAbierta===d.fireId;
-    const tabla=c.filas.length?`<div class="table-wrap" style="margin-top:10px"><table class="abonos-tabla">
-      <thead><tr><th>Fecha</th><th>Tipo</th><th>Pagado</th><th>Interés</th><th>A capital</th><th>Saldo</th><th></th></tr></thead>
-      <tbody>${c.filas.map(f=>`<tr>
-        <td>${fechaCorta(f.a.timestamp)}${f.a.nota?`<div style="font-size:10px;color:var(--muted)">${esc(f.a.nota)}</div>`:""}</td>
-        <td><button class="tipo-pill ${f.tipo}" onclick="cambiarTipoAbono('${f.a.fireId}')" title="Tocar para cambiar">${f.tipo==="capital"?"ABONO":"CUOTA"} ⇄</button></td>
-        <td>$${fmt(f.valor)}</td>
-        <td style="color:#f59e0b">${f.interes?`$${fmt(f.interes)}`:"—"}</td>
-        <td class="pos">$${fmt(f.capital)}</td>
-        <td style="font-weight:700">$${fmt(f.saldo)}</td>
-        <td><div class="acc"><button class="ib ed" onclick="editarAbono('${f.a.fireId}')" aria-label="Editar">✏️</button><button class="ib del" onclick="eliminarAbono('${f.a.fireId}')" aria-label="Eliminar">✕</button></div></td>
-      </tr>`).join("")}</tbody></table></div>`
-      :'<div class="deuda-sub" style="padding:8px 0">Sin pagos todavía</div>';
+    const pctI=pctTxt(c.tasa);
+    const filasHtml=c.filas.slice().reverse().map(f=>{
+      const intTxt=f.interes?`$${fmt(f.interes)}`:"$0";
+      const intSub=f.tipo==="capital"?"abono directo":c.tasa?`${pctI} del capital`:"sin interés";
+      const pI=f.valor?Math.round(f.interes/f.valor*100):0;
+      return `<div class="pago-card ${f.tipo}">
+        <div class="pago-top">
+          <button class="tipo-pill ${f.tipo}" onclick="cambiarTipoAbono('${f.a.fireId}')" title="Tocar para cambiar">${f.tipo==="capital"?"ABONO":"CUOTA"} ⇄</button>
+          <span class="pago-fecha">${fechaCorta(f.a.timestamp)}</span>
+          <div class="pago-acc"><button class="ib ed" onclick="editarAbono('${f.a.fireId}')" aria-label="Editar">✏️</button><button class="ib del" onclick="eliminarAbono('${f.a.fireId}')" aria-label="Eliminar">✕</button></div>
+        </div>
+        ${f.a.nota?`<div class="pago-nota">${esc(f.a.nota)}</div>`:""}
+        <div class="pago-valor">$${fmt(f.valor)}<small>pagado</small></div>
+        <div class="pago-split">
+          <div class="i"><span>Interés</span><b>${intTxt}</b><em>${intSub}</em></div>
+          <div class="c"><span>A capital</span><b>$${fmt(f.capital)}</b><em>${100-pI}% del pago</em></div>
+          <div><span>Saldo</span><b>$${fmt(f.saldo)}</b><em>capital queda</em></div>
+        </div>
+        <div class="pago-bar"><i style="width:${pI}%;background:#f59e0b"></i><i style="width:${100-pI}%;background:#22c55e"></i></div>
+      </div>`}).join("");
+    const tabla=`<div class="pagos-panel">
+      <div class="pagos-head"><span>📜 Pagos (${c.filas.length})</span><small>🟠 interés · 🟢 capital</small></div>
+      ${c.filas.length?filasHtml:'<div class="deuda-sub" style="padding:8px 0">Sin pagos todavía</div>'}
+    </div>`;
+    const intBox=`<div class="int-box${c.tasa?"":" off"}">
+      <div><span>Interés</span><b>${c.tasa?pctI:"0%"}</b><small>${c.tasa?"mensual":"sin interés"}</small></div>
+      <div><span>Próximo interés</span><b>$${fmt(saldo>0?c.proxInteres:0)}</b><small>${c.tasa&&cuota&&saldo>0?`a capital $${fmt(Math.max(cuota-c.proxInteres,0))}`:"este mes"}</small></div>
+      <div><span>Interés pagado</span><b>$${fmt(c.intPag)}</b><small>total $${fmt(c.pagado)}</small></div>
+    </div>`;
     const aviso=!c.tasa&&saldo>0?`<div class="sin-int-aviso">Esta deuda no tiene interés, por eso todo va a capital. <button onclick="editarDeuda('${d.fireId}')">Ponerle interés</button></div>`:"";
     return `<div class="deuda-item${saldo===0?" pagada":pronto||(dias!==null&&dias<0&&!cuotaLista)?" pronto":""}">
       <div class="deuda-head">
@@ -2376,8 +2427,7 @@ function renderDeudas(){
       </div>
       <div class="deuda-bar"><div class="deuda-fill" style="width:${pct}%"></div></div>
       <div class="deuda-meta"><span>Capital pagado $${fmt(c.capPag)} de $${fmt(total)}</span><span>${pct}%</span></div>
-      ${c.tasa&&saldo>0?`<div class="deuda-meta" style="margin-top:4px"><span>Próximo interés: <b style="color:#f59e0b">$${fmt(c.proxInteres)}</b></span>${cuota?`<span>Próxima cuota a capital: <b class="pos">$${fmt(Math.max(cuota-c.proxInteres,0))}</b></span>`:""}</div>`:""}
-      ${c.intPag?`<div class="deuda-meta" style="margin-top:4px"><span>Intereses pagados: $${fmt(c.intPag)}</span><span>Total pagado: $${fmt(c.pagado)}</span></div>`:""}
+      ${intBox}
       <div class="deuda-btns">
         ${saldo>0?`<button class="ib ok grow" onclick="abrirAbono('${d.fireId}')">💵 Registrar pago</button>`:""}
         <button class="ib grow" onclick="toggleHistDeuda('${d.fireId}')">📜 Abonos (${c.filas.length})</button>
