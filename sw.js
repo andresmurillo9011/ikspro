@@ -1,4 +1,4 @@
-const CACHE = "ikspro-v6";
+const CACHE = "ikspro-v7";
 const ARCHIVOS = ["./","./index.html"];
 
 self.addEventListener("install", e=>{

@@ -146,6 +146,7 @@ tr.selected td{background:#1e3a5f}
 .deuda-item.pronto{border-left-color:#f59e0b}
 .deuda-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .deuda-nombre{font-weight:700;font-size:15px}
+.deuda-nombre span{white-space:nowrap;display:inline-block;margin-top:3px}
 .deuda-sub{font-size:12px;color:var(--muted);margin-top:2px}
 .deuda-saldo{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:#fb7185;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
 .deuda-saldo small{display:block;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);font-weight:500}
@@ -248,6 +249,175 @@ html[data-theme=light] .avisos .alerta-banner,html[data-theme=light] .page-card{
 html[data-theme=light] .alerta-item,html[data-theme=light] .pago-item,html[data-theme=light] .agenda-item{background:var(--field)}
 html[data-theme=light] .alerta-nombre,html[data-theme=light] .pago-titulo,html[data-theme=light] .agenda-titulo{color:var(--txt)}
 @media(max-width:420px){.hero-v{font-size:40px}.hero-row b{font-size:15px}.quick{gap:8px}.quick button{font-size:11px}.tiles{grid-template-columns:1fr 1fr;gap:10px}.tile{min-height:112px;padding:14px 12px}.tile-name{font-size:17px}}
+
+/* ══════ DISEÑO v2: SECCIONES ══════ */
+.sec-hero{border-radius:22px;padding:18px 18px 14px;color:#fff;position:relative;overflow:hidden;box-shadow:0 12px 34px #0005}
+.sec-hero::before{content:'';position:absolute;right:-50px;top:-60px;width:190px;height:190px;border-radius:50%;background:#ffffff17}
+.sec-hero::after{content:'';position:absolute;left:-30px;bottom:-70px;width:150px;height:150px;border-radius:50%;background:#ffffff0f}
+.sh-row{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+.sh-ico{width:52px;height:52px;border-radius:16px;background:#ffffff26;display:grid;place-items:center;font-size:26px;flex-shrink:0;box-shadow:inset 0 0 0 1px #ffffff30}
+.sh-l{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;opacity:.85}
+.sh-v{font-family:'Rajdhani',sans-serif;font-size:38px;font-weight:700;line-height:1.05;font-variant-numeric:tabular-nums}
+.sh-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(68px,1fr));gap:8px;margin-top:14px;position:relative;z-index:1}
+.sh-stats>div{background:#ffffff1f;border-radius:12px;padding:8px 10px;backdrop-filter:blur(4px)}
+.sh-stats span{display:block;font-size:10.5px;opacity:.85;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.sh-stats b{font-size:17px!important;font-family:'Rajdhani',sans-serif;font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.sh-note{position:relative;z-index:1;font-size:12px;opacity:.9;margin-top:10px}
+.sh-note:empty{display:none}
+.sec-hero .pos,.sec-hero .neg,.sec-hero .v{color:#fff!important}
+.g-blue{background:linear-gradient(135deg,#3b82f6,#1d4ed8 70%,#312e81)}
+.g-green{background:linear-gradient(135deg,#10b981,#047857 70%,#064e3b)}
+.g-rose{background:linear-gradient(135deg,#f43f5e,#be123c 65%,#831843)}
+.g-cyan{background:linear-gradient(135deg,#06b6d4,#0e7490 70%,#164e63)}
+.g-violet{background:linear-gradient(135deg,#a855f7,#7c3aed 60%,#4c1d95)}
+.g-indigo{background:linear-gradient(135deg,#6366f1,#4338ca 65%,#1e1b4b)}
+.g-teal{background:linear-gradient(135deg,#14b8a6,#0f766e 70%,#134e4a)}
+.g-slate{background:linear-gradient(135deg,#475569,#1e293b 75%,#0f172a)}
+/* plegables "Nuevo…" */
+.fold{border-radius:18px}
+.fold>summary{list-style:none;cursor:pointer}
+.fold>summary::-webkit-details-marker{display:none}
+.fold-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:16px;font-weight:700;font-size:15px;border:1.5px dashed;user-select:none;transition:transform .15s}
+.fold-btn:active{transform:scale(.98)}
+.fold-btn::after{content:'▾';font-size:14px;transition:transform .2s;opacity:.8}
+.fold[open]>.fold-btn{border-style:solid;border-bottom-left-radius:6px;border-bottom-right-radius:6px}
+.fold[open]>.fold-btn::after{transform:rotate(180deg)}
+.fb-blue{color:#60a5fa;border-color:#3b82f688;background:#3b82f614}
+.fb-rose{color:#fb7185;border-color:#f43f5e88;background:#f43f5e14}
+.fb-cyan{color:#22d3ee;border-color:#06b6d488;background:#06b6d414}
+.fb-violet{color:#c084fc;border-color:#a855f788;background:#a855f714}
+.fb-indigo{color:#a5b4fc;border-color:#6366f188;background:#6366f114}
+.fold-body{margin-top:6px;border-top-left-radius:6px!important;border-top-right-radius:6px!important;animation:entra .2s ease}
+.two{grid-template-columns:1fr 1fr!important}
+.two .full{grid-column:1/-1}
+.big{padding:14px!important;font-size:15px!important;justify-content:center;margin-top:14px}
+.form-group input,.form-group select{border-radius:11px;border-color:#1e40af88}
+.form-group label{font-size:11px}
+/* servicio */
+.svc-box{background:linear-gradient(135deg,#3b82f61f,#7c3aed14);border:1px solid #3b82f655;border-radius:16px;padding:14px;margin-bottom:14px}
+.svc-head{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:17px;color:#93c5fd;margin-bottom:10px}
+.svc-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.svc-box .chips{margin-top:10px}
+.chip{border:1px solid #1e40af88;background:var(--field);color:var(--label);font-family:inherit;font-weight:700;font-size:13px;padding:7px 13px;border-radius:999px;cursor:pointer;transition:all .15s}
+.chip.on{background:var(--b2);border-color:var(--b2);color:#fff;box-shadow:0 4px 14px #3b82f655}
+.svc-vence{margin-top:10px;font-size:14px;font-weight:600;color:var(--label);display:flex;align-items:center;gap:6px}
+.svc-vence b{color:var(--txt)}
+/* buscador */
+.toolbar{display:flex;gap:8px}
+.search-box{flex:1;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid #1e40af66;border-radius:14px;padding:0 14px;color:var(--muted)}
+.search-box input{flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:15px;padding:12px 0;font-family:inherit;min-width:0}
+.mini-in{width:104px;background:var(--card);border:1px solid #1e40af66;border-radius:14px;color:var(--txt);font-size:14px;padding:0 12px;outline:none;font-family:inherit}
+.filt .chip{font-size:12px;padding:7px 12px}
+.filt .chip i{font-style:normal;opacity:.75;margin-left:4px}
+/* tarjetas de clientes */
+.cli-list{display:flex;flex-direction:column;gap:10px}
+.cli{background:var(--card);border:1px solid #1e40af55;border-radius:18px;padding:14px;position:relative;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s;box-shadow:0 4px 16px #0003}
+.cli:active{transform:scale(.99)}
+.cli.sel{border-color:var(--b2);box-shadow:0 0 0 2px #3b82f655,0 6px 20px #0004}
+.cli-top{display:flex;align-items:center;gap:12px}
+.av{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;color:var(--c);background:color-mix(in srgb,var(--c) 18%,transparent);flex-shrink:0;border:1px solid color-mix(in srgb,var(--c) 40%,transparent)}
+.cli-main{flex:1;min-width:0}
+.cli-name{font-weight:700;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cli-meta{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{display:inline-flex;flex-direction:column;align-items:flex-end;flex-shrink:0;text-align:right}
+.pill em{font-style:normal;font-size:11.5px;font-weight:800;color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent);border:1px solid color-mix(in srgb,var(--c) 45%,transparent);padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pill small{font-size:11px;color:var(--muted);margin-top:4px}
+.cli-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.cli-nums div{background:var(--field);border-radius:11px;padding:7px 8px;min-width:0}
+.cli-nums span{display:block;font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.cli-nums b{font-family:'Rajdhani',sans-serif;font-size:16px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.cli-obs{font-size:12.5px;color:var(--label);margin-top:10px;background:var(--field);border-radius:10px;padding:7px 10px}
+.cli-acts{display:flex;gap:6px;margin-top:12px}
+.ib{border:1px solid #1e40af66;background:var(--field);color:var(--txt);border-radius:11px;height:38px;min-width:42px;padding:0 12px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;transition:transform .12s}
+.ib:active{transform:scale(.94)}
+.ib.grow{flex:1}
+.ib.vio{background:#7c3aed22;border-color:#7c3aed77;color:#c4b5fd}
+.ib.wa{background:#25d366;border-color:#25d366;color:#fff}
+.ib.ed{background:#f59e0b1f;border-color:#f59e0b77;color:#fbbf24}
+.ib.del{background:#ef44441a;border-color:#ef444466;color:#f87171}
+.ib.ok{background:#22c55e1f;border-color:#22c55e77;color:#4ade80}
+.ib.blu{background:#3b82f61f;border-color:#3b82f677;color:#93c5fd}
+.cli-check{position:absolute;top:-7px;left:-7px;width:24px;height:24px;border-radius:50%;background:var(--b2);color:#fff;font-size:13px;font-weight:800;display:none;place-items:center;box-shadow:0 2px 8px #0006}
+.cli.sel .cli-check{display:grid}
+.sel-bar{display:none;align-items:center;gap:8px;background:var(--card);border:1px solid var(--b2);border-radius:16px;padding:8px 8px 8px 14px;position:sticky;top:66px;z-index:50;box-shadow:0 8px 24px #0006}
+.sel-bar.on{display:flex}
+.sel-bar span{flex:1;font-weight:700;font-size:14px}
+.sel-bar .btn{padding:8px 12px;font-size:13px}
+.hint{text-align:center;font-size:12px;color:var(--muted)}
+.empty{text-align:center;color:var(--muted);padding:28px 10px;font-size:14px;background:var(--card);border:1px dashed #1e40af66;border-radius:18px}
+.empty div{font-size:34px;margin-bottom:6px}
+/* movimientos */
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpi{background:var(--card);border:1px solid #1e40af55;border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.kpi i{font-style:normal;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:16px}
+.kpi span{font-size:10.5px;color:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.kpi .val{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.amount-in{display:flex;align-items:center;gap:6px;background:var(--field);border:1.5px solid #1e40af88;border-radius:16px;padding:6px 16px;margin-bottom:10px}
+.amount-in span{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:var(--muted)}
+.amount-in input{flex:1;background:none;border:none;outline:none;color:var(--txt);font-family:'Rajdhani',sans-serif;font-size:34px;font-weight:700;min-width:0;width:100%}
+.mov-seg button.on.g{background:#ef4444}
+.mov-seg button.on.i{background:#16a34a}
+.mov-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid #1e40af2e}
+.mov-row:first-child{border-top:none}
+.mov-ic{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-size:17px;flex-shrink:0}
+.mov-ic.g{background:#ef44441f}.mov-ic.i{background:#22c55e1f}
+.mov-tx{flex:1;min-width:0}
+.mov-tx b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mov-tx small{font-size:11.5px;color:var(--muted)}
+.mov-v{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.mov-row .ib{height:32px;min-width:34px;padding:0 8px;font-size:12px}
+/* listas genéricas (pagos, agenda, astra) */
+.lst{display:flex;flex-direction:column;gap:10px}
+.it{background:var(--card);border:1px solid #1e40af55;border-radius:18px;padding:13px;display:flex;gap:12px;align-items:flex-start;position:relative;box-shadow:0 4px 16px #0003}
+.it::before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:0 4px 4px 0;background:var(--c,#3b82f6)}
+.it-badge{width:52px;flex-shrink:0;border-radius:14px;text-align:center;padding:7px 0;background:color-mix(in srgb,var(--c,#3b82f6) 16%,transparent);border:1px solid color-mix(in srgb,var(--c,#3b82f6) 40%,transparent);color:var(--c,#3b82f6)}
+.it-badge b{display:block;font-family:'Rajdhani',sans-serif;font-size:24px;line-height:1}
+.it-badge span{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.it-body{flex:1;min-width:0}
+.it-t{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.it-s{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+.it-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tg{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--field);color:var(--label);border:1px solid #1e40af44;white-space:nowrap}
+.tg.c{color:var(--c);background:color-mix(in srgb,var(--c) 15%,transparent);border-color:color-mix(in srgb,var(--c) 45%,transparent)}
+.it-acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.it-amt{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:20px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.it.done{opacity:.55}
+.it.done .it-t{text-decoration:line-through}
+.lst-t{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:var(--label);margin:4px 2px 0}
+/* deudas */
+.deuda-item{background:var(--card);border:1px solid #1e40af55;border-left-width:4px;border-radius:18px;box-shadow:0 4px 16px #0003}
+.deuda-bar{height:12px;background:var(--field);border:none}
+.deuda-fill{background:linear-gradient(90deg,#22c55e,#4ade80)}
+.deuda-btns .btn{border-radius:11px;padding:8px 12px}
+/* historial */
+.mes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.mes{background:var(--card);border:1px solid #1e40af55;border-radius:18px;padding:14px;cursor:pointer;transition:transform .15s;box-shadow:0 4px 16px #0003}
+.mes:active{transform:scale(.97)}
+.mes .n{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700}
+.mes .g{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;margin-top:6px}
+.mes .r{font-size:12px;color:var(--muted)}
+.tot-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.tot-row>div{background:var(--field);border-radius:12px;padding:10px;text-align:center}
+.tot-row span{display:block;font-size:10.5px;color:var(--muted);font-weight:700;text-transform:uppercase}
+.tot-row strong{font-family:'Rajdhani',sans-serif;font-size:18px}
+/* tablas */
+.table-wrap{border-color:#1e40af55;border-radius:14px}
+th{background:var(--field);font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--label)}
+/* resumen */
+.rm{display:flex;flex-direction:column;gap:6px;padding:12px 0;border-top:1px solid #1e40af2e}
+.rm:first-child{border-top:none;padding-top:2px}
+.rm-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.rm-top b{font-family:'Rajdhani',sans-serif;font-size:17px}
+.rm-top .gan{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700}
+.rm-bar{height:8px;background:var(--field);border-radius:999px;overflow:hidden}
+.rm-bar div{height:100%;border-radius:999px;background:linear-gradient(90deg,#14b8a6,#22c55e)}
+.rm-bar div.n{background:linear-gradient(90deg,#f43f5e,#ef4444)}
+.rm-sub{font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap}
+html[data-theme=light] .cli,html[data-theme=light] .it,html[data-theme=light] .kpi,html[data-theme=light] .mes,html[data-theme=light] .deuda-item{box-shadow:0 4px 16px #1e3a8a12}
+html[data-theme=light] .fb-blue{color:#1d4ed8}html[data-theme=light] .fb-rose{color:#be123c}html[data-theme=light] .fb-cyan{color:#0e7490}html[data-theme=light] .fb-violet{color:#7e22ce}html[data-theme=light] .fb-indigo{color:#4338ca}
+html[data-theme=light] .svc-head{color:#1d4ed8}html[data-theme=light] .ib.vio{color:#6d28d9}html[data-theme=light] .ib.ed{color:#b45309}html[data-theme=light] .ib.del{color:#dc2626}html[data-theme=light] .ib.ok{color:#15803d}html[data-theme=light] .ib.blu{color:#1d4ed8}
+@media(max-width:420px){.sh-v{font-size:32px}.cli-nums b{font-size:14px}.kpi .val{font-size:16px}.kpi{padding:10px}.it-amt{font-size:17px}.mini-in{width:86px}}
 </style>
 </head>
 <body>
@@ -351,77 +521,90 @@ html[data-theme=light] .alerta-nombre,html[data-theme=light] .pago-titulo,html[d
     </section>
 
     <section class="page" data-page="clientes">
-    <div class="card">
-      <div class="card-title">📋 Nuevo Registro</div>
-      <div class="form-grid">
-        <div class="form-group"><label>Fecha</label><input type="text" id="f-fecha"></div>
-        <div class="form-group"><label>Usuario</label><input type="text" id="f-usuario" placeholder="Nombre del cliente"></div>
-        <div class="form-group"><label>Paga ($)</label><input type="number" id="f-paga" placeholder="0"></div>
-        <div class="form-group"><label>¿Pagó?</label><select id="f-pago"><option>SI</option><option>NO</option></select></div>
-        <div class="form-group"><label>Proveedor</label><input type="text" id="f-proveedor" placeholder="Proveedor"></div>
-        <div class="form-group"><label>Cancelado</label><input type="text" id="f-cancelado" placeholder="Estado"></div>
-        <div class="form-group"><label>Tipo</label><select id="f-tipo" onchange="toggleCantidad()"><option>SAT FULL</option><option>IKS</option></select></div>
-        <div class="form-group"><label>Cantidad</label><input type="number" id="f-cantidad" placeholder="Solo IKS" disabled></div>
-        <div class="form-group"><label>Valor ($)</label><input type="number" id="f-valor" placeholder="0"></div>
-        <div class="form-group"><label>WhatsApp cliente</label><input type="text" id="f-telefono" placeholder="573001234567"></div>
-        <div class="form-group"><label>Días de servicio</label><input type="number" id="f-dias" placeholder="30" min="1"></div>
-        <div class="form-group obs-group"><label>Observaciones</label><input type="text" id="f-obs" placeholder="Notas adicionales..."></div>
-      </div>
-      <div class="btn-row" style="margin-top:14px">
-        <button class="btn btn-blue" onclick="guardar()">💾 Guardar Registro</button>
+    <div class="sec-hero g-blue">
+      <div class="sh-row"><div class="sh-ico">👥</div><div><div class="sh-l">Clientes registrados</div><div class="sh-v" id="cl-n">0</div></div></div>
+      <div class="sh-stats">
+        <div><span>Activos</span><b id="cl-act">0</b></div>
+        <div><span>Por vencer</span><b id="cl-pron">0</b></div>
+        <div><span>Vencidos</span><b id="cl-venc">0</b></div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-title">🔍 Buscar y Filtrar</div>
-      <div class="search-grid">
-        <div class="form-group"><label>Buscar usuario</label><input type="text" id="s-usuario" placeholder="Nombre..." oninput="buscar()"></div>
-        <div class="form-group"><label>Filtrar fecha (mm/aaaa)</label><input type="text" id="s-fecha" placeholder="05/2026" oninput="buscar()"></div>
-        <button class="btn btn-blue" onclick="buscar()">🔍 Buscar</button>
-        <button class="btn btn-gray" onclick="limpiarFiltro()">↺ Limpiar</button>
+
+    <details class="fold" id="fold-cliente">
+      <summary class="fold-btn fb-blue">➕ Nuevo cliente</summary>
+      <div class="card fold-body">
+        <div class="svc-box">
+          <div class="svc-head">⏱️ Servicio</div>
+          <div class="svc-grid">
+            <div class="form-group"><label>Fecha de inicio</label><input type="text" id="f-fecha" placeholder="dd/mm/aaaa" oninput="previewVence()"></div>
+            <div class="form-group"><label>Días</label><input type="number" id="f-dias" value="30" min="1" inputmode="numeric" oninput="previewVence()"></div>
+          </div>
+          <div class="chips" id="dias-chips">
+            <button type="button" class="chip" onclick="setDias(15)">15</button>
+            <button type="button" class="chip on" onclick="setDias(30)">30</button>
+            <button type="button" class="chip" onclick="setDias(60)">60</button>
+            <button type="button" class="chip" onclick="setDias(90)">90</button>
+            <button type="button" class="chip" onclick="setDias(180)">180</button>
+          </div>
+          <div class="svc-vence" id="f-vence">—</div>
+        </div>
+        <div class="form-grid two">
+          <div class="form-group full"><label>Cliente</label><input type="text" id="f-usuario" placeholder="Nombre del cliente"></div>
+          <div class="form-group full"><label>WhatsApp</label><input type="text" id="f-telefono" placeholder="573001234567" inputmode="tel"></div>
+          <div class="form-group"><label>Paga ($)</label><input type="number" id="f-paga" placeholder="0" inputmode="numeric"></div>
+          <div class="form-group"><label>¿Pagó?</label><select id="f-pago"><option>SI</option><option>NO</option></select></div>
+          <div class="form-group"><label>Tipo</label><select id="f-tipo" onchange="toggleCantidad()"><option>SAT FULL</option><option>IKS</option></select></div>
+          <div class="form-group"><label>Cantidad</label><input type="number" id="f-cantidad" placeholder="Solo IKS" disabled></div>
+          <div class="form-group"><label>Costo ($)</label><input type="number" id="f-valor" placeholder="0" inputmode="numeric"></div>
+          <div class="form-group"><label>Proveedor</label><input type="text" id="f-proveedor" placeholder="Proveedor"></div>
+          <div class="form-group"><label>Cancelado</label><input type="text" id="f-cancelado" placeholder="Estado"></div>
+          <div class="form-group"><label>Notas</label><input type="text" id="f-obs" placeholder="Opcional"></div>
+        </div>
+        <button class="btn btn-blue btn-full big" onclick="guardar()">💾 Guardar cliente</button>
       </div>
+    </details>
+
+    <div class="toolbar">
+      <div class="search-box">🔍<input type="text" id="s-usuario" placeholder="Buscar cliente..." oninput="buscar()"></div>
+      <input type="text" class="mini-in" id="s-fecha" placeholder="mm/aaaa" oninput="buscar()">
     </div>
-    <div class="card">
-      <div class="card-title">📊 Historial de Registros</div>
-      <div class="table-wrap" style="max-height:360px;overflow-y:auto">
-        <table>
-          <thead><tr>
-            <th>ID</th><th>Fecha</th><th>Usuario</th><th>Vence</th><th>Paga</th><th>Pagó</th>
-            <th>Proveedor</th><th>Cancelado</th><th>Tipo</th><th>Cant.</th>
-            <th>Valor</th><th>Ganancia</th><th>Obs</th><th>Acciones</th>
-          </tr></thead>
-          <tbody id="tbody-registros"><tr><td colspan="13" class="loading">🔄 Cargando...</td></tr></tbody>
-        </table>
-      </div>
-      <div class="btn-row" style="margin-top:12px">
-        <button class="btn btn-red" onclick="eliminarSeleccionados()">🗑️ Eliminar Seleccionados</button>
-      </div>
+    <div class="chips filt" id="cl-filtros">
+      <button class="chip on" data-f="todos" onclick="filtrarClientes('todos',this)">Todos<i id="fc-todos"></i></button>
+      <button class="chip" data-f="pronto" onclick="filtrarClientes('pronto',this)">⚠️ Por vencer<i id="fc-pronto"></i></button>
+      <button class="chip" data-f="vencido" onclick="filtrarClientes('vencido',this)">⛔ Vencidos<i id="fc-vencido"></i></button>
+      <button class="chip" data-f="nopago" onclick="filtrarClientes('nopago',this)">💸 Sin pagar<i id="fc-nopago"></i></button>
     </div>
+    <div class="sel-bar" id="sel-bar">
+      <span id="sel-n"></span>
+      <button class="btn btn-gray" onclick="limpiarSeleccion()">Quitar</button>
+      <button class="btn btn-red" onclick="eliminarSeleccionados()">🗑️ Eliminar</button>
+    </div>
+    <div class="cli-list" id="tbody-registros"><div class="loading">🔄 Cargando...</div></div>
+    <div class="hint">Toca un cliente para seleccionarlo y borrar varios a la vez</div>
     </section>
 
     <section class="page" data-page="movimientos">
-    <div class="resumen">
-      <div class="resumen-card"><div class="lbl">💰 Ganancia Total</div><div class="val pos" id="r-ganancia">$0</div></div>
-      <div class="resumen-card"><div class="lbl">🔻 Gastos</div><div class="val neg" id="r-gastos">$0</div></div>
-      <div class="resumen-card"><div class="lbl">🔺 Ingresos Extra</div><div class="val pos" id="r-ingresos">$0</div></div>
-      <div class="resumen-card"><div class="lbl">📊 Balance Final</div><div class="val" id="r-balance">$0</div></div>
+    <div class="sec-hero g-green">
+      <div class="sh-row"><div class="sh-ico">💸</div><div><div class="sh-l">Balance final del mes</div><div class="sh-v" id="r-balance">$0</div></div></div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><i style="background:#22c55e1f">💰</i><span>Ganancia</span><div class="val pos" id="r-ganancia">$0</div></div>
+      <div class="kpi"><i style="background:#ef44441f">🔻</i><span>Gastos</span><div class="val neg" id="r-gastos">$0</div></div>
+      <div class="kpi"><i style="background:#3b82f61f">🔺</i><span>Ingresos</span><div class="val pos" id="r-ingresos">$0</div></div>
     </div>
     <div class="card">
-      <div class="card-title">💸 Gastos e Ingresos Extra</div>
-      <div class="form-grid">
-        <div class="form-group"><label>Monto Gasto ($)</label><input type="number" id="m-gasto" placeholder="0"></div>
-        <div class="form-group"><label>Monto Ingreso ($)</label><input type="number" id="m-ingreso" placeholder="0"></div>
-        <div class="form-group obs-group"><label>Descripción</label><input type="text" id="m-desc" placeholder="Descripción del movimiento"></div>
+      <div class="seg mov-seg">
+        <button class="on g" data-m="gasto" onclick="modoMov('gasto')">🔻 Gasto</button>
+        <button data-m="ingreso" onclick="modoMov('ingreso')">🔺 Ingreso</button>
       </div>
-      <div class="btn-row" style="margin-top:12px">
-        <button class="btn btn-red" onclick="agregarGasto()">🔻 Agregar Gasto</button>
-        <button class="btn btn-green" onclick="agregarIngreso()">🔺 Agregar Ingreso</button>
-      </div>
-      <div class="table-wrap" style="margin-top:14px;max-height:200px;overflow-y:auto">
-        <table>
-          <thead><tr><th>Tipo</th><th>Valor</th><th>Descripción</th><th>Acciones</th></tr></thead>
-          <tbody id="tbody-movimientos"><tr><td colspan="4" class="loading">🔄 Cargando...</td></tr></tbody>
-        </table>
-      </div>
+      <div class="amount-in"><span>$</span><input type="number" id="m-monto" placeholder="0" inputmode="numeric"></div>
+      <input type="number" id="m-gasto" style="display:none"><input type="number" id="m-ingreso" style="display:none">
+      <div class="form-group"><label>Descripción</label><input type="text" id="m-desc" placeholder="¿En qué fue?"></div>
+      <button class="btn btn-red btn-full big" id="mov-btn" onclick="guardarMov()">🔻 Agregar gasto</button>
+    </div>
+    <div class="card">
+      <div class="card-title">🧾 Movimientos del mes</div>
+      <div id="tbody-movimientos"><div class="loading">🔄 Cargando...</div></div>
     </div>
     </section>
 
@@ -463,157 +646,140 @@ html[data-theme=light] .alerta-nombre,html[data-theme=light] .pago-titulo,html[d
     </section>
 
     <section class="page" data-page="deudas" id="modal-deudas">
-  <div class="page-card">
-    <h3>🧾 Control de Deudas</h3>
-    <div class="deuda-res">
-      <div class="pres-stat"><div class="l">Debo en total</div><div class="v" id="d-total">$0</div></div>
-      <div class="pres-stat"><div class="l">Capital pagado</div><div class="v pos" id="d-pagado">$0</div></div>
-      <div class="pres-stat"><div class="l">Me falta</div><div class="v" style="color:#fb7185" id="d-saldo">$0</div></div>
-    </div>
-    <div style="font-size:12px;color:var(--muted);text-align:center;margin:-8px 0 14px" id="d-intereses"></div>
-    <div id="deudas-lista"></div>
-    <div style="background:var(--field);border-radius:10px;padding:16px;margin-top:14px">
-      <div style="font-size:13px;font-weight:700;color:#fb7185;margin-bottom:10px">➕ Nueva deuda</div>
-      <div class="edit-form-grid" style="gap:10px">
-        <div class="form-group"><label class="modal-label">¿A quién / qué?</label><input type="text" id="dn-nombre" placeholder="Ej: Préstamo Juan, Banco..."></div>
-        <div class="form-group"><label class="modal-label">Valor total ($)</label><input type="number" id="dn-total" placeholder="0" inputmode="numeric"></div>
-        <div class="form-group"><label class="modal-label">Interés mensual % (opcional)</label><input type="number" id="dn-interes" placeholder="Ej: 6" step="0.01" inputmode="decimal"></div>
-        <div class="form-group"><label class="modal-label">Cuota (opcional)</label><input type="number" id="dn-cuota" placeholder="Ej: 200000" inputmode="numeric"></div>
-        <div class="form-group"><label class="modal-label">Día de pago (opcional)</label><input type="number" id="dn-dia" placeholder="Ej: 15" min="1" max="31"></div>
-        <div class="form-group obs-group"><label class="modal-label">Notas</label><input type="text" id="dn-notas" placeholder="Opcional"></div>
+    <div class="sec-hero g-rose">
+      <div class="sh-row"><div class="sh-ico">🧾</div><div><div class="sh-l">Me falta pagar</div><div class="sh-v" id="d-saldo">$0</div></div></div>
+      <div class="sh-stats">
+        <div><span>Debo en total</span><b id="d-total">$0</b></div>
+        <div><span>Capital pagado</span><b id="d-pagado">$0</b></div>
       </div>
-      <div class="btn-row" style="margin-top:10px">
-        <button class="btn btn-blue" onclick="guardarDeuda()">💾 Guardar deuda</button>
+      <div class="sh-note" id="d-intereses"></div>
+    </div>
+    <div id="deudas-lista" class="lst"></div>
+    <details class="fold">
+      <summary class="fold-btn fb-rose">➕ Nueva deuda</summary>
+      <div class="card fold-body">
+        <div class="form-grid two">
+          <div class="form-group full"><label>¿A quién / qué?</label><input type="text" id="dn-nombre" placeholder="Ej: Préstamo Juan, Banco..."></div>
+          <div class="form-group"><label>Valor total ($)</label><input type="number" id="dn-total" placeholder="0" inputmode="numeric"></div>
+          <div class="form-group"><label>Interés mensual %</label><input type="number" id="dn-interes" placeholder="Opcional" step="0.01" inputmode="decimal"></div>
+          <div class="form-group"><label>Cuota ($)</label><input type="number" id="dn-cuota" placeholder="Opcional" inputmode="numeric"></div>
+          <div class="form-group"><label>Día de pago</label><input type="number" id="dn-dia" placeholder="Ej: 15" min="1" max="31"></div>
+          <div class="form-group full"><label>Notas</label><input type="text" id="dn-notas" placeholder="Opcional"></div>
+        </div>
+        <button class="btn btn-blue btn-full big" onclick="guardarDeuda()">💾 Guardar deuda</button>
       </div>
-    </div>
-    <div class="modal-btns" style="margin-top:16px">
-      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-deudas')">Cerrar</button>
-    </div>
-  </div>
+    </details>
 </section>
     <section class="page" data-page="pagos" id="modal-pagos">
-  <div class="page-card">
-    <h3>💳 Pagos Mensuales Fijos</h3>
-    <div style="background:#141c35;border-radius:10px;padding:16px;margin-bottom:16px">
-      <div style="font-size:13px;font-weight:700;color:#0891b2;margin-bottom:10px">➕ Nuevo Pago Fijo</div>
-      <div class="edit-form-grid" style="gap:10px">
-        <div class="form-group"><label class="modal-label">Nombre</label><input type="text" id="pm-nombre" placeholder="Ej: Internet, IKS, Arriendo..."></div>
-        <div class="form-group"><label class="modal-label">Monto ($)</label><input type="number" id="pm-monto" placeholder="0"></div>
-        <div class="form-group"><label class="modal-label">Día de pago (del mes)</label><input type="number" id="pm-dia" placeholder="Ej: 5" min="1" max="31"></div>
-        <div class="form-group"><label class="modal-label">Recordar (días antes)</label><input type="number" id="pm-aviso" placeholder="3" min="1" max="15"></div>
-        <div class="form-group obs-group"><label class="modal-label">Descripción</label><input type="text" id="pm-desc" placeholder="Descripción opcional"></div>
-      </div>
-      <div class="btn-row" style="margin-top:10px">
-        <button class="btn btn-blue" onclick="guardarPagoMensual()">💾 Guardar Pago Fijo</button>
+    <div class="sec-hero g-cyan">
+      <div class="sh-row"><div class="sh-ico">💳</div><div><div class="sh-l">Total fijo al mes</div><div class="sh-v" id="pm-total">$0</div></div></div>
+      <div class="sh-stats">
+        <div><span>Pagos fijos</span><b id="pm-n">0</b></div>
+        <div><span>Próximo</span><b id="pm-prox">—</b></div>
       </div>
     </div>
-    <div style="font-size:13px;font-weight:700;color:#94a3b8;margin-bottom:8px">📋 Pagos Registrados</div>
-    <div id="pagos-lista" style="max-height:300px;overflow-y:auto"></div>
-    <div class="modal-btns" style="margin-top:16px">
-      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-pagos')">Cerrar</button>
-    </div>
-  </div>
+    <div id="pagos-lista" class="lst"></div>
+    <details class="fold">
+      <summary class="fold-btn fb-cyan">➕ Nuevo pago fijo</summary>
+      <div class="card fold-body">
+        <div class="form-grid two">
+          <div class="form-group full"><label>Nombre</label><input type="text" id="pm-nombre" placeholder="Ej: Internet, IKS, Arriendo..."></div>
+          <div class="form-group"><label>Monto ($)</label><input type="number" id="pm-monto" placeholder="0" inputmode="numeric"></div>
+          <div class="form-group"><label>Día del mes</label><input type="number" id="pm-dia" placeholder="Ej: 5" min="1" max="31"></div>
+          <div class="form-group"><label>Avisar (días antes)</label><input type="number" id="pm-aviso" placeholder="3" min="1" max="15"></div>
+          <div class="form-group"><label>Descripción</label><input type="text" id="pm-desc" placeholder="Opcional"></div>
+        </div>
+        <button class="btn btn-blue btn-full big" onclick="guardarPagoMensual()">💾 Guardar pago fijo</button>
+      </div>
+    </details>
 </section>
     <section class="page" data-page="agenda" id="modal-agenda">
-  <div class="page-card">
-    <h3>📅 Agenda de Soportes</h3>
-
-    <!-- Formulario nuevo soporte -->
-    <div style="background:#141c35;border-radius:10px;padding:16px;margin-bottom:16px">
-      <div style="font-size:13px;font-weight:700;color:#3b82f6;margin-bottom:10px">➕ Nuevo Soporte</div>
-      <div class="edit-form-grid" style="gap:10px">
-        <div class="form-group"><label class="modal-label">Cliente</label><input type="text" id="ag-cliente" placeholder="Nombre del cliente"></div>
-        <div class="form-group"><label class="modal-label">Teléfono WhatsApp</label><input type="text" id="ag-telefono" placeholder="573001234567"></div>
-        <div class="form-group"><label class="modal-label">Fecha</label><input type="date" id="ag-fecha"></div>
-        <div class="form-group"><label class="modal-label">Hora</label><input type="time" id="ag-hora"></div>
-        <div class="form-group" style="grid-column:1/-1"><label class="modal-label">Descripción del soporte</label><input type="text" id="ag-desc" placeholder="Ej: Configurar router, instalar decoder..."></div>
-      </div>
-      <div class="btn-row" style="margin-top:10px">
-        <button class="btn btn-blue" onclick="guardarSoporte()">💾 Agendar Soporte</button>
+    <div class="sec-hero g-violet">
+      <div class="sh-row"><div class="sh-ico">📅</div><div><div class="sh-l">Soportes pendientes</div><div class="sh-v" id="ag-n">0</div></div></div>
+      <div class="sh-stats">
+        <div><span>Hoy</span><b id="ag-hoy">0</b></div>
+        <div><span>Atrasados</span><b id="ag-atr">0</b></div>
+        <div><span>Hechos</span><b id="ag-ok">0</b></div>
       </div>
     </div>
-
-    <!-- Lista de soportes -->
-    <div style="font-size:13px;font-weight:700;color:#94a3b8;margin-bottom:8px">📋 Soportes Agendados</div>
-    <div id="agenda-lista" style="max-height:300px;overflow-y:auto"></div>
-
-    <div class="modal-btns" style="margin-top:16px">
-      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-agenda')">Cerrar</button>
-    </div>
-  </div>
+    <details class="fold">
+      <summary class="fold-btn fb-violet">➕ Agendar soporte</summary>
+      <div class="card fold-body">
+        <div class="form-grid two">
+          <div class="form-group full"><label>Cliente</label><input type="text" id="ag-cliente" placeholder="Nombre del cliente"></div>
+          <div class="form-group full"><label>WhatsApp</label><input type="text" id="ag-telefono" placeholder="573001234567" inputmode="tel"></div>
+          <div class="form-group"><label>Fecha</label><input type="date" id="ag-fecha"></div>
+          <div class="form-group"><label>Hora</label><input type="time" id="ag-hora"></div>
+          <div class="form-group full"><label>¿Qué hay que hacer?</label><input type="text" id="ag-desc" placeholder="Ej: Configurar router, instalar decoder..."></div>
+        </div>
+        <button class="btn btn-blue btn-full big" onclick="guardarSoporte()">💾 Agendar soporte</button>
+      </div>
+    </details>
+    <div id="agenda-lista" class="lst"></div>
 </section>
     <section class="page" data-page="astra" id="modal-astra">
-  <div class="page-card">
-    <h3>📡 Gestión ASTRA</h3>
-
-    <!-- Formulario -->
-    <div style="background:#141c35;border-radius:10px;padding:16px;margin-bottom:16px">
-      <div style="font-size:13px;font-weight:700;color:#a78bfa;margin-bottom:10px">➕ Nuevo Servicio ASTRA</div>
-      <div class="edit-form-grid" style="gap:10px">
-        <div class="form-group"><label class="modal-label">Cliente</label><input type="text" id="as-cliente" placeholder="Nombre del cliente"></div>
-        <div class="form-group"><label class="modal-label">Teléfono WhatsApp</label><input type="text" id="as-telefono" placeholder="573001234567"></div>
-        <div class="form-group"><label class="modal-label">ID ASTRA</label><input type="text" id="as-id" placeholder="ID del dispositivo"></div>
-        <div class="form-group"><label class="modal-label">Número de Serie</label><input type="text" id="as-serie" placeholder="N° de serie"></div>
-        <div class="form-group"><label class="modal-label">Fecha Activación</label><input type="date" id="as-fecha"></div>
-        <div class="form-group"><label class="modal-label">Días de servicio</label><input type="number" id="as-dias" value="30" min="1"></div>
-        <div class="form-group obs-group"><label class="modal-label">Observaciones</label><input type="text" id="as-obs" placeholder="Notas..."></div>
-      </div>
-      <div class="btn-row" style="margin-top:10px">
-        <button class="btn btn-blue" onclick="guardarAstra()">💾 Guardar ASTRA</button>
+    <div class="sec-hero g-indigo">
+      <div class="sh-row"><div class="sh-ico">📡</div><div><div class="sh-l">Servicios ASTRA</div><div class="sh-v" id="as-n">0</div></div></div>
+      <div class="sh-stats">
+        <div><span>Activos</span><b id="as-act">0</b></div>
+        <div><span>Por vencer</span><b id="as-pron">0</b></div>
+        <div><span>Vencidos</span><b id="as-venc">0</b></div>
       </div>
     </div>
-
-    <!-- Buscador -->
-    <div style="display:flex;gap:10px;margin-bottom:12px">
-      <input type="text" id="as-buscar" placeholder="🔍 Buscar por cliente o ID..." oninput="filtrarAstra()"
-        style="flex:1;background:#141c35;border:1.5px solid #1e40af;border-radius:8px;color:#e2e8f0;font-size:14px;padding:10px 12px;outline:none;font-family:inherit">
-    </div>
-
-    <!-- Lista -->
-    <div id="astra-lista" style="max-height:320px;overflow-y:auto"></div>
-
-    <div class="modal-btns" style="margin-top:16px">
-      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-astra')">Cerrar</button>
-    </div>
-  </div>
+    <details class="fold">
+      <summary class="fold-btn fb-indigo">➕ Nuevo servicio ASTRA</summary>
+      <div class="card fold-body">
+        <div class="form-grid two">
+          <div class="form-group full"><label>Cliente</label><input type="text" id="as-cliente" placeholder="Nombre del cliente"></div>
+          <div class="form-group full"><label>WhatsApp</label><input type="text" id="as-telefono" placeholder="573001234567" inputmode="tel"></div>
+          <div class="form-group"><label>ID ASTRA</label><input type="text" id="as-id" placeholder="ID del equipo"></div>
+          <div class="form-group"><label>N° de serie</label><input type="text" id="as-serie" placeholder="Serie"></div>
+          <div class="form-group"><label>Activación</label><input type="date" id="as-fecha"></div>
+          <div class="form-group"><label>Días de servicio</label><input type="number" id="as-dias" value="30" min="1"></div>
+          <div class="form-group full"><label>Notas</label><input type="text" id="as-obs" placeholder="Opcional"></div>
+        </div>
+        <button class="btn btn-blue btn-full big" onclick="guardarAstra()">💾 Guardar ASTRA</button>
+      </div>
+    </details>
+    <div class="search-box">🔍<input type="text" id="as-buscar" placeholder="Buscar por cliente o ID..." oninput="filtrarAstra()"></div>
+    <div id="astra-lista" class="lst"></div>
 </section>
     <section class="page" data-page="historial" id="modal-historial">
-  <div class="page-card">
-    <h3>🗂️ Historial de Meses</h3>
-    <div id="historial-meses" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"></div>
-    <div id="historial-detalle" style="display:none">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-        <button class="btn btn-gray" style="padding:5px 12px;font-size:12px" onclick="document.getElementById('historial-detalle').style.display='none';document.getElementById('historial-meses').style.display='flex'">← Volver</button>
-        <span id="historial-titulo" style="font-weight:700;color:#3b82f6;font-size:16px"></span>
+    <div class="sec-hero g-slate">
+      <div class="sh-row"><div class="sh-ico">🗂️</div><div><div class="sh-l">Historial</div><div class="sh-v" style="font-size:26px">Meses cerrados</div></div></div>
+    </div>
+    <div id="historial-meses" class="mes-grid"></div>
+    <div id="historial-detalle" class="card" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <button class="ib" onclick="document.getElementById('historial-detalle').style.display='none';document.getElementById('historial-meses').style.display='grid'">‹ Meses</button>
+        <span id="historial-titulo" style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:19px;text-transform:capitalize"></span>
       </div>
-      <div class="table-wrap" style="max-height:400px;overflow-y:auto">
+      <div class="tot-row">
+        <div><span>Registros</span><strong id="h-total-regs">0</strong></div>
+        <div><span>Ganancia</span><strong id="h-total-gan" style="color:#22c55e">$0</strong></div>
+        <div><span>Cobrado</span><strong id="h-total-cob">$0</strong></div>
+      </div>
+      <div class="table-wrap" style="max-height:420px;overflow-y:auto;margin-top:12px">
         <table>
           <thead><tr><th>Usuario</th><th>Fecha</th><th>Paga</th><th>Pagó</th><th>Proveedor</th><th>Tipo</th><th>Valor</th><th>Ganancia</th></tr></thead>
           <tbody id="historial-tbody"></tbody>
         </table>
       </div>
-      <div style="margin-top:10px;padding:10px;background:#141c35;border-radius:8px;display:flex;gap:20px;flex-wrap:wrap">
-        <span>📋 Registros: <strong id="h-total-regs">0</strong></span>
-        <span>💰 Ganancia: <strong id="h-total-gan" style="color:#22c55e">$0</strong></span>
-        <span>💸 Cobrado: <strong id="h-total-cob">$0</strong></span>
-      </div>
     </div>
-    <div class="modal-btns" style="margin-top:16px">
-      <button class="btn btn-gray btn-full" onclick="cerrarModal('modal-historial')">Cerrar</button>
-    </div>
-  </div>
 </section>
     <section class="page" data-page="resumen" id="modal-resumen">
+    <div class="sec-hero g-teal">
+      <div class="sh-row"><div class="sh-ico">📊</div><div><div class="sh-l">Ganancia acumulada</div><div class="sh-v" id="rs-total">$0</div></div></div>
+      <div class="sh-stats">
+        <div><span>Meses</span><b id="rs-meses">0</b></div>
+        <div><span>Mejor mes</span><b id="rs-mejor">—</b></div>
+        <div><span>Promedio</span><b id="rs-prom">$0</b></div>
+      </div>
+    </div>
   <div class="page-card">
     <div class="seg"><button class="on" onclick="verResumenTab('tabla',this)">📅 Por mes</button><button onclick="verResumenTab('grafica',this)">📊 Gráfica</button></div>
-    <div id="res-tabla">
-    <h3>📅 Resumen Mensual</h3>
-    <div class="table-wrap" style="max-height:360px;overflow-y:auto">
-      <table><thead><tr><th>Mes</th><th>Registros</th><th>Cobrado</th><th>Costo</th><th>Ganancia</th></tr></thead>
-      <tbody id="tbody-resumen"></tbody></table>
-    </div>
-    </div><div id="res-grafica" style="display:none"><div id="chart-container"><canvas id="myChart"></canvas></div></div>
-    <div class="modal-btns" style="margin-top:16px"><button class="btn btn-gray btn-full" onclick="cerrarModal('modal-resumen')">Cerrar</button></div>
+    <div id="res-tabla"><div id="tbody-resumen"></div></div>
+    <div id="res-grafica" style="display:none"><div id="chart-container"><canvas id="myChart"></canvas></div></div>
   </div>
 </section>
   </main>
@@ -846,6 +1012,7 @@ function abrirApp(){
   document.getElementById("app").style.display="flex";
   const hoy=new Date();
   document.getElementById("f-fecha").value=`${String(hoy.getDate()).padStart(2,"0")}/${String(hoy.getMonth()+1).padStart(2,"0")}/${hoy.getFullYear()}`;
+  try{previewVence()}catch(e){}
   const modo=localStorage.getItem("modo")||"dark";
   if(modo==="light") aplicarModo("light");
   escucharCambios();
@@ -895,7 +1062,8 @@ window.guardar=async function(){
     dias:parseInt(document.getElementById("f-dias").value)||0,
     timestamp:Date.now()
   });
-  ["f-usuario","f-paga","f-proveedor","f-cancelado","f-valor","f-obs","f-cantidad","f-telefono","f-dias"].forEach(id=>document.getElementById(id).value="");
+  ["f-usuario","f-paga","f-proveedor","f-cancelado","f-valor","f-obs","f-cantidad","f-telefono"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("f-dias").value=30;previewVence();
   document.getElementById("f-tipo").value="SAT FULL";
   toggleCantidad();
   showToast("Registro guardado ✔");
@@ -1033,7 +1201,7 @@ window.eliminarSeleccionados=async function(){
   if(!seleccionados.size){showToast("Selecciona registros primero",true);return}
   if(!confirm(`¿Eliminar ${seleccionados.size} registro(s)?`)) return;
   for(const id of seleccionados) await deleteDoc(doc(db,"registros",id));
-  seleccionados.clear();showToast("Registros eliminados");
+  seleccionados.clear();actualizarSelBar();renderTablaRegistros();showToast("Registros eliminados");
 }
 window.eliminarMov=async function(fireId){
   if(!confirm("¿Eliminar este movimiento?")) return;
@@ -1109,50 +1277,106 @@ function mostrarAlertas(regs){
   });
 }
 
-function renderTablaRegistros(data){
-  const tbody=document.getElementById("tbody-registros");
-  tbody.innerHTML="";
-  if(!data.length){tbody.innerHTML='<tr><td colspan="13" class="loading">Sin registros aún</td></tr>';return}
+let filtroCli="todos";
+function cap(t){t=String(t||"");return t.charAt(0).toUpperCase()+t.slice(1)}
+function diasA(fv){if(!fv)return null;const h=new Date();h.setHours(0,0,0,0);const v=new Date(fv);v.setHours(0,0,0,0);return Math.floor((v-h)/864e5)}
+function catCli(r){const d=diasA(calcularVencimiento(r.fecha,r.dias));return d===null?"sin":d<0?"vencido":d<=5?"pronto":"activo"}
+function iniciales(n){const p=String(n||"?").trim().split(/\s+/);return ((p[0]||"?")[0]+(p[1]?p[1][0]:"")).toUpperCase()}
+window.filtrarClientes=function(f,btn){filtroCli=f;document.querySelectorAll("#cl-filtros .chip").forEach(b=>b.classList.toggle("on",b===btn));renderTablaRegistros()};
+window.limpiarSeleccion=function(){seleccionados.clear();renderTablaRegistros()};
+function actualizarSelBar(){const n=seleccionados.size;document.getElementById("sel-bar").classList.toggle("on",n>0);document.getElementById("sel-n").textContent=`${n} seleccionado${n===1?"":"s"}`}
+function renderTablaRegistros(){
+  const box=document.getElementById("tbody-registros");
+  // estadísticas
+  const cats={activo:0,pronto:0,vencido:0,sin:0};let nopago=0,gan=0;
+  registros.forEach(r=>{cats[catCli(r)]++;if(r.pago==="NO")nopago++;gan+=r.ganancia||0});
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+  set("cl-n",registros.length);set("cl-act",cats.activo);set("cl-pron",cats.pronto);set("cl-venc",cats.vencido);set("cl-gan",`$${fmt(gan)}`);
+  set("fc-todos",registros.length);set("fc-pronto",cats.pronto||"");set("fc-vencido",cats.vencido||"");set("fc-nopago",nopago||"");
+  // filtros
+  const txt=(document.getElementById("s-usuario")?.value||"").toLowerCase();
+  const fecha=(document.getElementById("s-fecha")?.value||"").trim();
+  const data=registros.filter(r=>(txt?(r.usuario||"").toLowerCase().includes(txt):true)&&(fecha?(r.fecha||"").includes(fecha):true)
+    &&(filtroCli==="todos"||(filtroCli==="nopago"?r.pago==="NO":catCli(r)===filtroCli)));
+  [...seleccionados].forEach(id=>{if(!registros.some(r=>r.fireId===id))seleccionados.delete(id)});
+  actualizarSelBar();
+  if(!data.length){box.innerHTML=`<div class="empty"><div>${registros.length?"🔎":"👥"}</div>${registros.length?"No hay clientes con ese filtro":"Aún no tienes clientes. Toca ➕ Nuevo cliente"}</div>`;return}
+  box.innerHTML="";
   data.forEach(r=>{
-    const tr=document.createElement("tr");
-    if(seleccionados.has(r.fireId)) tr.classList.add("selected");
-    tr.onclick=()=>{seleccionados.has(r.fireId)?(seleccionados.delete(r.fireId),tr.classList.remove("selected")):(seleccionados.add(r.fireId),tr.classList.add("selected"))};
-    const gc=r.ganancia>=0?"pos":"neg";
     const fv=calcularVencimiento(r.fecha,r.dias);
     const ev=estadoVence(fv);
     const fvStr=fmtFecha(fv);
     const tel=(r.telefono||"").replace(/\D/g,"");
     const msg=encodeURIComponent(`Hola ${r.usuario||""}, te recordamos que tu servicio IKS vence el ${fvStr}. Por favor renueva a tiempo. Gracias!`);
-    tr.innerHTML=`<td>${r.fireId.slice(-4)}</td><td>${r.fecha||""}</td><td>${r.usuario||""}</td>
-      <td style="color:${ev.cls};font-weight:700;white-space:nowrap">${fvStr}<br><small>${ev.txt}</small><br>
-        <button class="btn btn-purple" style="padding:3px 8px;font-size:11px;margin-top:4px" onclick="event.stopPropagation();abrirDias('${r.fireId}')">⏱️ ${r.dias?r.dias+" días":"Poner días"}</button></td>
-      <td>$${fmt(r.paga)}</td><td>${r.pago||""}</td><td>${r.proveedor||""}</td><td>${r.cancelado||""}</td>
-      <td>${r.tipo||""}</td><td>${r.cantidad||0}</td><td>$${fmt(r.valor)}</td>
-      <td class="${gc}">$${fmt(r.ganancia)}</td><td>${r.observacion||""}</td>
-      <td style="white-space:nowrap">
-        <button class="btn btn-orange" style="padding:5px 10px;font-size:12px;margin-right:4px" onclick="event.stopPropagation();solicitarEdicion('${r.fireId}')">✏️</button>
-        ${tel?`<a href="https://wa.me/${tel}?text=${msg}" target="_blank" onclick="event.stopPropagation()" style="padding:5px 10px;font-size:12px;margin-right:4px;background:#25d366;color:#fff;border-radius:9px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center">📲</a>`:""}
-        <button class="btn btn-red" style="padding:5px 10px;font-size:12px" onclick="event.stopPropagation();eliminarUno('${r.fireId}')">🗑️</button>
-      </td>`;
-    tbody.appendChild(tr);
+    const el=document.createElement("div");
+    el.className="cli"+(seleccionados.has(r.fireId)?" sel":"");
+    el.style.setProperty("--c",ev.cls);
+    el.onclick=()=>{seleccionados.has(r.fireId)?seleccionados.delete(r.fireId):seleccionados.add(r.fireId);el.classList.toggle("sel",seleccionados.has(r.fireId));actualizarSelBar()};
+    const meta=[r.tipo||"",r.tipo==="IKS"&&r.cantidad?`×${r.cantidad}`:"",r.proveedor?`· ${esc(r.proveedor)}`:"",r.fecha?`· desde ${r.fecha}`:""].filter(Boolean).join(" ");
+    const notas=[r.cancelado?`Cancelado: ${esc(r.cancelado)}`:"",r.observacion?esc(r.observacion):""].filter(Boolean).join(" · ");
+    el.innerHTML=`<div class="cli-check">✓</div>
+      <div class="cli-top">
+        <div class="av">${esc(iniciales(r.usuario))}</div>
+        <div class="cli-main"><div class="cli-name">${esc(r.usuario||"")}</div><div class="cli-meta">${meta}</div></div>
+        <div class="pill"><em>${fv?ev.txt.replace(" ⚠️",""):"Sin días"}</em><small>${fv?fvStr:""}</small></div>
+      </div>
+      <div class="cli-nums">
+        <div><span>Paga</span><b>$${fmt(r.paga)}</b></div>
+        <div><span>Costo</span><b>$${fmt(r.valor)}</b></div>
+        <div><span>Ganancia</span><b class="${(r.ganancia||0)>=0?"pos":"neg"}">$${fmt(r.ganancia)}</b></div>
+        <div><span>Pagó</span><b class="${r.pago==="NO"?"neg":"pos"}">${r.pago==="NO"?"NO":"SÍ"}</b></div>
+      </div>
+      ${notas?`<div class="cli-obs">📝 ${notas}</div>`:""}
+      <div class="cli-acts">
+        <button class="ib vio grow" onclick="event.stopPropagation();abrirDias('${r.fireId}')">⏱️ ${r.dias?r.dias+" días":"Poner días"}</button>
+        ${tel?`<a class="ib wa" href="https://wa.me/${tel}?text=${msg}" target="_blank" onclick="event.stopPropagation()" aria-label="WhatsApp">📲</a>`:""}
+        <button class="ib ed" onclick="event.stopPropagation();solicitarEdicion('${r.fireId}')" aria-label="Editar">✏️</button>
+        <button class="ib del" onclick="event.stopPropagation();eliminarUno('${r.fireId}')" aria-label="Eliminar">🗑️</button>
+      </div>`;
+    box.appendChild(el);
   });
 }
 
+window.setDias=function(n){document.getElementById("f-dias").value=n;previewVence()};
+window.previewVence=function(){
+  const d=parseInt(document.getElementById("f-dias").value)||0;
+  document.querySelectorAll("#dias-chips .chip").forEach(c=>c.classList.toggle("on",parseInt(c.textContent)===d));
+  const fv=calcularVencimiento(document.getElementById("f-fecha").value.trim(),d);
+  const box=document.getElementById("f-vence");
+  if(!fv){box.innerHTML="Escribe la fecha (dd/mm/aaaa) y los días";box.style.color="";return}
+  const ev=estadoVence(fv);
+  box.innerHTML=`📅 Vence el <b>${fmtFecha(fv)}</b> · ${d} días`;box.style.color=ev.cls;
+};
+
 function renderTablaMovimientos(data){
-  const tbody=document.getElementById("tbody-movimientos");
-  tbody.innerHTML="";
-  if(!data.length){tbody.innerHTML='<tr><td colspan="4" class="loading">Sin movimientos aún</td></tr>';return}
-  data.forEach(m=>{
-    const tr=document.createElement("tr");
-    const cls=m.tipo==="GASTO"?"tag-gasto":"tag-ingreso";
-    tr.innerHTML=`<td class="${cls}">${m.tipo}</td><td>$${fmt(m.valor)}</td><td>${m.descripcion||""}</td>
-    <td style="white-space:nowrap">
-      <button class="btn btn-orange" style="padding:4px 10px;font-size:12px;margin-right:4px" onclick="solicitarEdicionMov('${m.fireId}')">✏️</button>
-      <button class="btn btn-red" style="padding:4px 10px;font-size:12px" onclick="eliminarMov('${m.fireId}')">🗑️</button>
-    </td>`;
-    tbody.appendChild(tr);
-  });
+  const box=document.getElementById("tbody-movimientos");
+  if(!data.length){box.innerHTML='<div class="empty" style="border:none;background:none"><div>🧾</div>Sin movimientos aún</div>';return}
+  box.innerHTML=data.map(m=>{
+    const g=m.tipo==="GASTO";
+    const f=m.timestamp?new Date(m.timestamp).toLocaleDateString("es-CO",{day:"numeric",month:"short"}):"";
+    return `<div class="mov-row">
+      <div class="mov-ic ${g?"g":"i"}">${g?"🔻":"🔺"}</div>
+      <div class="mov-tx"><b>${esc(m.descripcion||(g?"Gasto":"Ingreso"))}</b><small>${g?"Gasto":"Ingreso"}${f?` · ${f}`:""}</small></div>
+      <div class="mov-v ${g?"neg":"pos"}">${g?"−":"+"}$${fmt(m.valor)}</div>
+      <button class="ib ed" onclick="solicitarEdicionMov('${m.fireId}')" aria-label="Editar">✏️</button>
+      <button class="ib del" onclick="eliminarMov('${m.fireId}')" aria-label="Eliminar">🗑️</button>
+    </div>`}).join("");
 }
+let modoMovActual="gasto";
+window.modoMov=function(m){
+  modoMovActual=m;
+  document.querySelectorAll(".mov-seg button").forEach(b=>{const on=b.dataset.m===m;b.classList.toggle("on",on);b.classList.toggle("g",on&&m==="gasto");b.classList.toggle("i",on&&m==="ingreso")});
+  const btn=document.getElementById("mov-btn");
+  btn.className=`btn ${m==="gasto"?"btn-red":"btn-green"} btn-full big`;
+  btn.textContent=m==="gasto"?"🔻 Agregar gasto":"🔺 Agregar ingreso";
+};
+window.guardarMov=async function(){
+  const id=modoMovActual==="gasto"?"m-gasto":"m-ingreso";
+  const oculto=document.getElementById(id);
+  oculto.value=document.getElementById("m-monto").value;
+  await (modoMovActual==="gasto"?agregarGasto():agregarIngreso());
+  if(!oculto.value) document.getElementById("m-monto").value="";
+};
 
 function actualizarResumen(regs,movs){
   const tg=regs.reduce((a,r)=>a+(r.ganancia||0),0);
@@ -1163,14 +1387,13 @@ function actualizarResumen(regs,movs){
   rg.textContent=`$${fmt(tg)}`;rg.className=`val ${tg>=0?"pos":"neg"}`;
   document.getElementById("r-gastos").textContent=`$${fmt(ga)}`;
   document.getElementById("r-ingresos").textContent=`$${fmt(in2)}`;
-  rb.textContent=`$${fmt(bal)}`;rb.className=`val ${bal>=0?"pos":"neg"}`;
+  rb.textContent=`$${fmt(bal)}`;rb.className=`sh-v val ${bal>=0?"pos":"neg"}`;
 }
 
 window.buscar=function(){
   const txt=document.getElementById("s-usuario").value.toLowerCase();
   const fecha=document.getElementById("s-fecha").value.trim();
-  const f=registros.filter(r=>(txt?(r.usuario||"").toLowerCase().includes(txt):true)&&(fecha?(r.fecha||"").includes(fecha):true));
-  renderTablaRegistros(f);
+  renderTablaRegistros();
 }
 window.limpiarFiltro=function(){
   document.getElementById("s-usuario").value="";document.getElementById("s-fecha").value="";
@@ -1191,9 +1414,23 @@ window.mostrarGrafica=function(){
 
 window.mostrarResumen=function(){
   const meses={};
-  registros.forEach(r=>{if(!r.fecha)return;const p=r.fecha.split("/");const k=p.length>=3?`${p[1]}/${p[2]}`:r.fecha;if(!meses[k])meses[k]={n:0,cobrado:0,costo:0,gan:0};meses[k].n++;meses[k].cobrado+=r.paga||0;meses[k].costo+=r.valor||0;meses[k].gan+=r.ganancia||0});
-  const tbody=document.getElementById("tbody-resumen");tbody.innerHTML="";
-  Object.keys(meses).sort().reverse().forEach(k=>{const m=meses[k];const tr=document.createElement("tr");tr.innerHTML=`<td>${k}</td><td>${m.n}</td><td>$${fmt(m.cobrado)}</td><td>$${fmt(m.costo)}</td><td class="${m.gan>=0?"pos":"neg"}">$${fmt(m.gan)}</td>`;tbody.appendChild(tr)});
+  registros.forEach(r=>{if(!r.fecha)return;const p=r.fecha.split("/");const k=p.length>=3?`${p[2]}-${p[1]}`:r.fecha;if(!meses[k])meses[k]={n:0,cobrado:0,costo:0,gan:0};meses[k].n++;meses[k].cobrado+=r.paga||0;meses[k].costo+=r.valor||0;meses[k].gan+=r.ganancia||0});
+  const keys=Object.keys(meses).sort().reverse();
+  const nom=k=>{const [y,m]=k.split("-");const d=new Date(+y,+m-1,1);return isNaN(d)?k:cap(d.toLocaleDateString("es-CO",{month:"long",year:"numeric"}))};
+  const corto=k=>{const [y,m]=k.split("-");const d=new Date(+y,+m-1,1);return isNaN(d)?k:cap(d.toLocaleDateString("es-CO",{month:"short"}).replace(".",""))+" "+String(y).slice(2)};
+  const tot=keys.reduce((a,k)=>a+meses[k].gan,0);
+  const max=Math.max(1,...keys.map(k=>Math.abs(meses[k].gan)));
+  const mejor=keys.slice().sort((a,b)=>meses[b].gan-meses[a].gan)[0];
+  document.getElementById("rs-total").textContent=`$${fmt(tot)}`;
+  document.getElementById("rs-meses").textContent=keys.length;
+  document.getElementById("rs-mejor").textContent=mejor?corto(mejor):"—";
+  document.getElementById("rs-prom").textContent=`$${fmt(keys.length?Math.round(tot/keys.length):0)}`;
+  const box=document.getElementById("tbody-resumen");
+  box.innerHTML=keys.length?keys.map(k=>{const m=meses[k];return `<div class="rm">
+    <div class="rm-top"><b>${nom(k)}</b><span class="gan ${m.gan>=0?"pos":"neg"}">$${fmt(m.gan)}</span></div>
+    <div class="rm-bar"><div class="${m.gan<0?"n":""}" style="width:${Math.round(Math.abs(m.gan)/max*100)}%"></div></div>
+    <div class="rm-sub"><span>📋 ${m.n} registro${m.n===1?"":"s"}</span><span>💵 Cobrado $${fmt(m.cobrado)}</span><span>📦 Costo $${fmt(m.costo)}</span></div>
+  </div>`}).join(""):'<div class="loading">Sin registros todavía</div>';
   document.getElementById("modal-resumen").classList.add("open");
 }
 
@@ -1328,47 +1565,35 @@ async function renderAgenda(){
   await cargarSoportes();
   const lista = document.getElementById("agenda-lista");
   if(!lista) return;
-  lista.innerHTML="";
-
   const hoy    = new Date();
   const hoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,"0")}-${String(hoy.getDate()).padStart(2,"0")}`;
-
-  if(!soportes.length){lista.innerHTML='<div class="loading">Sin soportes agendados</div>';return}
-
-  soportes.filter(s=>s.estado!=="completado").forEach(s=>{
-    const esPasado = s.fecha < hoyStr;
-    const tel = (s.telefono||"").replace(/\D/g,"");
-    const msgCliente = encodeURIComponent(`Hola ${s.cliente}, te recordamos que tienes un soporte técnico IKS el ${s.fecha} a las ${s.hora}. ¡Te esperamos!`);
-    const div = document.createElement("div");
-    div.className = `agenda-item${esPasado?" pasado":""}`;
-    div.innerHTML = `
-      <div class="agenda-info">
-        <div class="agenda-titulo">${s.cliente} <span style="color:#64748b;font-weight:400;font-size:12px">— ${s.fecha} ${s.hora}</span></div>
-        <div class="agenda-sub">${s.desc||"Sin descripción"} ${esPasado?'<span style="color:#ef4444">· Fecha pasada</span>':""}</div>
-      </div>
-      <div class="agenda-btns">
-        ${tel?`<a href="https://wa.me/${tel}?text=${msgCliente}" target="_blank" class="btn-wsp">📲 Avisar</a>`:""}
-        <button class="btn btn-green" style="padding:5px 10px;font-size:12px" onclick="completarSoporte('${s.fireId}')">✔ Listo</button>
-        <button class="btn btn-red" style="padding:5px 10px;font-size:12px" onclick="eliminarSoporte('${s.fireId}')">🗑️</button>
-      </div>`;
-    lista.appendChild(div);
-  });
-
-  // Completados al final
+  const pend = soportes.filter(s=>s.estado!=="completado").sort((a,b)=>(a.fecha+(a.hora||"")).localeCompare(b.fecha+(b.hora||"")));
   const completados = soportes.filter(s=>s.estado==="completado");
-  if(completados.length){
-    const sep=document.createElement("div");
-    sep.style="font-size:12px;color:#64748b;margin:12px 0 6px;font-weight:600";
-    sep.textContent="✔ Completados";
-    lista.appendChild(sep);
-    completados.slice(0,5).forEach(s=>{
-      const div=document.createElement("div");
-      div.className="agenda-item";
-      div.style="opacity:.5";
-      div.innerHTML=`<div class="agenda-info"><div class="agenda-titulo" style="text-decoration:line-through">${s.cliente} — ${s.fecha} ${s.hora}</div><div class="agenda-sub">${s.desc||""}</div></div>`;
-      lista.appendChild(div);
-    });
-  }
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+  set("ag-n",pend.length);set("ag-hoy",pend.filter(s=>s.fecha===hoyStr).length);set("ag-atr",pend.filter(s=>s.fecha<hoyStr).length);set("ag-ok",completados.length);
+  if(!soportes.length){lista.innerHTML='<div class="empty"><div>📅</div>Sin soportes agendados</div>';return}
+  const MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  const tarjeta=(s,hecho)=>{
+    const [y,m,d]=(s.fecha||"").split("-");
+    const esHoy=s.fecha===hoyStr, esPasado=s.fecha<hoyStr;
+    const c=hecho?"#64748b":esPasado?"#ef4444":esHoy?"#f59e0b":"#a855f7";
+    const tel=(s.telefono||"").replace(/\D/g,"");
+    const msg=encodeURIComponent(`Hola ${s.cliente}, te recordamos que tienes un soporte técnico IKS el ${s.fecha} a las ${s.hora}. ¡Te esperamos!`);
+    return `<div class="it${hecho?" done":""}" style="--c:${c}">
+      <div class="it-badge"><b>${d?+d:"—"}</b><span>${m?MES[+m-1]:""}</span></div>
+      <div class="it-body">
+        <div class="it-t">${esc(s.cliente)}</div>
+        <div class="it-s">${esc(s.desc||"Sin descripción")}</div>
+        <div class="it-tags">${s.hora?`<span class="tg">🕒 ${s.hora}</span>`:""}${hecho?'<span class="tg">✔ Hecho</span>':esHoy?'<span class="tg c">Hoy</span>':esPasado?'<span class="tg c">Atrasado</span>':""}</div>
+        ${hecho?"":`<div class="it-acts">
+          ${tel?`<a href="https://wa.me/${tel}?text=${msg}" target="_blank" class="ib wa">📲 Avisar</a>`:""}
+          <button class="ib ok" onclick="completarSoporte('${s.fireId}')">✔ Listo</button>
+          <button class="ib del" onclick="eliminarSoporte('${s.fireId}')" aria-label="Eliminar">🗑️</button>
+        </div>`}
+      </div></div>`;
+  };
+  lista.innerHTML=(pend.length?pend.map(s=>tarjeta(s,false)).join(""):'<div class="empty"><div>🎉</div>No hay soportes pendientes</div>')
+    +(completados.length?`<div class="lst-t">✔ Completados</div>`+completados.slice(0,5).map(s=>tarjeta(s,true)).join(""):"");
 }
 
 // Verificar cada 5 minutos si hay recordatorios
@@ -1407,23 +1632,29 @@ async function renderPagosMensuales(){
   const pagos = snap.docs.map(d=>({...d.data(),fireId:d.id}));
   const lista = document.getElementById("pagos-lista");
   if(!lista) return;
-  lista.innerHTML="";
-  if(!pagos.length){lista.innerHTML='<div class="loading">Sin pagos fijos registrados</div>';return}
   const hoy = new Date().getDate();
-  pagos.forEach(p=>{
-    const diasFaltan = p.dia >= hoy ? p.dia - hoy : (31 - hoy + p.dia);
+  const falta=p=>p.dia >= hoy ? p.dia - hoy : (31 - hoy + p.dia);
+  document.getElementById("pm-total").textContent=`$${fmt(pagos.reduce((a,p)=>a+(p.monto||0),0))}`;
+  document.getElementById("pm-n").textContent=pagos.length;
+  const prox=pagos.slice().sort((a,b)=>falta(a)-falta(b))[0];
+  document.getElementById("pm-prox").textContent=prox?`${prox.nombre} · ${falta(prox)===0?"hoy":falta(prox)+"d"}`:"—";
+  if(!pagos.length){lista.innerHTML='<div class="empty"><div>💳</div>Sin pagos fijos registrados</div>';return}
+  lista.innerHTML=pagos.map(p=>{
+    const diasFaltan=falta(p);
     const vencePronto = diasFaltan <= p.aviso;
-    const vencido     = p.dia < hoy && diasFaltan > 20;
-    const div = document.createElement("div");
-    div.className = `pago-item${vencePronto&&!vencido?" vence-pronto":vencido?" vencido":""}`;
-    div.innerHTML = `
-      <div class="pago-info">
-        <div class="pago-titulo">${p.nombre} <span style="color:#64748b;font-weight:400;font-size:12px">— Día ${p.dia} de cada mes</span></div>
-        <div class="pago-sub">$${fmt(p.monto)} · ${p.desc||""} · Aviso ${p.aviso} días antes · ${vencePronto?`<strong style="color:#f59e0b">Vence en ${diasFaltan} día(s)</strong>`:`Faltan ${diasFaltan} días`}</div>
-      </div>
-      <button class="btn btn-red" style="padding:5px 10px;font-size:12px" onclick="eliminarPagoMensual('${p.fireId}')">🗑️</button>`;
-    lista.appendChild(div);
-  });
+    const c = diasFaltan===0?"#ef4444":vencePronto?"#f59e0b":"#06b6d4";
+    return `<div class="it" style="--c:${c}">
+      <div class="it-badge"><b>${p.dia}</b><span>día</span></div>
+      <div class="it-body">
+        <div class="it-t" style="justify-content:space-between"><span>${esc(p.nombre)}</span><span class="it-amt">$${fmt(p.monto)}</span></div>
+        ${p.desc?`<div class="it-s">${esc(p.desc)}</div>`:""}
+        <div class="it-tags">
+          <span class="tg ${vencePronto?"c":""}">${diasFaltan===0?"Se paga HOY":vencePronto?`Vence en ${diasFaltan} día${diasFaltan===1?"":"s"}`:`Faltan ${diasFaltan} días`}</span>
+          <span class="tg">🔔 ${p.aviso}d antes</span>
+          <button class="ib del" style="height:26px;min-width:30px;padding:0 8px;margin-left:auto" onclick="eliminarPagoMensual('${p.fireId}')" aria-label="Eliminar">🗑️</button>
+        </div>
+      </div></div>`;
+  }).join("");
 }
 
 async function verificarPagosMensuales(){
@@ -1493,7 +1724,7 @@ Los clientes NO se borran.`)) return;
 window.abrirHistorial = async function(){
   const mesesDiv = document.getElementById("historial-meses");
   mesesDiv.innerHTML = '<div class="loading">🔄 Cargando historial...</div>';
-  mesesDiv.style.display = "flex";
+  mesesDiv.style.display = "grid";
   document.getElementById("historial-detalle").style.display = "none";
   document.getElementById("modal-historial").classList.add("open");
 
@@ -1505,21 +1736,21 @@ window.abrirHistorial = async function(){
   for(let i=0; i<24; i++){
     const d = new Date(hoy.getFullYear(), hoy.getMonth()-i, 1);
     const key = `${String(d.getMonth()+1).padStart(2,"0")}-${d.getFullYear()}`;
-    const nombre = d.toLocaleDateString("es-CO",{month:"long",year:"numeric"});
+    const nombre = cap(d.toLocaleDateString("es-CO",{month:"long",year:"numeric"}));
     const snap = await getDocs(collection(db,`historial_${key}`));
     if(snap.empty) continue;
     hayMeses = true;
     const regs = snap.docs.map(d=>d.data());
     const gan  = regs.reduce((a,r)=>a+(r.ganancia||0),0);
     const btn  = document.createElement("div");
-    btn.style = "background:#141c35;border:1px solid #1e40af;border-radius:10px;padding:14px 20px;cursor:pointer;text-align:center;min-width:140px";
-    btn.innerHTML = `<div style="font-weight:700;color:#3b82f6;font-size:15px">${nombre}</div>
-      <div style="color:${gan>=0?"#22c55e":"#ef4444"};font-weight:700;margin-top:4px">$${fmt(gan)}</div>
-      <div style="font-size:11px;color:#64748b;margin-top:2px">${regs.length} registros</div>`;
+    btn.className = "mes";
+    btn.innerHTML = `<div class="n">🗓️ ${nombre}</div>
+      <div class="g ${gan>=0?"pos":"neg"}">$${fmt(gan)}</div>
+      <div class="r">${regs.length} registros · ver ›</div>`;
     btn.onclick = ()=> verDetalleHistorial(key, nombre, regs);
     mesesDiv.appendChild(btn);
   }
-  if(!hayMeses) mesesDiv.innerHTML = '<div class="loading">No hay meses cerrados aún</div>';
+  if(!hayMeses) mesesDiv.innerHTML = '<div class="empty" style="grid-column:1/-1"><div>🗂️</div>No hay meses cerrados aún</div>';
 }
 
 function verDetalleHistorial(key, nombre, regs){
@@ -1624,51 +1855,46 @@ window.filtrarAstra = function(){
 function renderAstra(data){
   const lista = document.getElementById("astra-lista");
   if(!lista) return;
-  lista.innerHTML="";
-  if(!data.length){lista.innerHTML='<div class="loading">Sin servicios ASTRA registrados</div>';return}
-
   const hoy = new Date(); hoy.setHours(0,0,0,0);
-
-  data.forEach(a=>{
-    const fv   = a.fechaVencimiento ? new Date(a.fechaVencimiento) : null;
-    const diff = fv ? Math.floor((fv-hoy)/(1000*60*60*24)) : null;
-    const fvStr= fv ? `${String(fv.getDate()).padStart(2,"0")}/${String(fv.getMonth()+1).padStart(2,"0")}/${fv.getFullYear()}` : "—";
-
-    let estadoColor="#22c55e", estadoTxt="Activo", borderColor="#22c55e";
+  const dif=a=>a.fechaVencimiento?Math.floor((new Date(a.fechaVencimiento)-hoy)/864e5):null;
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+  const all=(typeof astras!=="undefined"&&astras.length)?astras:data;
+  set("as-n",all.length);
+  set("as-venc",all.filter(a=>{const d=dif(a);return d!==null&&d<0}).length);
+  set("as-pron",all.filter(a=>{const d=dif(a);return d!==null&&d>=0&&d<=5}).length);
+  set("as-act",all.filter(a=>{const d=dif(a);return d===null||d>5}).length);
+  if(!data.length){lista.innerHTML='<div class="empty"><div>📡</div>Sin servicios ASTRA registrados</div>';return}
+  lista.innerHTML=data.map(a=>{
+    const fv=a.fechaVencimiento?new Date(a.fechaVencimiento):null;
+    const diff=dif(a);
+    const fvStr=fv?`${String(fv.getDate()).padStart(2,"0")}/${String(fv.getMonth()+1).padStart(2,"0")}/${fv.getFullYear()}`:"—";
+    let c="#22c55e",txt="Activo";
     if(diff!==null){
-      if(diff<0){estadoColor="#ef4444";estadoTxt=`Vencido hace ${Math.abs(diff)}d`;borderColor="#ef4444"}
-      else if(diff===0){estadoColor="#ef4444";estadoTxt="Vence HOY";borderColor="#ef4444"}
-      else if(diff<=5){estadoColor="#f59e0b";estadoTxt=`Vence en ${diff}d`;borderColor="#f59e0b"}
-      else{estadoTxt=`${diff} días`}
+      if(diff<0){c="#ef4444";txt=`Vencido hace ${Math.abs(diff)}d`}
+      else if(diff===0){c="#ef4444";txt="Vence HOY"}
+      else if(diff<=5){c="#f59e0b";txt=`Vence en ${diff}d`}
+      else txt=`${diff} días`;
     }
-
-    const tel = (a.telefono||"").replace(/\D/g,"");
-    const msg = encodeURIComponent(`Hola ${a.cliente}, tu servicio ASTRA vence el ${fvStr}. Por favor renueva a tiempo. ID: ${a.idAstra}. Gracias!`);
-
-    const div = document.createElement("div");
-    div.className="agenda-item";
-    div.style=`border-left-color:${borderColor}`;
-    div.innerHTML=`
-      <div class="agenda-info">
-        <div class="agenda-titulo">
-          ${a.cliente}
-          <span style="color:${estadoColor};font-size:12px;font-weight:700;margin-left:6px">● ${estadoTxt}</span>
+    const tel=(a.telefono||"").replace(/\D/g,"");
+    const msg=encodeURIComponent(`Hola ${a.cliente}, tu servicio ASTRA vence el ${fvStr}. Por favor renueva a tiempo. ID: ${a.idAstra}. Gracias!`);
+    return `<div class="it" style="--c:${c}">
+      <div class="av" style="--c:${c}">${esc(iniciales(a.cliente))}</div>
+      <div class="it-body">
+        <div class="it-t">${esc(a.cliente)} <span class="tg c">● ${txt}</span></div>
+        <div class="it-tags">
+          <span class="tg">📡 ${esc(a.idAstra||"—")}</span>
+          <span class="tg">🔢 ${esc(a.serie||"—")}</span>
+          <span class="tg">📅 ${fvStr}</span>
+          ${a.telefono?`<span class="tg">📞 ${esc(a.telefono)}</span>`:""}
         </div>
-        <div class="agenda-sub">
-          📡 ID: <strong>${a.idAstra||"—"}</strong> &nbsp;|&nbsp;
-          🔢 Serie: <strong>${a.serie||"—"}</strong> &nbsp;|&nbsp;
-          📅 Vence: <strong>${fvStr}</strong> &nbsp;|&nbsp;
-          📞 ${a.telefono||"Sin tel"}
-          ${a.obs?`<br>📝 ${a.obs}`:""}
+        ${a.obs?`<div class="it-s" style="margin-top:8px">📝 ${esc(a.obs)}</div>`:""}
+        <div class="it-acts">
+          <button class="ib blu grow" onclick="renovarAstra('${a.fireId}',${a.dias||30})">🔄 Renovar ${a.dias||30}d</button>
+          ${tel?`<a href="https://wa.me/${tel}?text=${msg}" target="_blank" class="ib wa" aria-label="WhatsApp">📲</a>`:""}
+          <button class="ib del" onclick="eliminarAstra('${a.fireId}')" aria-label="Eliminar">🗑️</button>
         </div>
-      </div>
-      <div class="agenda-btns">
-        ${tel?`<a href="https://wa.me/${tel}?text=${msg}" target="_blank" class="btn-wsp" style="padding:5px 10px;font-size:12px">📲</a>`:""}
-        <button class="btn btn-blue" style="padding:5px 10px;font-size:12px" onclick="renovarAstra('${a.fireId}',${a.dias||30})">🔄 Renovar</button>
-        <button class="btn btn-red" style="padding:5px 10px;font-size:12px" onclick="eliminarAstra('${a.fireId}')">🗑️</button>
-      </div>`;
-    lista.appendChild(div);
-  });
+      </div></div>`;
+  }).join("");
 }
 
 async function verificarAstra(){
@@ -2004,7 +2230,7 @@ function renderDeudas(){
   document.getElementById("d-saldo").textContent=`$${fmt(T-P)}`;
   document.getElementById("d-intereses").textContent=I?`Intereses pagados: $${fmt(I)}`:"";
 
-  if(!items.length){lista.innerHTML='<div class="loading">Aún no tienes deudas registradas. Agrega una abajo 👇</div>'}
+  if(!items.length){lista.innerHTML='<div class="empty"><div>🎉</div>Aún no tienes deudas registradas. Agrega una abajo 👇</div>'}
   else lista.innerHTML=items.map(({d,total,c,saldo})=>{
     const pct=total?Math.min(100,Math.round(c.capPag/total*100)):0;
     const cuota=Number(d.cuota)||0;
@@ -2047,9 +2273,9 @@ function renderDeudas(){
       ${c.tasa&&saldo>0?`<div class="deuda-meta" style="margin-top:4px"><span>Próximo interés: <b style="color:#f59e0b">$${fmt(c.proxInteres)}</b></span>${cuota?`<span>Próxima cuota a capital: <b class="pos">$${fmt(Math.max(cuota-c.proxInteres,0))}</b></span>`:""}</div>`:""}
       ${c.intPag?`<div class="deuda-meta" style="margin-top:4px"><span>Intereses pagados: $${fmt(c.intPag)}</span><span>Total pagado: $${fmt(c.pagado)}</span></div>`:""}
       <div class="deuda-btns">
-        ${saldo>0?`<button class="btn btn-green" onclick="abrirAbono('${d.fireId}')">💵 Registrar pago</button>`:""}
-        <button class="btn btn-gray" onclick="toggleHistDeuda('${d.fireId}')">📜 Abonos (${c.filas.length})</button>
-        <button class="btn btn-gray" onclick="eliminarDeuda('${d.fireId}')">🗑️</button>
+        ${saldo>0?`<button class="ib ok grow" onclick="abrirAbono('${d.fireId}')">💵 Registrar pago</button>`:""}
+        <button class="ib grow" onclick="toggleHistDeuda('${d.fireId}')">📜 Abonos (${c.filas.length})</button>
+        <button class="ib del" onclick="eliminarDeuda('${d.fireId}')" aria-label="Eliminar">🗑️</button>
       </div>
       ${abierta?tabla:""}
     </div>`;
@@ -2218,8 +2444,10 @@ window.verResumenTab=function(t,btn){
   if(t==="grafica") mostrarGrafica();
 };
 window.accionRapida=function(a){
-  const foco={cliente:["clientes","f-usuario"],gasto:["movimientos","m-gasto"],semana:["presupuesto","p-monto"],deuda:["deudas",null]}[a];
+  const foco={cliente:["clientes","f-usuario"],gasto:["movimientos","m-monto"],semana:["presupuesto","p-monto"],deuda:["deudas",null]}[a];
   irA(foco[0]);
+  if(a==="cliente") document.getElementById("fold-cliente").open=true;
+  if(a==="gasto") modoMov("gasto");
   if(foco[1]) setTimeout(()=>{const el=document.getElementById(foco[1]);el.scrollIntoView({behavior:"smooth",block:"center"});el.focus()},150);
 };
 function txt(id){return document.getElementById(id)?.textContent||"$0"}
