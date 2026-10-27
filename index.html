@@ -1041,8 +1041,8 @@ html[data-theme=light] .svc-head{color:#1d4ed8}html[data-theme=light] .ib.vio{co
     <label class="modal-label">Avisarme al llegar al (%)</label>
     <input type="text" id="pc-topes" placeholder="50, 80, 100">
     <label class="chk-row"><input type="checkbox" id="pc-general"> Incluir estos gastos en el Balance del mes</label>
-    <div style="font-size:12px;color:var(--muted);margin:-4px 0 10px">Desmarcado: la semana lleva su propia cuenta, aparte del balance y de los gastos generales.</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">La semana va de lunes a domingo y se reinicia sola cada lunes.</div>
+    <div style="font-size:12px;color:var(--muted);margin:-4px 0 10px">Desmarcado: mientras la semana está abierta lleva su propia cuenta; al terminar, sus gastos pasan a los generales.</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">La semana va de lunes a domingo y se reinicia sola cada lunes. Al cerrar la semana, sus gastos se suman a los Gastos generales.</div>
     <div class="modal-error" id="pc-error"></div>
     <div class="modal-btns">
       <button class="btn btn-blue btn-full" onclick="guardarConfigPresupuesto()">💾 Guardar</button>
@@ -1476,7 +1476,8 @@ window.guardarMov=async function(){
   if(!oculto.value) document.getElementById("m-monto").value="";
 };
 
-function esDeSemana(m){return !!(m&&(m.presupuesto||m.presId))}
+// Un gasto de la semana solo va aparte mientras su semana está abierta; al pasar los 7 días se suma a los generales
+function esDeSemana(m){return !!(m&&(m.presupuesto||m.presId)&&(m.timestamp||0)>=inicioSemana().getTime())}
 function movsGenerales(movs){return presCfg.enBalance?movs:movs.filter(m=>!esDeSemana(m))}
 function refrescarGeneral(){try{renderTablaMovimientos(movsGenerales(movimientos));actualizarResumen(registros,movimientos)}catch{}}
 function actualizarResumen(regs,movs){
@@ -2076,11 +2077,29 @@ async function iniciarPresupuesto(){
   onSnapshot(query(collection(db,"gastos_presupuesto"),orderBy("timestamp","desc")),snap=>{
     presGastos=snap.docs.map(d=>({...d.data(),fireId:d.id}));
     presListo=true;
+    pasarSemanasCerradas();
     renderPresupuesto();
     revisarTopes();
   });
   // Por si la app queda abierta y cambia la semana
-  setInterval(()=>{renderPresupuesto();revisarTopes()},10*60*1000);
+  let semVista=claveSemana();
+  setInterval(()=>{
+    renderPresupuesto();revisarTopes();
+    if(semVista!==claveSemana()){semVista=claveSemana();refrescarGeneral()} // cerró la semana: sus gastos pasan a generales
+  },60*1000);
+}
+
+// Gastos de semanas ya cerradas que no tenían movimiento: se crean para que entren a los Gastos generales
+const pasando=new Set();
+function pasarSemanasCerradas(){
+  const desde=inicioSemana().getTime();
+  presGastos.filter(g=>!g.movId&&(g.timestamp||0)<desde&&!pasando.has(g.fireId)).forEach(async g=>{
+    pasando.add(g.fireId);
+    try{
+      const ref=await addDoc(collection(db,"movimientos"),{tipo:"GASTO",valor:g.valor||0,descripcion:`💰 ${g.descripcion||"Gasto semanal"}`,timestamp:g.timestamp||Date.now(),presupuesto:true,presId:g.fireId});
+      await updateDoc(doc(db,"gastos_presupuesto",g.fireId),{movId:ref.id});
+    }catch{pasando.delete(g.fireId)}
+  });
 }
 
 function aplicarVista(){ /* reemplazado por el menú de secciones */ }
